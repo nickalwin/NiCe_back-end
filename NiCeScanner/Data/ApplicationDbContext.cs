@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using NiCeScanner.Models;
 
 namespace NiCeScanner.Data
 {
@@ -9,5 +10,6 @@ namespace NiCeScanner.Data
             : base(options)
         {
         }
+        public DbSet<Mail> Mail { get; set; } = default!;
     }
 }
