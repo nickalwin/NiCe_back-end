@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using NiCeScanner.Data;
 using NiCeScanner.Models;
+using NiCeScanner.Resources.API;
 
 namespace NiCeScanner.Controllers
 {
@@ -17,9 +18,23 @@ namespace NiCeScanner.Controllers
 		}
 
 		[HttpGet]
-		public async Task<ActionResult<IEnumerable<Question>>> GetQuestions()
+		public async Task<ActionResult<IEnumerable<QuestionResource>>> GetQuestions()
 		{
-			return await _context.Questions.ToListAsync();
+			var questions = await _context.Questions
+				.Where(q => q.Show)
+				.Include(q => q.Category)
+				.Select(q => new QuestionResource
+				{
+					Uuid = q.Uuid,
+					Data = q.Data,
+					Category_uuid = q.Category.Uuid,
+					Category_name = q.Category.Name,
+					Statement = q.Statement,
+					Image = q.Image,
+				})
+				.ToListAsync();
+
+			return questions;
 		}
 	}
 }
