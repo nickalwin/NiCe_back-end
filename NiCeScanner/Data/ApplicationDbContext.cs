@@ -9,7 +9,13 @@ namespace NiCeScanner.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
+
         }
+
         public DbSet<Mail> Mail { get; set; } = default!;
-    }
+
+		public DbSet<Question> Questions { get; set; } = default!;
+
+		public DbSet<Category> Categories { get; set; } = default!;
+	}
 }
