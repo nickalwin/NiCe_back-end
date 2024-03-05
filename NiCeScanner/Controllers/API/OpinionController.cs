@@ -1,10 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using NiCeScanner.Data;
 
-namespace NiCeScanner.Controllers
+namespace NiCeScanner.Controllers.API
 {
-	[Route("api/[controller]")]
+	[Route("api/opinions")]
 	[ApiController]
 	public class OpinionController : Controller
 	{
