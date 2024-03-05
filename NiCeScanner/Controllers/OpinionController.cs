@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NiCeScanner.Data;
 
@@ -6,11 +6,11 @@ namespace NiCeScanner.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
-	public class QuestionController : Controller
+	public class OpinionController : Controller
 	{
 		private readonly ApplicationDbContext _context;
 
-		public QuestionController(ApplicationDbContext context)
+		public OpinionController(ApplicationDbContext context)
 		{
 			_context = context;
 		}
