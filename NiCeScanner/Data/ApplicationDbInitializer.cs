@@ -1051,6 +1051,89 @@ namespace NiCeScanner.Data
 					}
 				}
 
+				if (!context.Sectors.Any())
+				{
+					Sector s1 = new Sector()
+					{
+						Name = "Agrarisch",
+					};
+
+					Sector s2 = new Sector()
+					{
+						Name = "Bouw",
+					};
+
+					Sector s3 = new Sector()
+					{
+						Name = "Detailhandel",
+					};
+
+					Sector s4 = new Sector()
+					{
+						Name = "Energie",
+					};
+
+					Sector s5 = new Sector()
+					{
+						Name = "Financiële dienstverlening",
+					};
+
+					Sector s6 = new Sector()
+					{
+						Name = "Gezondheidszorg",
+					};
+
+					Sector s7 = new Sector()
+					{
+						Name = "Horeca",
+					};
+
+					Sector s8 = new Sector()
+					{
+						Name = "ICT",
+					};
+
+					Sector s9 = new Sector()
+					{
+						Name = "Industrie",
+					};
+
+					Sector s10 = new Sector()
+					{
+						Name = "Landbouw",
+					};
+
+					Sector s11 = new Sector()
+					{
+						Name = "Onderwijs",
+					};
+
+					Sector s12 = new Sector()
+					{
+						Name = "Overheid",
+					};
+
+					Sector s13 = new Sector()
+					{
+						Name = "Transport",
+					};
+
+					Sector s14 = new Sector()
+					{
+						Name = "Vastgoed",
+					};
+
+					Sector s15 = new Sector()
+					{
+						Name = "Zakelijke dienstverlening",
+					};
+
+					context.Sectors.AddRange(
+						s1, s2, s3, s4, s5, s6, s7, s8, s9, s10,
+						s11, s12, s13, s14, s15
+					);
+				}
+
 				context.SaveChanges();
 			}
 		}
