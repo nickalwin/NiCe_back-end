@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NiCeScanner.Data;
 using NiCeScanner.Models;
-using NiCeScanner.Resources.API;
 using NiCeScanner.Resources.Request;
 
 namespace NiCeScanner.Controllers.API
@@ -18,25 +17,21 @@ namespace NiCeScanner.Controllers.API
 			_context = context;
 		}
 
-		[HttpGet]
-        [Route("getQuestions")]
-		public async Task<ActionResult<IEnumerable<QuestionResource>>> GetQuestions()
+		[HttpGet("{uuid}")]
+		public async Task<ActionResult<object>> GetScan(string uuid) // TODO
 		{
-			var questions = await _context.Questions
-				.Where(q => q.Show)
-				.Include(q => q.Category)
-				.Select(q => new QuestionResource
-				{
-					Uuid = q.Uuid,
-					Data = q.Data,
-					Category_uuid = q.Category.Uuid,
-					Category_name = q.Category.Name,
-					Statement = q.Statement,
-					Image = q.Image,
-				})
-				.ToListAsync();
+			Scan? scan = await _context.Scans.Where(s => s.Uuid == Guid.Parse(uuid))
+											.Include(s => s.Answers)
+											.ThenInclude(a => a.Question)
+											.FirstOrDefaultAsync();
 
-			return questions;
+			if (scan is null)
+			{
+				return NotFound("Scan not found");
+			}
+
+
+			return new { uuid };
 		}
 
 		[HttpPost]
