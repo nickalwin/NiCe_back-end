@@ -64,6 +64,7 @@ namespace NiCeScanner.Controllers.API
 				ScanId = newScan.Id,
 				QuestionId = questions[answer.Question_uuid],
 				Score = answer.Answer,
+				Comment = answer.Comment ?? "",
 			}).ToList();
 
 			_context.Answers.AddRange(newAnswers);
