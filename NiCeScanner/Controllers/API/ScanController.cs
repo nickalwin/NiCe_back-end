@@ -1,12 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 using NiCeScanner.Data;
-using NiCeScanner.Migrations;
 using NiCeScanner.Models;
 using NiCeScanner.Resources.Request.Scan;
+using NiCeScanner.Resources.API;
 using NiCeScanner.Utilities;
-using System;
 
 namespace NiCeScanner.Controllers.API
 {
@@ -22,28 +20,47 @@ namespace NiCeScanner.Controllers.API
 		}
 
 		[HttpGet("{uuid}")]
-		public async Task<ActionResult<object>> GetScan(string uuid) // TODO
+		public async Task<ActionResult<ScanResource>> GetScan(string uuid)
 		{
 			Guid guid = Guid.Parse(uuid);
 
-			var scan = await _context.Scans.Where(s => s.Uuid == guid)
-											.Include(s => s.Answers)
-											.ThenInclude(a => a.Question)
-											.FirstOrDefaultAsync();
+			var scan = await _context.Scans
+				.Include(s => s.Answers)
+					.ThenInclude(a => a.Question)
+						.ThenInclude(q => q.Category)
+				.FirstOrDefaultAsync(s => s.Uuid == guid);
 
-			// Scan? scan = await _context.Scans.Where(s => s.Uuid == Guid.Parse(uuid))
-											// .Include(s => s.Answers)
-											// .ThenInclude(a => a.Question)
-											// .FirstOrDefaultAsync();
+			if (scan == null)
+			{
+				return NotFound("Scan not found");
+			}
 
+			var groupedAnswers = scan.Answers
+				.GroupBy(a => a.Question.Category.Uuid)
+				.Select(g => new ScanResultDataResource
+				{
+					Category_uuid = g.Key,
+					Grouped_answers = g.Select(a => new GroupedCategoryQuestionsResource
+					{
+						Question_data = a.Question.Data,
+						Question_uuid = a.Question.Uuid,
+						Answer = a.Score,
+						Comment = a.Comment
+					})
+				});
 
-			// if (scan is null)
-			// {
-			// 	return NotFound("Scan not found");
-			// }
+			var scanResource = new ScanResource
+			{
+				Uuid = scan.Uuid,
+				Contact_name = scan.ContactName,
+				Contact_email = scan.ContactEmail,
+				Results = scan.Results,
+				Created_at = scan.CreatedAt,
+				Updated_at = scan.UpdatedAt,
+				Data = groupedAnswers
+			};
 
-
-			return new { uuid };
+			return scanResource;
 		}
 
 		[HttpPost]
@@ -58,6 +75,8 @@ namespace NiCeScanner.Controllers.API
 			};
 
 			_context.Scans.Add(newScan);
+
+			await _context.SaveChangesAsync();
 
 			List<Guid> questionUuids = scan.Answers.Select(a => a.Question_uuid).ToList();
 			List<Question> questions = await _context.Questions.Where(q => questionUuids.Contains(q.Uuid)).ToListAsync();
