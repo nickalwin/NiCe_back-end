@@ -4,7 +4,9 @@ using Newtonsoft.Json;
 using NiCeScanner.Data;
 using NiCeScanner.Migrations;
 using NiCeScanner.Models;
-using NiCeScanner.Resources.Request;
+using NiCeScanner.Resources.Request.Scan;
+using NiCeScanner.Utilities;
+using System;
 
 namespace NiCeScanner.Controllers.API
 {
@@ -45,7 +47,7 @@ namespace NiCeScanner.Controllers.API
 		}
 
 		[HttpPost]
-		public async Task<ActionResult<PostScanRequest>> StoreScan(PostScanRequest scan)
+		public async Task<ActionResult<PostScanRequestResult>> StoreScan(PostScanRequest scan)
 		{
 			var newScan = new Scan
 			{
@@ -57,76 +59,32 @@ namespace NiCeScanner.Controllers.API
 
 			_context.Scans.Add(newScan);
 
-			await _context.SaveChangesAsync();
-
 			List<Guid> questionUuids = scan.Answers.Select(a => a.Question_uuid).ToList();
-
-			List<Question> questions = await _context.Questions.Where(q => questionUuids.Contains(q.Uuid))
-															   .ToListAsync();
+			List<Question> questions = await _context.Questions.Where(q => questionUuids.Contains(q.Uuid)).ToListAsync();
+			Dictionary<Guid, Question> questionDictionary = questions.ToDictionary(q => q.Uuid, q => q);
 
 			var newAnswers = scan.Answers.Select(answer => new Answer
 			{
 				ScanId = newScan.Id,
-				QuestionId = questions.First(q => q.Uuid == answer.Question_uuid).Id,
+				QuestionId = questionDictionary[answer.Question_uuid].Id,
 				Score = answer.Answer,
 				Comment = answer.Comment ?? "",
 			}).ToList();
 
 			_context.Answers.AddRange(newAnswers);
 
-			await _context.SaveChangesAsync();
+			Dictionary<Guid, double> categoryWeightedMeans = ScanResultCalculator.CalculateResults(scan.Answers, questionDictionary);
+			List<Category> categories = await _context.Categories.Where(c => categoryWeightedMeans.Keys.Contains(c.Uuid)).ToListAsync();
 
-			Dictionary<Guid, double> totalWeightedScores = new Dictionary<Guid, double>();
-			Dictionary<Guid, double> totalWeights = new Dictionary<Guid, double>();
-
-			foreach (var answer in scan.Answers)
-			{
-				Guid questionUuid = answer.Question_uuid;
-				Guid categoryUuid = answer.Category_uuid;
-
-				short score = answer.Answer;
-				short weight = questions.First(q => q.Uuid == questionUuid).Weight;
-
-				double weightedScore = score * weight;
-
-				if (totalWeightedScores.ContainsKey(categoryUuid))
-				{
-					totalWeightedScores[categoryUuid] += weightedScore;
-					totalWeights[categoryUuid] += weight;
-				}
-				else
-				{
-					totalWeightedScores[categoryUuid] = weightedScore;
-					totalWeights[categoryUuid] = weight;
-				}
-			}
-
-			Dictionary<Guid, double> categoryWeightedMeans = new Dictionary<Guid, double>();
-			foreach (var categoryUuid in totalWeightedScores.Keys)
-			{
-				categoryWeightedMeans[categoryUuid] = totalWeightedScores[categoryUuid] / totalWeights[categoryUuid];
-			}
-
-			var categories = _context.Categories.ToList();
-
-			var categoryResults = (
-				from c in categories
-				join m in categoryWeightedMeans on c.Uuid equals m.Key
-				select new
-				{
-					category_name = c.Name,
-					category_uuid = c.Uuid,
-					mean = m.Value
-				}
-			).ToList();
-
-			newScan.Results = JsonConvert.SerializeObject(categoryResults);
+			newScan.Results = ScanResultCalculator.SerializeResults(categoryWeightedMeans, categories);
 
 			_context.Scans.Update(newScan);
-
 			await _context.SaveChangesAsync();
 
-			return Ok("Scan created successfully");
+			return new PostScanRequestResult 
+			{ 
+				Uuid = newScan.Uuid 
+			};
 		}
 	}
 }

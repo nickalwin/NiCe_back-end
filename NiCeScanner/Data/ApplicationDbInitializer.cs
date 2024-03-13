@@ -79,7 +79,7 @@ namespace NiCeScanner.Data
 								}
 							}),
 							Category = c1,
-							Weight = 1,
+							Weight = 0,
 							Statement = false,
 							Show = true,
 							Image = "https://placehold.co/600x400/EEE/31343C",
@@ -115,7 +115,7 @@ namespace NiCeScanner.Data
 								}
 							}),
 							Category = c1,
-							Weight = 1,
+							Weight = 2,
 							Statement = false,
 							Show = true,
 							Image = "https://placehold.co/600x400/EEE/31343C",
@@ -133,7 +133,7 @@ namespace NiCeScanner.Data
 								}
 							}),
 							Category = c1,
-							Weight = 1,
+							Weight = 2,
 							Statement = false,
 							Show = true,
 							Image = "https://placehold.co/600x400/EEE/31343C",
@@ -151,7 +151,7 @@ namespace NiCeScanner.Data
 								}
 							}),
 							Category = c1,
-							Weight = 1,
+							Weight = 2,
 							Statement = false,
 							Show = true,
 							Image = "https://placehold.co/600x400/EEE/31343C",
@@ -169,7 +169,7 @@ namespace NiCeScanner.Data
 								}
 							}),
 							Category = c1,
-							Weight = 1,
+							Weight = 3,
 							Statement = false,
 							Show = true,
 							Image = "https://placehold.co/600x400/EEE/31343C",
@@ -187,7 +187,7 @@ namespace NiCeScanner.Data
 								}
 							}),
 							Category = c1,
-							Weight = 1,
+							Weight = 3,
 							Statement = false,
 							Show = true,
 							Image = "https://placehold.co/600x400/EEE/31343C",
@@ -205,7 +205,7 @@ namespace NiCeScanner.Data
 								}
 							}),
 							Category = c1,
-							Weight = 1,
+							Weight = 3,
 							Statement = false,
 							Show = true,
 							Image = "https://placehold.co/600x400/EEE/31343C",
@@ -223,7 +223,7 @@ namespace NiCeScanner.Data
 								}
 							}),
 							Category = c1,
-							Weight = 1,
+							Weight = 3,
 							Statement = false,
 							Show = true,
 							Image = "https://placehold.co/600x400/EEE/31343C",
@@ -241,7 +241,7 @@ namespace NiCeScanner.Data
 								}
 							}),
 							Category = c1,
-							Weight = 1,
+							Weight = 3,
 							Statement = false,
 							Show = true,
 							Image = "https://placehold.co/600x400/EEE/31343C",
@@ -259,7 +259,7 @@ namespace NiCeScanner.Data
 								}
 							}),
 							Category = c1,
-							Weight = 1,
+							Weight = 2,
 							Statement = false,
 							Show = true,
 							Image = "https://placehold.co/600x400/EEE/31343C",
@@ -655,7 +655,7 @@ namespace NiCeScanner.Data
 								}
 							}),
 							Category = c5,
-							Weight = 1,
+							Weight = 3,
 							Statement = false,
 							Show = true,
 							Image = "https://placehold.co/600x400/EEE/31343C",
@@ -673,7 +673,7 @@ namespace NiCeScanner.Data
 								}
 							}),
 							Category = c5,
-							Weight = 1,
+							Weight = 2,
 							Statement = false,
 							Show = true,
 							Image = "https://placehold.co/600x400/EEE/31343C",
@@ -745,7 +745,7 @@ namespace NiCeScanner.Data
 								}
 							}),
 							Category = c5,
-							Weight = 1,
+							Weight = 3,
 							Statement = false,
 							Show = true,
 							Image = "https://placehold.co/600x400/EEE/31343C",
@@ -781,7 +781,7 @@ namespace NiCeScanner.Data
 								}
 							}),
 							Category = c5,
-							Weight = 1,
+							Weight = 2,
 							Statement = false,
 							Show = true,
 							Image = "https://placehold.co/600x400/EEE/31343C",
@@ -799,7 +799,7 @@ namespace NiCeScanner.Data
 								}
 							}),
 							Category = c5,
-							Weight = 1,
+							Weight = 2,
 							Statement = false,
 							Show = true,
 							Image = "https://placehold.co/600x400/EEE/31343C",
@@ -835,7 +835,7 @@ namespace NiCeScanner.Data
 								}
 							}),
 							Category = c5,
-							Weight = 1,
+							Weight = 2,
 							Statement = false,
 							Show = true,
 							Image = "https://placehold.co/600x400/EEE/31343C",
@@ -871,7 +871,7 @@ namespace NiCeScanner.Data
 								}
 							}),
 							Category = c5,
-							Weight = 1,
+							Weight = 2,
 							Statement = false,
 							Show = true,
 							Image = "https://placehold.co/600x400/EEE/31343C",
@@ -889,7 +889,7 @@ namespace NiCeScanner.Data
 								}
 							}),
 							Category = c6,
-							Weight = 1,
+							Weight = 2,
 							Statement = false,
 							Show = true,
 							Image = "https://placehold.co/600x400/EEE/31343C",
@@ -1015,7 +1015,7 @@ namespace NiCeScanner.Data
 								}
 							}),
 							Category = c6,
-							Weight = 1,
+							Weight = 2,
 							Statement = false,
 							Show = true,
 							Image = "https://placehold.co/600x400/EEE/31343C",
