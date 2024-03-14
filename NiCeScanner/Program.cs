@@ -16,7 +16,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DevDatabase")));
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+	.AddRoles<IdentityRole>()
+	.AddEntityFrameworkStores<ApplicationDbContext>();
+
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddSwaggerGen(c =>
@@ -75,5 +77,32 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
+
+using (var scope = app.Services.CreateScope())
+{
+	var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+	var roles = new List<string> { "Admin", "Researcher", "Student", "Member" };
+
+	foreach (var role in roles)
+	{
+		if (!await roleManager.RoleExistsAsync(role))
+		{
+			roleManager.CreateAsync(new IdentityRole(role)).Wait();
+		}
+	}
+}
+using (var scope = app.Services.CreateScope())
+{
+	var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+	string name = "Admin";
+	string email = "admin@admin.com";
+	string password = "Admin@123";
+	if (await userManager.FindByEmailAsync(email) == null)
+	{
+		var user = new IdentityUser { UserName = email, Email = email };
+		await userManager.CreateAsync(user, password);
+		userManager.AddToRoleAsync(user, "Admin");
+	}
+}
 
 app.Run();
