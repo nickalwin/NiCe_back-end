@@ -21,6 +21,10 @@ body {
   margin-bottom: 60px;
 }
 
+.navbar{
+    background-color: #f9c67b;
+}
+
 .loginForm {
     background-color: #80808020;
     padding: 20px;
@@ -30,6 +34,16 @@ body {
     display: -webkit-box;
     display: flex;
     justify-content: space-evenly;
+}
+
+.nav-item {
+    background-color: #f9c67b;
+}
+
+.nav-item.active {
+    background-color: #dbcdb9 !important;
+    border-radius: 10px;
+
 }
 
 .avatar img{
@@ -43,4 +57,57 @@ body {
 .btn-primary{
     background-color: #2ad700;
     border-color: #2ad700;
+}
+
+.loginForm-item{
+    width: 50%;
+}
+.loginForm-item img{
+    display: block;
+}
+
+@media (max-width: 1024px) {
+    .loginForm {
+        flex-direction: column-reverse;
+        padding-top: 0 !important;
+    }
+    .loginForm-item{
+        width: 100%;
+        padding-top: 8px !important;
+        padding-bottom: 0 !important;
+    }
+    .loginForm-item img{
+        display: none !important;
+    }
+}
+
+@media (max-width: 575px) {
+    .nav-item {
+        background-color: #f5e1c4;
+    }
+
+    .nav-item.active {
+        border-radius: 0;
+    }
+
+    .container-fluid {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
+    .navbar {
+        margin-bottom: 0 !important;
+        padding-bottom: 0 !important;
+        text-align: center;
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+
+    .navbar-toggler {
+        margin-right: 10.5px;
+    }
+
+    .avatar {
+        margin-left: 10.5px;
+    }
 }
