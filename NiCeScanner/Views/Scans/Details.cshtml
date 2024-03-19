@@ -1,0 +1,90 @@
+﻿@using Newtonsoft.Json
+@model NiCeScanner.Models.Scan
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Scan</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Uuid)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Uuid)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ContactName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ContactName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ContactEmail)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ContactEmail)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Results)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Results)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.CreatedAt)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.CreatedAt)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.UpdatedAt)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.UpdatedAt)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Sector)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Sector.Name)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
+
+<div>
+    <h4>Answers</h4>
+    <hr />
+    <table class="table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Question</th>
+                <th>Score</th>
+                <th>Comment</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var answer in Model.Answers)
+            {
+                var jsonData = JsonConvert.DeserializeObject<dynamic>(answer.Question.Data);
+                var questionText = jsonData.nl.question;
+                <tr>
+                    <td>@answer.Id</td>
+                    <td>@questionText</td>
+                    <td>@answer.Score</td>
+                    <td>@answer.Comment</td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

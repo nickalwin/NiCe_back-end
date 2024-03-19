@@ -15,7 +15,7 @@ namespace NiCeScanner.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "8.0.2");
+            modelBuilder.HasAnnotation("ProductVersion", "8.0.3");
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -478,7 +478,7 @@ namespace NiCeScanner.Migrations
                         .IsRequired();
 
                     b.HasOne("NiCeScanner.Models.Scan", "Scan")
-                        .WithMany()
+                        .WithMany("Answers")
                         .HasForeignKey("ScanId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -513,6 +513,11 @@ namespace NiCeScanner.Migrations
             modelBuilder.Entity("NiCeScanner.Models.Category", b =>
                 {
                     b.Navigation("Questions");
+                });
+
+            modelBuilder.Entity("NiCeScanner.Models.Scan", b =>
+                {
+                    b.Navigation("Answers");
                 });
 
             modelBuilder.Entity("NiCeScanner.Models.Sector", b =>

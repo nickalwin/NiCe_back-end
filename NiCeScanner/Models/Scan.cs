@@ -22,7 +22,12 @@ namespace NiCeScanner.Models
 		[ForeignKey("Sector")]
 		public long SectorId { get; set; }
 
-		public string Results { get; set; }
+		private string _results;
+		public string Results
+		{
+			get { return _results; }
+			set { _results = value ?? "N/A"; } 
+		}
 
 		public DateTime CreatedAt { get; set; }
 
