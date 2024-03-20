@@ -70,24 +70,27 @@ namespace NiCeScanner.Controllers
             return View();
         }
 
-        // POST: Category/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Uuid,Name,Show,CreatedAt,UpdatedAt")] Category category)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(category);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(category);
-        }
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> Create([Bind("Name,Show")] Category category)
+		{
+			if (ModelState.IsValid)
+			{
+				category.CreatedAt = DateTime.Now;
+				category.Uuid = Guid.NewGuid();
 
-        // GET: Category/Edit/5
-        public async Task<IActionResult> Edit(long? id)
+				_context.Add(category);
+				await _context.SaveChangesAsync();
+
+				return RedirectToAction(nameof(Index));
+			}
+
+			return View(category);
+		}
+
+
+		// GET: Category/Edit/5
+		public async Task<IActionResult> Edit(long? id)
         {
             if (id == null)
             {

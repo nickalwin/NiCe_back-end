@@ -61,30 +61,36 @@
 </div>
 
 <div>
-    <h4>Answers</h4>
-    <hr />
-    <table class="table">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Question</th>
-                <th>Score</th>
-                <th>Comment</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var answer in Model.Answers)
-            {
-                var jsonData = JsonConvert.DeserializeObject<dynamic>(answer.Question.Data);
-                var questionText = jsonData.nl.question;
+    @foreach(var category in Model.Answers.Select(a => a.Question.Category).Distinct())
+    {
+        if(category.Questions.Count == 0) continue;
+        <h4>@category.Name</h4>
+        <hr />
+        <table class="table">
+            <thead>
                 <tr>
-                    <td>@answer.Id</td>
-                    <td>@questionText</td>
-                    <td>@answer.Score</td>
-                    <td>@answer.Comment</td>
-
+                    <th>#</th>
+                    <th>Question</th>
+                    <th>Score</th>
+                    <th>Comment</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var answer in Model.Answers)
+                {
+                    if (answer.Question.CategoryId == category.Id)
+                    {
+                        var jsonData = JsonConvert.DeserializeObject<dynamic>(answer.Question.Data);
+                        var questionText = jsonData.nl.question;
+                        <tr>
+                            <td>@answer.Id</td>
+                        <td>@questionText</td>
+                        <td>@answer.Score</td>
+                        <td>@answer.Comment</td>
+                    </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    }
 </div>

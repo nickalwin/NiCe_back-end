@@ -36,8 +36,9 @@ namespace NiCeScanner.Controllers
 
 			var scan = await _context.Scans
 				.Include(s => s.Sector)
-				.Include(s => s.Answers)  // Include Answers related to Scan
-					.ThenInclude(a => a.Question)  // Include Questions related to Answers
+				.Include(s => s.Answers)
+					.ThenInclude(a => a.Question)
+					.ThenInclude(q => q.Category)
 				.FirstOrDefaultAsync(m => m.Id == id);
 
 			if (scan == null)
