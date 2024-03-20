@@ -5,6 +5,7 @@ using NiCeScanner.Models;
 using NiCeScanner.Resources.Request.Scan;
 using NiCeScanner.Resources.API;
 using NiCeScanner.Utilities;
+using Newtonsoft.Json;
 
 namespace NiCeScanner.Controllers.API
 {
@@ -49,12 +50,43 @@ namespace NiCeScanner.Controllers.API
 					})
 				});
 
+			// get the average results for those categories
+			var scans = await _context.Scans.ToListAsync();
+			var allResults = new List<ScanResultElement>();
+
+			if (scans.Count > 5) // TODO Take a look at this limit.
+			{
+				foreach (var s in scans)
+				{
+					if (s.Results is null)
+						continue;
+					var results = JsonConvert.DeserializeObject<IEnumerable<ScanResultElement>>(s.Results);
+
+					foreach (var r in results!)
+					{
+						allResults.Add(r);
+					}
+				}
+			}
+
+			var averagesOfCategories = allResults
+				.GroupBy(r => r.Category_uuid)
+				.Select(g => new
+				{
+					Category_uuid = g.Key,
+					g.First().Category_name,
+					Mean = g.Average(r => r.Mean)
+				});
+
+			string averages = JsonConvert.SerializeObject(averagesOfCategories);
+				
 			var scanResource = new ScanResource
 			{
 				Uuid = scan.Uuid,
 				Contact_name = scan.ContactName,
 				Contact_email = scan.ContactEmail,
 				Results = scan.Results,
+				Average_results = averages,
 				Created_at = scan.CreatedAt,
 				Updated_at = scan.UpdatedAt,
 				Data = groupedAnswers
@@ -98,11 +130,29 @@ namespace NiCeScanner.Controllers.API
 			newScan.Results = ScanResultCalculator.SerializeResults(categoryWeightedMeans, categories);
 
 			_context.Scans.Update(newScan);
+
+			ScanCode editCode = new ScanCode
+			{
+				Code = Guid.NewGuid(),
+				CanEdit = true,
+				ScanId = newScan.Id,
+			};
+
+			ScanCode viewCode = new ScanCode
+			{
+				Code = Guid.NewGuid(),
+				CanEdit = false,
+				ScanId = newScan.Id,
+			};
+
+			_context.ScanCodes.AddRange(editCode, viewCode);
 			await _context.SaveChangesAsync();
 
 			return new PostScanRequestResult 
 			{ 
-				Uuid = newScan.Uuid 
+				Uuid = newScan.Uuid,
+				Edit_code = editCode.Code,
+				View_code = viewCode.Code,
 			};
 		}
 	}

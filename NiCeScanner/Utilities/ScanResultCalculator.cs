@@ -68,7 +68,9 @@ namespace NiCeScanner.Utilities
 					category_uuid = c.Uuid,
 					mean = m.Value
 				}
-			).ToList();
+			)
+			.OrderBy(c => c.mean)
+			.ToList();
 
 			return JsonConvert.SerializeObject(categoryResults);
 		}
