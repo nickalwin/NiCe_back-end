@@ -1,12 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NiCeScanner.Data;
-using NiCeScanner.Models;
 using NiCeScanner.Resources.API;
 
-namespace NiCeScanner.Controllers
+namespace NiCeScanner.Controllers.API
 {
-	[Route("api/[controller]")]
+	[Route("api/questions")]
 	[ApiController]
 	public class QuestionController : Controller
 	{

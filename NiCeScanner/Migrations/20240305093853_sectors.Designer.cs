@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NiCeScanner.Data;
 
@@ -10,9 +11,11 @@ using NiCeScanner.Data;
 namespace NiCeScanner.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240305093853_sectors")]
+    partial class sectors
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.2");
@@ -213,34 +216,6 @@ namespace NiCeScanner.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("NiCeScanner.Models.Answer", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Comment")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<long>("QuestionId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<long>("ScanId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<short>("Score")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("QuestionId");
-
-                    b.HasIndex("ScanId");
-
-                    b.ToTable("Answers");
-                });
-
             modelBuilder.Entity("NiCeScanner.Models.Category", b =>
                 {
                     b.Property<long>("Id")
@@ -303,26 +278,6 @@ namespace NiCeScanner.Migrations
                     b.ToTable("Mail");
                 });
 
-            modelBuilder.Entity("NiCeScanner.Models.Opinion", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Feedback")
-                        .HasColumnType("TEXT");
-
-                    b.Property<short>("Score")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Opinions");
-                });
-
             modelBuilder.Entity("NiCeScanner.Models.Question", b =>
                 {
                     b.Property<long>("Id")
@@ -363,59 +318,6 @@ namespace NiCeScanner.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("Questions");
-                });
-
-            modelBuilder.Entity("NiCeScanner.Models.Scan", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("ContactEmail")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("ContactName")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Results")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<long>("SectorId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("Uuid")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SectorId")
-                        .IsUnique();
-
-                    b.ToTable("Scans");
-                });
-
-            modelBuilder.Entity("NiCeScanner.Models.Sector", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Sectors");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -469,25 +371,6 @@ namespace NiCeScanner.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("NiCeScanner.Models.Answer", b =>
-                {
-                    b.HasOne("NiCeScanner.Models.Question", "Question")
-                        .WithMany()
-                        .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("NiCeScanner.Models.Scan", "Scan")
-                        .WithMany()
-                        .HasForeignKey("ScanId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Question");
-
-                    b.Navigation("Scan");
-                });
-
             modelBuilder.Entity("NiCeScanner.Models.Question", b =>
                 {
                     b.HasOne("NiCeScanner.Models.Category", "Category")
@@ -499,26 +382,9 @@ namespace NiCeScanner.Migrations
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("NiCeScanner.Models.Scan", b =>
-                {
-                    b.HasOne("NiCeScanner.Models.Sector", "Sector")
-                        .WithOne("Scan")
-                        .HasForeignKey("NiCeScanner.Models.Scan", "SectorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Sector");
-                });
-
             modelBuilder.Entity("NiCeScanner.Models.Category", b =>
                 {
                     b.Navigation("Questions");
-                });
-
-            modelBuilder.Entity("NiCeScanner.Models.Sector", b =>
-                {
-                    b.Navigation("Scan")
-                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
