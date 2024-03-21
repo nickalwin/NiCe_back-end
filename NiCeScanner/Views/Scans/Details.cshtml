@@ -51,7 +51,7 @@
             @Html.DisplayNameFor(model => model.Sector)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Sector.Name)
+            @Html.DisplayFor(model => model.Sector.Data)
         </dd>
     </dl>
 </div>
@@ -64,7 +64,7 @@
     @foreach(var category in Model.Answers.Select(a => a.Question.Category).Distinct())
     {
         if(category.Questions.Count == 0) continue;
-        <h4>@category.Name</h4>
+        <h4>@category.Data</h4>
         <hr />
         <table class="table">
             <thead>

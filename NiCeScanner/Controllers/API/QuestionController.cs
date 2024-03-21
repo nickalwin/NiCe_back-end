@@ -27,7 +27,7 @@ namespace NiCeScanner.Controllers.API
 					Uuid = q.Uuid,
 					Data = q.Data,
 					Category_uuid = q.Category.Uuid,
-					Category_name = q.Category.Name,
+					Category_data = q.Category.Data,
 					Statement = q.Statement,
 					Image = q.Image,
 				})

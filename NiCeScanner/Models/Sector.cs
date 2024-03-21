@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace NiCeScanner.Models
 {
@@ -8,7 +7,7 @@ namespace NiCeScanner.Models
 		[Key]
 		public long Id { get; set; }
 
-		public string Name { get; set; }
+		public string Data { get; set; }
 
 
 		public Scan Scan { get; set; }
