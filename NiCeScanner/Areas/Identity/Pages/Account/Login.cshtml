@@ -2,15 +2,14 @@
 @model LoginModel
 
 @{
-    ViewData["Title"] = "Log in";
+    ViewData["Title"] = "NiCE Admin Panel";
 }
 
-<h1>@ViewData["Title"]</h1>
 <div class="row">
-    <div class="col-md-4">
-        <section>
+    <div class="loginForm">
+        <section class="loginForm-item p-4">
             <form id="account" method="post">
-                <h2>Use a local account to log in.</h2>
+                <h1 class="text-center">@ViewData["Title"]</h1>
                 <hr />
                 <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
                 <div class="form-floating mb-3">
@@ -30,7 +29,7 @@
                     </label>
                 </div>
                 <div>
-                    <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">Log in</button>
+                    <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">Sign in</button>
                 </div>
                 <div>
                     <p>
@@ -39,14 +38,17 @@
                     <p>
                         <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
                     </p>
-                    <p>
+@*                     <p>
                         <a id="resend-confirmation" asp-page="./ResendEmailConfirmation">Resend email confirmation</a>
-                    </p>
+                    </p> *@
                 </div>
             </form>
         </section>
+        <section class="loginForm-item p-4">
+            <img src="https://via.placeholder.com/640x360" class="img-fluid" alt="Responsive image">
+        </section>
     </div>
-    <div class="col-md-6 col-md-offset-2">
+@*     <div class="col-md-6 col-md-offset-2">
         <section>
             <h3>Use another service to log in.</h3>
             <hr />
@@ -75,7 +77,7 @@
                 }
             }
         </section>
-    </div>
+    </div> *@
 </div>
 
 @section Scripts {
