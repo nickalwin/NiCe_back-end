@@ -83,8 +83,8 @@ namespace NiCeScanner.Data
 									tooltip = "For services: does the use of your services prevent products and materials from being incinerated with energy recovery?"
 								}
 							}),
-						Category = c1,
-							Weight = 1,
+							Category = c1,
+							Weight = 0,
 							Statement = false,
 							Show = true,
 							Image = "https://placehold.co/600x400/EEE/31343C",
@@ -130,8 +130,8 @@ namespace NiCeScanner.Data
 									tooltip = "For services: repair café, maintenance contracts, refurbishing, using repairable products in services. Can you quickly deliver replacement parts for products already delivered to your customers? Do you still supply parts for products that have been discontinued? Do you invest in affordable maintenance for your customers so that the products in your product range last longer? Are returned products refurbished for resale? Do you sell products where the parts can be efficiently replaced?"
 								}
 							}),
-						Category = c1,
-							Weight = 1,
+							Category = c1,
+							Weight = 2,
 							Statement = false,
 							Show = true,
 							Image = "https://placehold.co/600x400/EEE/31343C",
@@ -153,8 +153,8 @@ namespace NiCeScanner.Data
 									tooltip = "For services: e.g., using used products. Are products used in your services reused multiple times? Ensuring the sharing and redistribution of old products."
 								}
 							}),
-						Category = c1,
-							Weight = 1,
+							Category = c1,
+							Weight = 2,
 							Statement = false,
 							Show = true,
 							Image = "https://placehold.co/600x400/EEE/31343C",
@@ -176,8 +176,8 @@ namespace NiCeScanner.Data
 									tooltip = "For services: Do you use products where efficient use of raw materials in production and usage phase has been considered? Maintenance of appliances/machines to keep them efficient."
 								}
 							}),
-						Category = c1,
-							Weight = 1,
+							Category = c1,
+							Weight = 2,
 							Statement = false,
 							Show = true,
 							Image = "https://placehold.co/600x400/EEE/31343C",
@@ -199,8 +199,8 @@ namespace NiCeScanner.Data
 									tooltip = "For example, is your product offered via platforms for more intensive use? Or can it be used multifunctionally?"
 								}
 							}),
-						Category = c1,
-							Weight = 1,
+							Category = c1,
+							Weight = 3,
 							Statement = false,
 							Show = true,
 							Image = "https://placehold.co/600x400/EEE/31343C",
@@ -222,8 +222,8 @@ namespace NiCeScanner.Data
 									tooltip = "For services: for example, developing a service that eliminates the need for new products, such as a diaper washing service. Hot water instead of chemical weed killer. Innovation to prevent material use."
 								}
 							}),
-						Category = c1,
-							Weight = 1,
+							Category = c1,
+							Weight = 3,
 							Statement = false,
 							Show = true,
 							Image = "https://placehold.co/600x400/EEE/31343C",
@@ -245,8 +245,8 @@ namespace NiCeScanner.Data
 									tooltip = "Understand what happens to products, what breaks first, when and why products are discarded, whether they are repaired, resold, modified, know where the materials in products are, etc."
 								}
 							}),
-						Category = c1,
-							Weight = 1,
+							Category = c1,
+							Weight = 3,
 							Statement = false,
 							Show = true,
 							Image = "https://placehold.co/600x400/EEE/31343C",
@@ -268,8 +268,8 @@ namespace NiCeScanner.Data
 									tooltip = "There are many different circular business models and revenue models. For example: Performance model (contract based on pay-per-performance), Middleman model (recover, refurbish & resell or repair), Access model (providing access to product), classic sustainable model (long lifespan), and hybrid model (combination of long lifespan and sale of associated consumables)."
 								}
 							}),
-						Category = c1,
-							Weight = 1,
+							Category = c1,
+							Weight = 3,
 							Statement = false,
 							Show = true,
 							Image = "https://placehold.co/600x400/EEE/31343C",
@@ -291,8 +291,8 @@ namespace NiCeScanner.Data
 									tooltip = ""
 								}
 							}),
-						Category = c1,
-							Weight = 1,
+							Category = c1,
+							Weight = 3,
 							Statement = false,
 							Show = true,
 							Image = "https://placehold.co/600x400/EEE/31343C",
@@ -314,8 +314,8 @@ namespace NiCeScanner.Data
 									tooltip = ""
 								}
 							}),
-						Category = c1,
-							Weight = 1,
+							Category = c1,
+							Weight = 2,
 							Statement = false,
 							Show = true,
 							Image = "https://placehold.co/600x400/EEE/31343C",
@@ -820,8 +820,8 @@ namespace NiCeScanner.Data
 									tooltip = ""
 								}
 							}),
-						Category = c5,
-							Weight = 1,
+							Category = c5,
+							Weight = 3,
 							Statement = false,
 							Show = true,
 							Image = "https://placehold.co/600x400/EEE/31343C",
@@ -843,8 +843,8 @@ namespace NiCeScanner.Data
 									tooltip = ""
 								}
 							}),
-						Category = c5,
-							Weight = 1,
+							Category = c5,
+							Weight = 2,
 							Statement = false,
 							Show = true,
 							Image = "https://placehold.co/600x400/EEE/31343C",
@@ -935,8 +935,8 @@ namespace NiCeScanner.Data
 									tooltip = ""
 								}
 							}),
-						Category = c5,
-							Weight = 1,
+							Category = c5,
+							Weight = 3,
 							Statement = false,
 							Show = true,
 							Image = "https://placehold.co/600x400/EEE/31343C",
@@ -981,8 +981,8 @@ namespace NiCeScanner.Data
 									tooltip = ""
 								}
 							}),
-						Category = c5,
-							Weight = 1,
+							Category = c5,
+							Weight = 2,
 							Statement = false,
 							Show = true,
 							Image = "https://placehold.co/600x400/EEE/31343C",
@@ -1004,8 +1004,8 @@ namespace NiCeScanner.Data
 									tooltip = ""
 								}
 							}),
-						Category = c5,
-							Weight = 1,
+							Category = c5,
+							Weight = 2,
 							Statement = false,
 							Show = true,
 							Image = "https://placehold.co/600x400/EEE/31343C",
@@ -1050,8 +1050,8 @@ namespace NiCeScanner.Data
 									tooltip = "Do you know how to calculate your organization's CO2 footprint? Are you aware of the costs associated with the current European CO2 price? Does your organization use tools to identify potential energy savings? Are you familiar with subsidy opportunities for energy savings?"
 								}
 							}),
-						Category = c5,
-							Weight = 1,
+							Category = c5,
+							Weight = 2,
 							Statement = false,
 							Show = true,
 							Image = "https://placehold.co/600x400/EEE/31343C",
@@ -1096,8 +1096,8 @@ namespace NiCeScanner.Data
 									tooltip = "Does your organization have company cars? Does your company know the commuting routes of its employees and the means of transportation used? Does your company use public transportation cards? Is your company transitioning from fossil fuel to electric vehicles? Does your company know the CO2 footprint of its (air) travel?"
 								}
 							}),
-						Category = c5,
-							Weight = 1,
+							Category = c5,
+							Weight = 2,
 							Statement = false,
 							Show = true,
 							Image = "https://placehold.co/600x400/EEE/31343C",
@@ -1119,8 +1119,8 @@ namespace NiCeScanner.Data
 									tooltip = "People with distance to the labor market, disabled people, individuals over 50, training programs, cultural backgrounds, gender"
 								}
 							}),
-						Category = c6,
-							Weight = 1,
+							Category = c6,
+							Weight = 2,
 							Statement = false,
 							Show = true,
 							Image = "https://placehold.co/600x400/EEE/31343C",
@@ -1280,8 +1280,8 @@ namespace NiCeScanner.Data
 									tooltip = "Not only are labor conditions within the company considered, but throughout the entire lifecycle of the organization's products, aspects such as minimum acceptable wage (sustainable wage in the long term, or decent living wage in the short term), child labor (forced labor, inability to attend school), extreme poverty (derived from the World Bank's absolute poverty line), excessive working hours (forced labor, involuntary), workplace safety and health (based on ILO statistics)."
 								}
 							}),
-						Category = c6,
-							Weight = 1,
+							Category = c6,
+							Weight = 2,
 							Statement = false,
 							Show = true,
 							Image = "https://placehold.co/600x400/EEE/31343C",
