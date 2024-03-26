@@ -8,15 +8,25 @@ namespace NiCeScanner.Data
 	{
 		public static void Seed(IApplicationBuilder appBuilder)
 		{
-			using (var serviceScope = appBuilder.ApplicationServices.CreateScope())
+			using (IServiceScope serviceScope = appBuilder.ApplicationServices.CreateScope())
 			{
-				var context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
+				ApplicationDbContext context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
 
 				if (!context.Categories.Any())
 				{
 					Category c1 = new Category()
 					{
-						Name = "Innovatie in grondstofgebruik",
+						Data = JsonConvert.SerializeObject(new
+						{
+							nl = new
+							{
+								name = "Innovatie in grondstofgebruik",
+							},
+							en = new
+							{
+								name = "Innovation in raw material use",
+							}
+						}),
 						Show = true,
 						CreatedAt = DateTime.Now,
 						UpdatedAt = DateTime.Now,
@@ -24,7 +34,17 @@ namespace NiCeScanner.Data
 
 					Category c2 = new Category()
 					{
-						Name = "Productie en logistiek",
+						Data = JsonConvert.SerializeObject(new
+						{
+							nl = new
+							{
+								name = "Productie en logistiek",
+							},
+							en = new
+							{
+								name = "Production and logistics",
+							}
+						}),
 						Show = true,
 						CreatedAt = DateTime.Now,
 						UpdatedAt = DateTime.Now,
@@ -32,7 +52,17 @@ namespace NiCeScanner.Data
 
 					Category c3 = new Category()
 					{
-						Name = "Ketensamenwerking",
+						Data = JsonConvert.SerializeObject(new
+						{
+							nl = new
+							{
+								name = "Ketensamenwerking",
+							},
+							en = new
+							{
+								name = "Chain collaboration",
+							}
+						}),
 						Show = true,
 						CreatedAt = DateTime.Now,
 						UpdatedAt = DateTime.Now,
@@ -40,7 +70,17 @@ namespace NiCeScanner.Data
 
 					Category c4 = new Category()
 					{
-						Name = "Ambitie",
+						Data = JsonConvert.SerializeObject(new
+						{
+							nl = new
+							{
+								name = "Ambitie",
+							},
+							en = new
+							{
+								name = "Ambition",
+							}
+						}),
 						Show = true,
 						CreatedAt = DateTime.Now,
 						UpdatedAt = DateTime.Now,
@@ -48,7 +88,17 @@ namespace NiCeScanner.Data
 
 					Category c5 = new Category()
 					{
-						Name = "Facilitair",
+						Data = JsonConvert.SerializeObject(new
+						{
+							nl = new
+							{
+								name = "Facilitair",
+							},
+							en = new
+							{
+								name = "Facility",
+							}
+						}),
 						Show = true,
 						CreatedAt = DateTime.Now,
 						UpdatedAt = DateTime.Now,
@@ -56,7 +106,17 @@ namespace NiCeScanner.Data
 
 					Category c6 = new Category()
 					{
-						Name = "Arbeid",
+						Data = JsonConvert.SerializeObject(new
+						{
+							nl = new
+							{
+								name = "Arbeid",
+							},
+							en = new
+							{
+								name = "Labor",
+							}
+						}),
 						Show = true,
 						CreatedAt = DateTime.Now,
 						UpdatedAt = DateTime.Now,
@@ -1326,77 +1386,227 @@ namespace NiCeScanner.Data
 				{
 					Sector s1 = new Sector()
 					{
-						Name = "Agrarisch",
+						Data = JsonConvert.SerializeObject(new
+						{
+							nl = new
+							{
+								name = "Agrarisch",
+							},
+							en = new
+							{
+								name = "Agricultural",
+							}
+						}),
 					};
 
 					Sector s2 = new Sector()
 					{
-						Name = "Bouw",
+						Data = JsonConvert.SerializeObject(new
+						{
+							nl = new
+							{
+								name = "Bouw",
+							},
+							en = new
+							{
+								name = "Build",
+							}
+						}),
 					};
 
 					Sector s3 = new Sector()
 					{
-						Name = "Detailhandel",
+						Data = JsonConvert.SerializeObject(new
+						{
+							nl = new
+							{
+								name = "Detailhandel",
+							},
+							en = new
+							{
+								name = "Retail",
+							}
+						}),
 					};
 
 					Sector s4 = new Sector()
 					{
-						Name = "Energie",
+						Data = JsonConvert.SerializeObject(new
+						{
+							nl = new
+							{
+								name = "Energie",
+							},
+							en = new
+							{
+								name = "Energy",
+							}
+						}),
 					};
 
 					Sector s5 = new Sector()
 					{
-						Name = "Financiële dienstverlening",
+						Data = JsonConvert.SerializeObject(new
+						{
+							nl = new
+							{
+								name = "Financiële dienstverlening",
+							},
+							en = new
+							{
+								name = "Financial services",
+							}
+						}),
 					};
 
 					Sector s6 = new Sector()
 					{
-						Name = "Gezondheidszorg",
+						Data = JsonConvert.SerializeObject(new
+						{
+							nl = new
+							{
+								name = "Gezondheidszorg",
+							},
+							en = new
+							{
+								name = "Healthcare",
+							}
+						}),
 					};
 
 					Sector s7 = new Sector()
 					{
-						Name = "Horeca",
+						Data = JsonConvert.SerializeObject(new
+						{
+							nl = new
+							{
+								name = "Horeca",
+							},
+							en = new
+							{
+								name = "Catering industry",
+							}
+						}),
 					};
 
 					Sector s8 = new Sector()
 					{
-						Name = "ICT",
+						Data = JsonConvert.SerializeObject(new
+						{
+							nl = new
+							{
+								name = "ICT",
+							},
+							en = new
+							{
+								name = "IT",
+							}
+						}),
 					};
 
 					Sector s9 = new Sector()
 					{
-						Name = "Industrie",
+						Data = JsonConvert.SerializeObject(new
+						{
+							nl = new
+							{
+								name = "Industrie",
+							},
+							en = new
+							{
+								name = "Industry",
+							}
+						}),
 					};
 
 					Sector s10 = new Sector()
 					{
-						Name = "Landbouw",
+						Data = JsonConvert.SerializeObject(new
+						{
+							nl = new
+							{
+								name = "Landbouw",
+							},
+							en = new
+							{
+								name = "Agriculture",
+							}
+						}),
 					};
 
 					Sector s11 = new Sector()
 					{
-						Name = "Onderwijs",
+						Data = JsonConvert.SerializeObject(new
+						{
+							nl = new
+							{
+								name = "Onderwijs",
+							},
+							en = new
+							{
+								name = "Education",
+							}
+						}),
 					};
 
 					Sector s12 = new Sector()
 					{
-						Name = "Overheid",
+						Data = JsonConvert.SerializeObject(new
+						{
+							nl = new
+							{
+								name = "Overheid",
+							},
+							en = new
+							{
+								name = "Government",
+							}
+						}),
 					};
 
 					Sector s13 = new Sector()
 					{
-						Name = "Transport",
+						Data = JsonConvert.SerializeObject(new
+						{
+							nl = new
+							{
+								name = "Transport",
+							},
+							en = new
+							{
+								name = "Transport",
+							}
+						}),
 					};
 
 					Sector s14 = new Sector()
 					{
-						Name = "Vastgoed",
+						Data = JsonConvert.SerializeObject(new
+						{
+							nl = new
+							{
+								name = "Vastgoed",
+							},
+							en = new
+							{
+								name = "Property",
+							}
+						}),
 					};
 
 					Sector s15 = new Sector()
 					{
-						Name = "Zakelijke dienstverlening",
+						Data = JsonConvert.SerializeObject(new
+						{
+							nl = new
+							{
+								name = "Zakelijke dienstverlening",
+							},
+							en = new
+							{
+								name = "Business services",
+							}
+						}),
 					};
 
 					context.Sectors.AddRange(

@@ -64,7 +64,7 @@ namespace NiCeScanner.Utilities
 				join m in categoryWeightedMeans on c.Uuid equals m.Key
 				select new
 				{
-					category_name = c.Name,
+					category_data = c.Data,
 					category_uuid = c.Uuid,
 					mean = m.Value
 				}

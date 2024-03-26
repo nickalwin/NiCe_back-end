@@ -15,8 +15,7 @@ namespace NiCeScanner.Models
 
 		public Guid Uuid { get; set; }
 
-		[MaxLength(255)]
-		public string Name { get; set; }
+		public string Data { get; set; }
 
 		public bool Show { get; set; }
 

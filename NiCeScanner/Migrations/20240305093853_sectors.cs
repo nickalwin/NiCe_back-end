@@ -16,8 +16,8 @@ namespace NiCeScanner.Migrations
                 {
                     Id = table.Column<long>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(nullable: false)
-                },
+					Data = table.Column<string>(type: "json", nullable: false),
+				},
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Sectors", x => x.Id);
