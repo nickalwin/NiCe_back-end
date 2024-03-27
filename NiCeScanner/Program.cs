@@ -19,6 +19,14 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
 	.AddRoles<IdentityRole>()
 	.AddEntityFrameworkStores<ApplicationDbContext>();
 
+builder.Services.AddAuthorization(options =>
+{
+	options.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"));
+	options.AddPolicy("RequireResearcherRole", policy => policy.RequireRole("Admin", "Researcher"));
+	options.AddPolicy("RequireStudentRole", policy => policy.RequireRole("Admin", "Student"));
+	options.AddPolicy("RequireMemberRole", policy => policy.RequireRole("Admin", "Member"));
+});
+
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddSwaggerGen(c =>
