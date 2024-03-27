@@ -1,7 +1,9 @@
-namespace NiCeScanner.Resources.Request
+namespace NiCeScanner.Resources.Request.Scan
 {
 	public class AnswerElement
 	{
+		public Guid Category_uuid { get; set; }
+
 		public Guid Question_uuid { get; set; }
 
 		public short Answer { get; set; }

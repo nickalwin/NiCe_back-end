@@ -2,7 +2,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NiCeScanner.Data;
 using NiCeScanner.Models;
-using NiCeScanner.Resources.Request;
+using NiCeScanner.Resources.Request.Scan;
+using NiCeScanner.Resources.API;
+using NiCeScanner.Utilities;
+using Newtonsoft.Json;
 
 namespace NiCeScanner.Controllers.API
 {
@@ -18,24 +21,82 @@ namespace NiCeScanner.Controllers.API
 		}
 
 		[HttpGet("{uuid}")]
-		public async Task<ActionResult<object>> GetScan(string uuid) // TODO
+		public async Task<ActionResult<ScanResource>> GetScan(string uuid)
 		{
-			Scan? scan = await _context.Scans.Where(s => s.Uuid == Guid.Parse(uuid))
-											.Include(s => s.Answers)
-											.ThenInclude(a => a.Question)
-											.FirstOrDefaultAsync();
+			Guid guid = Guid.Parse(uuid);
 
-			if (scan is null)
+			var scan = await _context.Scans
+				.Include(s => s.Answers)
+					.ThenInclude(a => a.Question)
+						.ThenInclude(q => q.Category)
+				.FirstOrDefaultAsync(s => s.Uuid == guid);
+
+			if (scan == null)
 			{
 				return NotFound("Scan not found");
 			}
 
+			var groupedAnswers = scan.Answers
+				.GroupBy(a => a.Question.Category.Uuid)
+				.Select(g => new ScanResultDataResource
+				{
+					Category_uuid = g.Key,
+					Grouped_answers = g.Select(a => new GroupedCategoryQuestionsResource
+					{
+						Question_data = a.Question.Data,
+						Question_uuid = a.Question.Uuid,
+						Answer = a.Score,
+						Comment = a.Comment
+					})
+				});
 
-			return new { uuid };
+			// get the average results for those categories
+			var scans = await _context.Scans.ToListAsync();
+			var allResults = new List<ScanResultElement>();
+
+			if (scans.Count > 5) // TODO Take a look at this limit.
+			{
+				foreach (var s in scans)
+				{
+					if (s.Results is null)
+						continue;
+					var results = JsonConvert.DeserializeObject<IEnumerable<ScanResultElement>>(s.Results);
+
+					foreach (var r in results!)
+					{
+						allResults.Add(r);
+					}
+				}
+			}
+
+			var averagesOfCategories = allResults
+				.GroupBy(r => r.Category_uuid)
+				.Select(g => new
+				{
+					Category_uuid = g.Key,
+					g.First().Category_name,
+					Mean = g.Average(r => r.Mean)
+				});
+
+			string averages = JsonConvert.SerializeObject(averagesOfCategories);
+				
+			var scanResource = new ScanResource
+			{
+				Uuid = scan.Uuid,
+				Contact_name = scan.ContactName,
+				Contact_email = scan.ContactEmail,
+				Results = scan.Results,
+				Average_results = averages,
+				Created_at = scan.CreatedAt,
+				Updated_at = scan.UpdatedAt,
+				Data = groupedAnswers
+			};
+
+			return scanResource;
 		}
 
 		[HttpPost]
-		public async Task<ActionResult<PostScanRequest>> StoreScan(PostScanRequest scan)
+		public async Task<ActionResult<PostScanRequestResult>> StoreScan(PostScanRequest scan)
 		{
 			var newScan = new Scan
 			{
@@ -50,23 +111,49 @@ namespace NiCeScanner.Controllers.API
 			await _context.SaveChangesAsync();
 
 			List<Guid> questionUuids = scan.Answers.Select(a => a.Question_uuid).ToList();
-
-			Dictionary<Guid, long> questions = await _context.Questions.Where(q => questionUuids.Contains(q.Uuid))
-																	   .ToDictionaryAsync(q => q.Uuid, q => q.Id);
+			List<Question> questions = await _context.Questions.Where(q => questionUuids.Contains(q.Uuid)).ToListAsync();
+			Dictionary<Guid, Question> questionDictionary = questions.ToDictionary(q => q.Uuid, q => q);
 
 			var newAnswers = scan.Answers.Select(answer => new Answer
 			{
 				ScanId = newScan.Id,
-				QuestionId = questions[answer.Question_uuid],
+				QuestionId = questionDictionary[answer.Question_uuid].Id,
 				Score = answer.Answer,
 				Comment = answer.Comment ?? "",
 			}).ToList();
 
 			_context.Answers.AddRange(newAnswers);
 
+			Dictionary<Guid, double> categoryWeightedMeans = ScanResultCalculator.CalculateResults(scan.Answers, questionDictionary);
+			List<Category> categories = await _context.Categories.Where(c => categoryWeightedMeans.Keys.Contains(c.Uuid)).ToListAsync();
+
+			newScan.Results = ScanResultCalculator.SerializeResults(categoryWeightedMeans, categories);
+
+			_context.Scans.Update(newScan);
+
+			ScanCode editCode = new ScanCode
+			{
+				Code = Guid.NewGuid(),
+				CanEdit = true,
+				ScanId = newScan.Id,
+			};
+
+			ScanCode viewCode = new ScanCode
+			{
+				Code = Guid.NewGuid(),
+				CanEdit = false,
+				ScanId = newScan.Id,
+			};
+
+			_context.ScanCodes.AddRange(editCode, viewCode);
 			await _context.SaveChangesAsync();
 
-			return Ok("Scan created successfully");
+			return new PostScanRequestResult 
+			{ 
+				Uuid = newScan.Uuid,
+				Edit_code = editCode.Code,
+				View_code = viewCode.Code,
+			};
 		}
 	}
 }
