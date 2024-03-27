@@ -23,7 +23,8 @@ namespace NiCeScanner.Controllers.API
 
 			return Ok(sectors.Select(s => new SectorResource
 			{
-				Name = s.Name
+				Id = s.Id,
+				Data = s.Data
 			}));
         }
 	}
