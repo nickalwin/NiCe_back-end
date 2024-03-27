@@ -81,7 +81,7 @@ namespace NiCeScanner.Controllers
 				var category = new Category
 				{
 					Uuid = categoryForm.Uuid,
-					Name = categoryForm.Name,
+					//Name = categoryForm.Name,
 					Show = categoryForm.Show,
 					CreatedAt = categoryForm.CreatedAt,
 					UpdatedAt = categoryForm.UpdatedAt

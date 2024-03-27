@@ -1,4 +1,6 @@
-﻿@model PaginatedList<NiCeScanner.Models.Category>
+﻿@using Newtonsoft.Json
+@using Newtonsoft.Json.Linq
+@model PaginatedList<NiCeScanner.Models.Category>
 
 @{
     ViewData["Title"] = "Index";
@@ -31,9 +33,12 @@
     <tbody>
         @foreach (var item in Model)
         {
+            var categoryData = JsonConvert.DeserializeObject<JObject>(item.Data);
+            var categoryText = categoryData?["nl"]?.Value<string>("name") ?? "N/A";
+
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Data)
+                    @Html.DisplayFor(modelItem => categoryText)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Show)

@@ -1,4 +1,6 @@
-﻿@model IEnumerable<NiCeScanner.Models.Scan>
+﻿@using Newtonsoft.Json
+@using Newtonsoft.Json.Linq
+@model IEnumerable<NiCeScanner.Models.Scan>
 
 @{
     ViewData["Title"] = "Index";
@@ -28,6 +30,10 @@
     </thead>
     <tbody>
 @foreach (var item in Model) {
+
+        var sectorData = JsonConvert.DeserializeObject<JObject>(item.Sector.Data);
+        var sectorText = sectorData?["nl"]?.Value<string>("name") ?? "N/A";
+
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.ContactName)
@@ -36,7 +42,7 @@
                 @Html.DisplayFor(modelItem => item.ContactEmail)
             </td>
             <td>
-                    @Html.DisplayFor(modelItem => item.Sector.Data)
+                    @Html.DisplayFor(modelItem => sectorText)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.CreatedAt)

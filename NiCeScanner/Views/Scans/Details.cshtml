@@ -1,4 +1,5 @@
 ﻿@using Newtonsoft.Json
+@using Newtonsoft.Json.Linq
 @model NiCeScanner.Models.Scan
 
 @{
@@ -64,7 +65,11 @@
     @foreach(var category in Model.Answers.Select(a => a.Question.Category).Distinct())
     {
         if(category.Questions.Count == 0) continue;
-        <h4>@category.Data</h4>
+
+        var categoryData = JsonConvert.DeserializeObject<JObject>(category.Data);
+        var categoryText = categoryData?["nl"]?.Value<string>("name") ?? "N/A";
+
+        <h4>@categoryText</h4>
         <hr />
         <table class="table">
             <thead>
