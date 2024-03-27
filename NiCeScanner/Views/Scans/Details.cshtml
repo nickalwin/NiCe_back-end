@@ -63,7 +63,6 @@
 <div>
     @foreach(var category in Model.Answers.Select(a => a.Question.Category).Distinct())
     {
-        if(category.Questions.Count == 0) continue;
         <h4>@category.Name</h4>
         <hr />
         <table class="table">

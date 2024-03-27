@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -20,6 +21,7 @@ namespace NiCeScanner.Controllers
         }
 
 		// GET: Category
+		[Authorize(Policy = "RequireResearcherRole")]
 		public async Task<IActionResult> Index(
 		string sortOrder,
 		string currentFilter,
@@ -72,24 +74,29 @@ namespace NiCeScanner.Controllers
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Create([Bind("Name,Show")] Category category)
+		public async Task<IActionResult> Create([Bind("Name,Show")] CategoryForm categoryForm)
 		{
 			if (ModelState.IsValid)
 			{
-				category.CreatedAt = DateTime.Now;
-				category.Uuid = Guid.NewGuid();
+				var category = new Category
+				{
+					Uuid = categoryForm.Uuid,
+					Name = categoryForm.Name,
+					Show = categoryForm.Show,
+					CreatedAt = categoryForm.CreatedAt,
+					UpdatedAt = categoryForm.UpdatedAt
+				};
 
 				_context.Add(category);
 				await _context.SaveChangesAsync();
-
 				return RedirectToAction(nameof(Index));
 			}
-
-			return View(category);
+			return View(categoryForm);
 		}
 
 
 		// GET: Category/Edit/5
+		[Authorize(Roles = "Admin")]
 		public async Task<IActionResult> Edit(long? id)
         {
             if (id == null)
@@ -140,7 +147,8 @@ namespace NiCeScanner.Controllers
             return View(category);
         }
 
-        // GET: Category/Delete/5
+		// GET: Category/Delete/5
+		[Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(long? id)
         {
             if (id == null)
