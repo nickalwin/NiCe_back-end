@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing.Printing;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using NiCeScanner.Data;
+using NiCeScanner.Migrations;
 using NiCeScanner.Models;
 
 namespace NiCeScanner.Controllers
@@ -19,15 +21,79 @@ namespace NiCeScanner.Controllers
             _context = context;
         }
 
-        // GET: Questions
-        public async Task<IActionResult> Index()
-        {
-            var applicationDbContext = _context.Questions.Include(q => q.Category);
-            return View(await applicationDbContext.ToListAsync());
-        }
+		// GET: Questions
+		public async Task<IActionResult> Index(
+			string[] sortOrder,
+			string currentFilter,
+			string searchString,
+			int? pageNumber)
+		{
+			ViewData["CurrentSort"] = sortOrder;
+			ViewData["WeightSortParm"] = sortOrder[0] switch
+			{
+				"Weight" => "Weight_desc",
+				"Weight_desc" => "",
+				_ => "Weight"
+			};
+			ViewData["CategoryIdSortParm"] = sortOrder[1] switch
+			{
+				"category" => "categoryId_desc",
+				"categoryId_desc" => "",
+				_ => "category"
+			};
 
-        // GET: Questions/Details/5
-        public async Task<IActionResult> Details(long? id)
+			if (searchString != null)
+			{
+				pageNumber = 1;
+			}
+			else
+			{
+				searchString = currentFilter;
+			}
+
+			ViewData["CurrentFilter"] = searchString;
+
+			var questions = from s in _context.Questions.Include(q => q.Category)
+							select s;
+
+			if (!string.IsNullOrEmpty(searchString))
+			{
+				questions = questions.Where(s => s.Data.Contains(searchString));
+			}
+
+			// Iterate over the sortOrder array and apply sorting accordingly
+			for (int i = 0; i < sortOrder.Length; i++)
+			{
+				switch (sortOrder[i])
+				{
+					case "Weight":
+						questions = questions.OrderBy(s => s.Weight);
+						break;
+					case "Weight_desc":
+						questions = questions.OrderByDescending(s => s.Weight);
+						break;
+					case "categoryId_desc":
+						questions = questions.OrderByDescending(s => s.CategoryId);
+						break;
+					case "category":
+						questions = questions.OrderBy(s => s.CategoryId);
+						break;
+					default:
+						questions = questions.OrderBy(s => s.CategoryId);
+						break;
+				}
+			}
+
+			int pageSize = 10;
+			return View(await PaginatedList<Question>.CreateAsync(questions.AsNoTracking(), pageNumber ?? 1, pageSize));
+		}
+
+
+
+
+
+		// GET: Questions/Details/5
+		public async Task<IActionResult> Details(long? id)
         {
             if (id == null)
             {
