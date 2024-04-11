@@ -23,24 +23,58 @@ namespace NiCeScanner.Controllers
 
 		// GET: Questions
 		public async Task<IActionResult> Index(
-			string[] sortOrder,
+			string sortOrderQuestion,
+			string sortOrderWeight,
+			string sortOrderCategory,
+			string sortOrderShow,
+			string sortOrderStatement,
 			string currentFilter,
 			string searchString,
 			int? pageNumber)
 		{
-			ViewData["CurrentSort"] = sortOrder;
-			ViewData["WeightSortParm"] = sortOrder[0] switch
+			ViewData["Title"] = "Questions";
+
+			ViewData["QuestionIDSortParm"] = sortOrderQuestion switch
+			{
+				"QuestionID_desc" => "QuestionID",
+				"QuestionID" => "",
+				_ => "QuestionID_desc"
+			};
+			ViewData["SortOrderQuestion"] = sortOrderQuestion;
+
+			ViewData["WeightSortParm"] = sortOrderWeight switch
 			{
 				"Weight" => "Weight_desc",
 				"Weight_desc" => "",
 				_ => "Weight"
 			};
-			ViewData["CategoryIdSortParm"] = sortOrder[1] switch
+			ViewData["SortOrderWeight"] = sortOrderWeight;
+
+			ViewData["CategorySortParm"] = sortOrderCategory switch
 			{
-				"category" => "categoryId_desc",
-				"categoryId_desc" => "",
+				"category" => "category_desc",
+				"category_desc" => "",
 				_ => "category"
 			};
+			ViewData["SortOrderCategory"] = sortOrderCategory;
+
+			ViewData["ShowSortParm"] = sortOrderShow switch
+			{
+				"Show_desc" => "Show",
+				"Show" => "",
+				_ => "Show_desc"
+			};
+			ViewData["SortOrderShow"] = sortOrderShow;
+
+			ViewData["StatementSortParm"] = sortOrderStatement switch
+			{
+				"Statement_desc" => "Statement",
+				"Statement" => "",
+				_ => "Statement_desc"
+			};
+			ViewData["SortOrderStatement"] = sortOrderStatement;
+
+			ViewData["SearchString"] = searchString;
 
 			if (searchString != null)
 			{
@@ -53,44 +87,73 @@ namespace NiCeScanner.Controllers
 
 			ViewData["CurrentFilter"] = searchString;
 
+
 			var questions = from s in _context.Questions.Include(q => q.Category)
 							select s;
 
 			if (!string.IsNullOrEmpty(searchString))
 			{
-				questions = questions.Where(s => s.Data.Contains(searchString));
+				questions = questions.Where(s => s.Data.Contains(searchString) || s.Category.Data.Contains(searchString));
 			}
-
-			// Iterate over the sortOrder array and apply sorting accordingly
-			for (int i = 0; i < sortOrder.Length; i++)
+			switch (sortOrderCategory)
 			{
-				switch (sortOrder[i])
-				{
-					case "Weight":
-						questions = questions.OrderBy(s => s.Weight);
-						break;
-					case "Weight_desc":
-						questions = questions.OrderByDescending(s => s.Weight);
-						break;
-					case "categoryId_desc":
-						questions = questions.OrderByDescending(s => s.CategoryId);
-						break;
-					case "category":
-						questions = questions.OrderBy(s => s.CategoryId);
-						break;
-					default:
-						questions = questions.OrderBy(s => s.CategoryId);
-						break;
-				}
+				case "category_desc":
+					questions = questions.OrderByDescending(s => s.Category.Data);
+					break;
+				case "category":
+					questions = questions.OrderBy(s => s.Category.Data);
+					break;
+			}
+			switch (sortOrderQuestion)
+			{
+				case "QuestionID_desc":
+					questions = questions.OrderByDescending(s => s.Id);
+					break;
+				case "QuestionID":
+					questions = questions.OrderBy(s => s.Id);
+					break;
+				default:
+					questions = questions.OrderBy(s => s.Data);
+					break;
+			}
+			switch (sortOrderWeight)
+			{
+				case "Weight_desc":
+					questions = questions.OrderByDescending(s => s.Weight);
+					break;
+				case "Weight":
+					questions = questions.OrderBy(s => s.Weight);
+					break;
+			}
+			switch (sortOrderShow)
+			{
+				case "Show_desc":
+					questions = questions.OrderByDescending(s => s.Show);
+					break;
+				case "Show":
+					questions = questions.OrderBy(s => s.Show);
+					break;
+			}
+			switch (sortOrderStatement)
+			{
+				case "Statement_desc":
+					questions = questions.OrderByDescending(s => s.Statement);
+					break;
+				case "Statement":
+					questions = questions.OrderBy(s => s.Statement);
+					break;
 			}
 
 			int pageSize = 10;
-			return View(await PaginatedList<Question>.CreateAsync(questions.AsNoTracking(), pageNumber ?? 1, pageSize));
+			var model = await PaginatedList<Question>.CreateAsync(questions.AsNoTracking(), pageNumber ?? 1, pageSize);
+
+			if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+			{
+				return PartialView("_QuestionTable", model);
+			}
+
+			return View(model);
 		}
-
-
-
-
 
 		// GET: Questions/Details/5
 		public async Task<IActionResult> Details(long? id)

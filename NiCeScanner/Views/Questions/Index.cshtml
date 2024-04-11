@@ -2,118 +2,42 @@
 @using Newtonsoft.Json.Linq
 @model PaginatedList<NiCeScanner.Models.Question>
 
-@{
-    ViewData["Title"] = "Index";
-}
+<h1>@ViewData["Title"]</h1>
 
-
-<h1>Index</h1>
-
-<p>
+<div class="justify-content-between d-flex">
     <a asp-action="Create">Create New</a>
-</p>
-<div class="table-container">
-    <table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model[0].Data)
-            </th>
-            <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["WeightSortParm"]">@Html.DisplayNameFor(model => model[0].Weight)</a>
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model[0].Statement)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model[0].Show)
-            </th>
-            <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["CategoryIdSortParm"]">@Html.DisplayNameFor(model => model[0].Category)</a>
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            var jsonData = JsonConvert.DeserializeObject<JObject>(item.Data);
-            var questionText = jsonData?["nl"]?.Value<string>("question") ?? "N/A"; 
-                jsonData = JsonConvert.DeserializeObject<JObject>(item.Category.Data);
-            var categoryText = jsonData?["nl"]?.Value<string>("name") ?? "N/A";
- 
-              <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => questionText)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Weight)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Statement)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Show)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => categoryText)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+    <div class="search-container mb-4">
+        <form id="searchForm" asp-action="Index" method="get">
+            <div class="input-group">
+                <input id="searchInput" type="text" class="form-control" name="searchString" value="@ViewData["CurrentFilter"]" placeholder="Search...">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="submit">Search</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
 
+<div id="tableContainer" class="table-container">
+    @Html.Partial("_QuestionTable", Model)
+</div>
 
-@{
-    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
-    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
-}
-
-<div>
-    <nav aria-label="Page navigation">
-        <ul class="pagination">
-            <li class="page-item @prevDisabled">
-                <a class="page-link" asp-action="Index"
-                   asp-route-sortOrder="@ViewData["CurrentSort"]"
-                   asp-route-pageNumber="@(Model.PageIndex - 1)"
-                   asp-route-currentFilter="@ViewData["CurrentFilter"]">Previous</a>
-            </li>
-            <li class="page-item @(1 == Model.PageIndex ? "active" : "")">
-                <a class="page-link" asp-action="Index"
-                   asp-route-sortOrder="@ViewData["CurrentSort"]"
-                   asp-route-pageNumber="1"
-                   asp-route-currentFilter="@ViewData["CurrentFilter"]">1</a>
-            </li>
-            @for (int i = Math.Max(1, Model.PageIndex - 2); i <= Math.Min(Model.TotalPages, Model.PageIndex + 2); i++)
-            {
-                if (i > 1 && i < Model.TotalPages)
-                {
-                            <li class="page-item @(i == Model.PageIndex ? "active" : "")">
-                                <a class="page-link" asp-action="Index"
-                                   asp-route-sortOrder="@ViewData["CurrentSort"]"
-                                   asp-route-pageNumber="@i"
-                                   asp-route-currentFilter="@ViewData["CurrentFilter"]">@i</a>
-                            </li>
-                }
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+    $('#searchInput').on('input', function () {
+        var formData = $('#searchForm').serialize();
+        $.ajax({
+            type: 'GET',
+            url: $('#searchForm').attr('action'),
+            data: formData,
+            success: function (result) {
+                $('#tableContainer').html(result);
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
             }
-            <li class="page-item @(Model.TotalPages == Model.PageIndex ? "active" : "")">
-                <a class="page-link" asp-action="Index"
-                   asp-route-sortOrder="@ViewData["CurrentSort"]"
-                   asp-route-pageNumber="@Model.TotalPages"
-                   asp-route-currentFilter="@ViewData["CurrentFilter"]">@Model.TotalPages</a>
-            </li>
-            <li class="page-item @nextDisabled">
-                <a class="page-link" asp-action="Index"
-                   asp-route-sortOrder="@ViewData["CurrentSort"]"
-                   asp-route-pageNumber="@(Model.PageIndex + 1)"
-                   asp-route-currentFilter="@ViewData["CurrentFilter"]">Next</a>
-            </li>
-        </ul>
-    </nav>
-</div>
-</div>
+        });
+    });
+});
+</script>

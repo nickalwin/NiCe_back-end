@@ -1,0 +1,129 @@
+﻿@using Newtonsoft.Json
+@using Newtonsoft.Json.Linq
+@model PaginatedList<NiCeScanner.Models.Category>
+
+<table id="questionTable" class="table mb-2">
+    <thead>
+        <tr>
+            <th>
+                <a asp-action="Index"
+                   asp-route-searchString="@ViewData["SearchString"]"
+                   asp-route-sortOrderCategory="@ViewData["CategorySortParm"]"
+                   asp-route-sortOrderShow="@ViewData["SortOrderShow"]"
+                   asp-route-sortOrderCreatedAt="@ViewData["SortOrderCreatedAt"]"
+                   asp-route-sortOrderUpdatedAt="@ViewData["SortOrderUpdatedAt"]"
+                >@Html.DisplayNameFor(model => model[0].Data)</a>
+            </th>
+            <th>
+                <a asp-action="Index"
+                    asp-route-searchString="@ViewData["SearchString"]"
+                    asp-route-sortOrderCategory="@ViewData["SortOrderCategory"]"
+                    asp-route-sortOrderShow="@ViewData["ShowSortParm"]"
+                    asp-route-sortOrderCreatedAt="@ViewData["SortOrderCreatedAt"]"
+                    asp-route-sortOrderUpdatedAt="@ViewData["SortOrderUpdatedAt"]"
+                    >@Html.DisplayNameFor(model => model[0].Show)</a>
+            </th>
+            <th>
+                <a asp-action="Index"
+                    asp-route-searchString="@ViewData["SearchString"]"
+                    asp-route-sortOrderCategory="@ViewData["SortOrderCategory"]"
+                    asp-route-sortOrderShow="@ViewData["SortOrderShow"]"
+                    asp-route-sortOrderCreatedAt="@ViewData["CreatedAtSortParm"]"
+                    asp-route-sortOrderUpdatedAt="@ViewData["SortOrderUpdatedAt"]"
+                    >@Html.DisplayNameFor(model => model[0].CreatedAt)</a>
+            </th>
+            <th>
+                <a asp-action="Index"
+                    asp-route-searchString="@ViewData["SearchString"]"
+                    asp-route-sortOrderCategory="@ViewData["SortOrderCategory"]"
+                    asp-route-sortOrderShow="@ViewData["SortOrderShow"]"
+                    asp-route-sortOrderCreatedAt="@ViewData["SortOrderCreatedAt"]"
+                    asp-route-sortOrderUpdatedAt="@ViewData["UpdatedAtSortParm"]"
+                    >@Html.DisplayNameFor(model => model[0].UpdatedAt)</a>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody id="questionTableBody">
+        @if (Model != null && Model.Any())
+            {
+                foreach (var item in Model)
+                {
+            var categoryData = JsonConvert.DeserializeObject<JObject>(item.Data);
+            var categoryText = categoryData?["nl"]?.Value<string>("name") ?? "N/A";
+
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => categoryText)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Show)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreatedAt)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UpdatedAt)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                </td>
+            </tr>
+        }
+        }
+        else
+        {
+            <tr><td colspan="6">No data found</td></tr>
+        }
+    </tbody>
+</table>
+
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+
+<div>
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            <li class="page-item @prevDisabled">
+                <a class="page-link" asp-action="Index"
+                   asp-route-sortOrder="@ViewData["CurrentSort"]"
+                   asp-route-pageNumber="@(Model.PageIndex - 1)"
+                   asp-route-currentFilter="@ViewData["CurrentFilter"]">Previous</a>
+            </li>
+            <li class="page-item @prevDisabled">
+                <a class="page-link" asp-action="Index"
+                   asp-route-sortOrder="@ViewData["CurrentSort"]"
+                   asp-route-pageNumber="1"
+                   asp-route-currentFilter="@ViewData["CurrentFilter"]">1</a>
+            </li>
+            @for (int i = Math.Max(1, Model.PageIndex - 2); i <= Math.Min(Model.TotalPages, Model.PageIndex + 2); i++)
+            {
+                if (i > 1 && i < Model.TotalPages)
+                {
+                    <li class="page-item @(i == Model.PageIndex ? "active" : "")">
+                        <a class="page-link" asp-action="Index"
+                           asp-route-sortOrder="@ViewData["CurrentSort"]"
+                           asp-route-pageNumber="@i"
+                           asp-route-currentFilter="@ViewData["CurrentFilter"]">@i</a>
+                    </li>
+                }
+            }
+            <li class="page-item @nextDisabled">
+                <a class="page-link" asp-action="Index"
+                   asp-route-sortOrder="@ViewData["CurrentSort"]"
+                   asp-route-pageNumber="@Model.TotalPages"
+                   asp-route-currentFilter="@ViewData["CurrentFilter"]">@Model.TotalPages</a>
+            </li>
+            <li class="page-item @nextDisabled">
+                <a class="page-link" asp-action="Index"
+                   asp-route-sortOrder="@ViewData["CurrentSort"]"
+                   asp-route-pageNumber="@(Model.PageIndex + 1)"
+                   asp-route-currentFilter="@ViewData["CurrentFilter"]">Next</a>
+            </li>
+        </ul>
+    </nav>
+</div>

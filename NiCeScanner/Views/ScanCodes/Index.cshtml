@@ -1,8 +1,12 @@
 ﻿@using Newtonsoft.Json
 @using Newtonsoft.Json.Linq
-@model PaginatedList<NiCeScanner.Models.Category>
+@model PaginatedList<NiCeScanner.Models.ScanCode>
 
-<h1>Index</h1>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>@ViewData["Title"]</h1>
 
 <div class="justify-content-between d-flex">
     <a asp-action="Create">Create New</a>
@@ -19,25 +23,25 @@
 </div>
 
 <div id="tableContainer" class="table-container">
-    @Html.Partial("_CategoryTable", Model)
+    <partial name="_CodesTable" model="@Model" />
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function () {
-    $('#searchInput').on('input', function () {
-        var formData = $('#searchForm').serialize();
-        $.ajax({
-            type: 'GET',
-            url: $('#searchForm').attr('action'),
-            data: formData,
-            success: function (result) {
-                $('#tableContainer').html(result);
-            },
-            error: function (xhr, status, error) {
-                console.error(xhr.responseText);
-            }
+        $('#searchInput').on('input', function () {
+            var formData = $('#searchForm').serialize();
+            $.ajax({
+                type: 'GET',
+                url: $('#searchForm').attr('action'),
+                data: formData,
+                success: function (result) {
+                    $('#tableContainer').html(result);
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
         });
     });
-});
 </script>

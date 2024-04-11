@@ -1,28 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing.Printing;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using NiCeScanner.Data;
-using NiCeScanner.Migrations;
 using NiCeScanner.Models;
 
 namespace NiCeScanner.Controllers
 {
-    public class ScansController : Controller
+    public class ScanCodesController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public ScansController(ApplicationDbContext context)
+        public ScanCodesController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: Scans
-        public async Task<IActionResult> Index(
+		// GET: ScanCodes
+		public async Task<IActionResult> Index(
 			string currentFilter,
 			string searchString,
 			int? pageNumber
@@ -40,74 +38,68 @@ namespace NiCeScanner.Controllers
 			}
 
 			ViewData["CurrentFilter"] = searchString;
-
-			var scans = from s in _context.Scans.Include(s => s.Sector)
+			var codes = from s in _context.ScanCodes.Include(s => s.Scan)
 						select s;
+
 			if (!string.IsNullOrEmpty(searchString))
 			{
-				scans = scans.Where(s => s.ContactName.Contains(searchString)
-									   || s.ContactEmail.Contains(searchString)
-									   || s.Results.Contains(searchString)
-									   || s.Sector.Data.Contains(searchString));
+				codes = codes.Where(s => s.Scan.ContactName.Contains(searchString)
+									   || s.Scan.ContactEmail.Contains(searchString)
+									   || s.CanEdit.ToString().Contains(searchString));
 			}
 			int pageSize = 10;
-			var model = await PaginatedList<Scan>.CreateAsync(scans.AsNoTracking(), pageNumber ?? 1, pageSize);
+			var model = await PaginatedList<ScanCode>.CreateAsync(codes.AsNoTracking(), pageNumber ?? 1, pageSize);
 			if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
 			{
-				return PartialView("_ScanTable", model);
+				return PartialView("_CodesTable", model);
 			}
 			return View(model);
-        }
-
-		// GET: Scans/Details/5
-		public async Task<IActionResult> Details(long? id)
-		{
-			if (id == null)
-			{
-				return NotFound();
-			}
-
-			var scan = await _context.Scans
-				.Include(s => s.Sector)
-				.Include(s => s.Answers)
-					.ThenInclude(a => a.Question)
-					.ThenInclude(q => q.Category)
-				.FirstOrDefaultAsync(m => m.Id == id);
-
-			if (scan == null)
-			{
-				return NotFound();
-			}
-
-			return View(scan);
 		}
 
-
-		// GET: Scans/Create
-		public IActionResult Create()
+        // GET: ScanCodes/Details/5
+        public async Task<IActionResult> Details(long? id)
         {
-            ViewData["SectorId"] = new SelectList(_context.Sectors, "Id", "Id");
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var scanCode = await _context.ScanCodes
+                .Include(s => s.Scan)
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (scanCode == null)
+            {
+                return NotFound();
+            }
+
+            return View(scanCode);
+        }
+
+        // GET: ScanCodes/Create
+        public IActionResult Create()
+        {
+            ViewData["ScanId"] = new SelectList(_context.Scans, "Id", "Id");
             return View();
         }
 
-        // POST: Scans/Create
+        // POST: ScanCodes/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Uuid,ContactName,ContactEmail,SectorId,Results,CreatedAt,UpdatedAt")] Scan scan)
+        public async Task<IActionResult> Create([Bind("Id,Code,CanEdit,ScanId")] ScanCode scanCode)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(scan);
+                _context.Add(scanCode);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["SectorId"] = new SelectList(_context.Sectors, "Id", "Id", scan.SectorId);
-            return View(scan);
+            ViewData["ScanId"] = new SelectList(_context.Scans, "Id", "Id", scanCode.ScanId);
+            return View(scanCode);
         }
 
-        // GET: Scans/Edit/5
+        // GET: ScanCodes/Edit/5
         public async Task<IActionResult> Edit(long? id)
         {
             if (id == null)
@@ -115,23 +107,23 @@ namespace NiCeScanner.Controllers
                 return NotFound();
             }
 
-            var scan = await _context.Scans.FindAsync(id);
-            if (scan == null)
+            var scanCode = await _context.ScanCodes.FindAsync(id);
+            if (scanCode == null)
             {
                 return NotFound();
             }
-            ViewData["SectorId"] = new SelectList(_context.Sectors, "Id", "Id", scan.SectorId);
-            return View(scan);
+            ViewData["ScanId"] = new SelectList(_context.Scans, "Id", "Id", scanCode.ScanId);
+            return View(scanCode);
         }
 
-        // POST: Scans/Edit/5
+        // POST: ScanCodes/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long id, [Bind("Id,Uuid,ContactName,ContactEmail,SectorId,Results,CreatedAt,UpdatedAt")] Scan scan)
+        public async Task<IActionResult> Edit(long id, [Bind("Id,Code,CanEdit,ScanId")] ScanCode scanCode)
         {
-            if (id != scan.Id)
+            if (id != scanCode.Id)
             {
                 return NotFound();
             }
@@ -140,12 +132,12 @@ namespace NiCeScanner.Controllers
             {
                 try
                 {
-                    _context.Update(scan);
+                    _context.Update(scanCode);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ScanExists(scan.Id))
+                    if (!ScanCodeExists(scanCode.Id))
                     {
                         return NotFound();
                     }
@@ -156,11 +148,11 @@ namespace NiCeScanner.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["SectorId"] = new SelectList(_context.Sectors, "Id", "Id", scan.SectorId);
-            return View(scan);
+            ViewData["ScanId"] = new SelectList(_context.Scans, "Id", "Id", scanCode.ScanId);
+            return View(scanCode);
         }
 
-        // GET: Scans/Delete/5
+        // GET: ScanCodes/Delete/5
         public async Task<IActionResult> Delete(long? id)
         {
             if (id == null)
@@ -168,35 +160,35 @@ namespace NiCeScanner.Controllers
                 return NotFound();
             }
 
-            var scan = await _context.Scans
-                .Include(s => s.Sector)
+            var scanCode = await _context.ScanCodes
+                .Include(s => s.Scan)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (scan == null)
+            if (scanCode == null)
             {
                 return NotFound();
             }
 
-            return View(scan);
+            return View(scanCode);
         }
 
-        // POST: Scans/Delete/5
+        // POST: ScanCodes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(long id)
         {
-            var scan = await _context.Scans.FindAsync(id);
-            if (scan != null)
+            var scanCode = await _context.ScanCodes.FindAsync(id);
+            if (scanCode != null)
             {
-                _context.Scans.Remove(scan);
+                _context.ScanCodes.Remove(scanCode);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ScanExists(long id)
+        private bool ScanCodeExists(long id)
         {
-            return _context.Scans.Any(e => e.Id == id);
+            return _context.ScanCodes.Any(e => e.Id == id);
         }
     }
 }
