@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing.Printing;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -12,7 +13,7 @@ using NiCeScanner.Models;
 
 namespace NiCeScanner.Controllers
 {
-    public class QuestionsController : Controller
+	public class QuestionsController : Controller
     {
         private readonly ApplicationDbContext _context;
 
@@ -22,6 +23,7 @@ namespace NiCeScanner.Controllers
         }
 
 		// GET: Questions
+		[Authorize(Policy = "RequireStudentRole")]
 		public async Task<IActionResult> Index(
 			string sortOrderQuestion,
 			string sortOrderWeight,
@@ -174,8 +176,9 @@ namespace NiCeScanner.Controllers
             return View(question);
         }
 
-        // GET: Questions/Create
-        public IActionResult Create()
+		// GET: Questions/Create
+		[Authorize(Policy = "RequireResearcherRole")]
+		public IActionResult Create()
         {
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Id");
             return View();
@@ -198,8 +201,9 @@ namespace NiCeScanner.Controllers
             return View(question);
         }
 
-        // GET: Questions/Edit/5
-        public async Task<IActionResult> Edit(long? id)
+		// GET: Questions/Edit/5
+		[Authorize(Policy = "RequireResearcherRole")]
+		public async Task<IActionResult> Edit(long? id)
         {
             if (id == null)
             {
@@ -220,7 +224,8 @@ namespace NiCeScanner.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long id, [Bind("Id,Uuid,Data,CategoryId,Weight,Statement,Show,Image,CreatedAt,UpdatedAt")] Question question)
+		[Authorize(Policy = "RequireResearcherRole")]
+		public async Task<IActionResult> Edit(long id, [Bind("Id,Uuid,Data,CategoryId,Weight,Statement,Show,Image,CreatedAt,UpdatedAt")] Question question)
         {
             if (id != question.Id)
             {
@@ -251,8 +256,9 @@ namespace NiCeScanner.Controllers
             return View(question);
         }
 
-        // GET: Questions/Delete/5
-        public async Task<IActionResult> Delete(long? id)
+		// GET: Questions/Delete/5
+		[Authorize(Policy = "RequireResearcherRole")]
+		public async Task<IActionResult> Delete(long? id)
         {
             if (id == null)
             {
@@ -273,7 +279,8 @@ namespace NiCeScanner.Controllers
         // POST: Questions/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(long id)
+		[Authorize(Policy = "RequireResearcherRole")]
+		public async Task<IActionResult> DeleteConfirmed(long id)
         {
             var question = await _context.Questions.FindAsync(id);
             if (question != null)

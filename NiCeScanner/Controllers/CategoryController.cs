@@ -21,16 +21,16 @@ namespace NiCeScanner.Controllers
             _context = context;
         }
 
-		[Authorize(Policy = "RequireResearcherRole")]
+		[Authorize(Policy = "RequireStudentRole")]
 		public async Task<IActionResult> Index(
-	string sortOrder,
-	string sortOrderCategory,
-	string sortOrderShow,
-	string sortOrderCreatedAt,
-	string sortOrderUpdatedAt,
-	string currentFilter,
-	string searchString,
-	int? pageNumber)
+			string sortOrder,
+			string sortOrderCategory,
+			string sortOrderShow,
+			string sortOrderCreatedAt,
+			string sortOrderUpdatedAt,
+			string currentFilter,
+			string searchString,
+			int? pageNumber)
 		{
 			ViewData["Title"] = "Categories";
 			ViewData["CurrentSort"] = sortOrder;
@@ -139,6 +139,7 @@ namespace NiCeScanner.Controllers
 		}
 
 		// GET: Category/Details/5
+		[Authorize(Policy = "RequireStudentRole")]
 		public async Task<IActionResult> Details(long? id)
         {
             if (id == null)
@@ -156,14 +157,16 @@ namespace NiCeScanner.Controllers
             return View(category);
         }
 
-        // GET: Category/Create
-        public IActionResult Create()
+		// GET: Category/Create
+		[Authorize(Policy = "RequireResearcherRole")]
+		public IActionResult Create()
         {
             return View();
         }
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
+		[Authorize(Policy = "RequireResearcherRole")]
 		public async Task<IActionResult> Create([Bind("Name,Show")] CategoryForm categoryForm)
 		{
 			if (ModelState.IsValid)
@@ -186,7 +189,7 @@ namespace NiCeScanner.Controllers
 
 
 		// GET: Category/Edit/5
-		[Authorize(Roles = "Admin")]
+		[Authorize(Policy = "RequireResearcherRole")]
 		public async Task<IActionResult> Edit(long? id)
         {
             if (id == null)
@@ -207,7 +210,8 @@ namespace NiCeScanner.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long id, [Bind("Id,Uuid,Name,Show,CreatedAt,UpdatedAt")] Category category)
+		[Authorize(Policy = "RequireResearcherRole")]
+		public async Task<IActionResult> Edit(long id, [Bind("Id,Uuid,Name,Show,CreatedAt,UpdatedAt")] Category category)
         {
             if (id != category.Id)
             {
@@ -238,8 +242,8 @@ namespace NiCeScanner.Controllers
         }
 
 		// GET: Category/Delete/5
-		[Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Delete(long? id)
+		[Authorize(Policy = "RequireResearcherRole")]
+		public async Task<IActionResult> Delete(long? id)
         {
             if (id == null)
             {
@@ -259,7 +263,8 @@ namespace NiCeScanner.Controllers
         // POST: Category/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(long id)
+		[Authorize(Policy = "RequireResearcherRole")]
+		public async Task<IActionResult> DeleteConfirmed(long id)
         {
             var category = await _context.Categories.FindAsync(id);
             if (category != null)

@@ -22,9 +22,10 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
 builder.Services.AddAuthorization(options =>
 {
 	options.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"));
-	options.AddPolicy("RequireResearcherRole", policy => policy.RequireRole("Admin", "Researcher"));
-	options.AddPolicy("RequireStudentRole", policy => policy.RequireRole("Admin", "Student"));
-	options.AddPolicy("RequireMemberRole", policy => policy.RequireRole("Admin", "Member"));
+	options.AddPolicy("RequireManagerRole", policy => policy.RequireRole("Admin", "Manager"));
+	options.AddPolicy("RequireResearcherRole", policy => policy.RequireRole("Admin", "Manager", "Researcher"));
+	options.AddPolicy("RequireStudentRole", policy => policy.RequireRole("Admin", "Manager", "Researcher", "Student"));
+	options.AddPolicy("RequireMemberRole", policy => policy.RequireRole("Admin", "Manager", "Researcher", "Student", "Member"));
 });
 
 builder.Services.AddControllersWithViews();

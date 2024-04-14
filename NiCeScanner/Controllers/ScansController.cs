@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing.Printing;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -12,7 +13,8 @@ using NiCeScanner.Models;
 
 namespace NiCeScanner.Controllers
 {
-    public class ScansController : Controller
+	[Authorize(Policy = "RequireStudentRole")]
+	public class ScansController : Controller
     {
         private readonly ApplicationDbContext _context;
 
@@ -160,8 +162,9 @@ namespace NiCeScanner.Controllers
             return View(scan);
         }
 
-        // GET: Scans/Delete/5
-        public async Task<IActionResult> Delete(long? id)
+		// GET: Scans/Delete/5
+		[Authorize(Policy = "RequireManagerRole")]
+		public async Task<IActionResult> Delete(long? id)
         {
             if (id == null)
             {
@@ -179,8 +182,9 @@ namespace NiCeScanner.Controllers
             return View(scan);
         }
 
-        // POST: Scans/Delete/5
-        [HttpPost, ActionName("Delete")]
+		// POST: Scans/Delete/5
+		[Authorize(Policy = "RequireManagerRole")]
+		[HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(long id)
         {

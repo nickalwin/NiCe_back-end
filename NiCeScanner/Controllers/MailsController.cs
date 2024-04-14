@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,7 +11,8 @@ using NiCeScanner.Models;
 
 namespace NiCeScanner.Controllers
 {
-    public class MailsController : Controller
+	[Authorize(Policy = "RequireManagerRole")]
+	public class MailsController : Controller
     {
         private readonly ApplicationDbContext _context;
 
