@@ -3,10 +3,14 @@ using System.Collections.Generic;
 using System.Drawing.Printing;
 using System.Linq;
 using System.Threading.Tasks;
+using ClosedXML.Excel;
+using DocumentFormat.OpenXml.Spreadsheet;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using NiCeScanner.Data;
 using NiCeScanner.Migrations;
 using NiCeScanner.Models;
@@ -296,5 +300,46 @@ namespace NiCeScanner.Controllers
         {
             return _context.Questions.Any(e => e.Id == id);
         }
+
+		public IActionResult DownloadExcel()
+		{
+			var questions = _context.Questions.Include(q => q.Category).ToList();
+
+			using (var workbook = new XLWorkbook())
+			{
+				var worksheet = workbook.Worksheets.Add("Questions NL");
+
+				worksheet.Cell(1, 1).Value = "Question";
+				worksheet.Cell(1, 2).Value = "Category";
+				worksheet.Cell(1, 3).Value = "Weight";
+				worksheet.Cell(1, 4).Value = "Statement";
+				worksheet.Cell(1, 5).Value = "Show";
+
+				int rowIndex = 2;
+				foreach (var question in questions)
+				{
+					var questionData = question.Data;
+					var questionText = JsonConvert.DeserializeObject<JObject>(questionData)["nl"]["question"].ToString();
+					var categoryData = question.Category.Data;
+					var categoryText = JsonConvert.DeserializeObject<JObject>(categoryData)["nl"]["name"].ToString();
+
+					worksheet.Cell(rowIndex, 1).Value = questionText;
+					worksheet.Cell(rowIndex, 2).Value = categoryText;
+					worksheet.Cell(rowIndex, 3).Value = question.Weight;
+					worksheet.Cell(rowIndex, 4).Value = question.Statement;
+					worksheet.Cell(rowIndex, 5).Value = question.Show;
+
+					rowIndex++;
+				}
+
+				worksheet.Columns("A","B").AdjustToContents();
+
+				using (var stream = new MemoryStream())
+				{
+					workbook.SaveAs(stream);
+					return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Questions.xlsx");
+				}
+			}
+		}
     }
 }

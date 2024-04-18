@@ -6,23 +6,34 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model[0].ContactName)
+                <a asp-action="Index"
+                   asp-route-searchString="@ViewData["SearchString"]"
+                   asp-route-SortOrderContactName="@ViewData["ContactNameParm"]">@Html.DisplayNameFor(model => model[0].ContactName)</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model[0].ContactEmail)
+                <a asp-action="Index"
+                   asp-route-searchString="@ViewData["SearchString"]"
+                   asp-route-SortOrderContactEmail="@ViewData["ContactEmailParm"]">@Html.DisplayNameFor(model => model[0].ContactEmail)</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model[0].Sector)
+                <a asp-action="Index"
+                   asp-route-searchString="@ViewData["SearchString"]"
+                   asp-route-SortOrderSector="@ViewData["SectorSortParm"]">@Html.DisplayNameFor(model => model[0].Sector)</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model[0].CreatedAt)
+                <a asp-action="Index"
+                   asp-route-searchString="@ViewData["SearchString"]"
+                   asp-route-SortOrderCreatedAt="@ViewData["CreatedAtSortParm"]">@Html.DisplayNameFor(model => model[0].CreatedAt)</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model[0].UpdatedAt)
+                <a asp-action="Index"
+                   asp-route-searchString="@ViewData["SearchString"]"
+                   asp-route-SortOrderUpdatedAt="@ViewData["UpdatedAtSortParm"]">@Html.DisplayNameFor(model => model[0].UpdatedAt)</a>
             </th>
             <th></th>
         </tr>
     </thead>
+
     <tbody>
         @foreach (var item in Model)
         {
