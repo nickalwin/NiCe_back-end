@@ -26,7 +26,54 @@ namespace NiCeScanner.Utilities
 				Guid categoryUuid = answer.Category_uuid;
 
 				short score = answer.Answer;
+
+				if (score == 0|| score == -1) // not applicable || i dont know, TODO, to be asked about how the calculation should work
+				{
+					continue;
+				}
+
 				short weight = questionDictionary[questionUuid].Weight;
+
+				double weightedScore = score * weight;
+
+				if (totalWeightedScores.ContainsKey(categoryUuid))
+				{
+					totalWeightedScores[categoryUuid] += weightedScore;
+					totalWeights[categoryUuid] += weight;
+				}
+				else
+				{
+					totalWeightedScores[categoryUuid] = weightedScore;
+					totalWeights[categoryUuid] = weight;
+				}
+			}
+
+			Dictionary<Guid, double> categoryWeightedMeans = new Dictionary<Guid, double>();
+			foreach (var categoryUuid in totalWeightedScores.Keys)
+			{
+				categoryWeightedMeans[categoryUuid] = totalWeightedScores[categoryUuid] / totalWeights[categoryUuid];
+			}
+
+			return categoryWeightedMeans;
+		}
+
+		internal static Dictionary<Guid, double> CalculateResults(Scan scan)
+		{
+			Dictionary<Guid, double> totalWeightedScores = new Dictionary<Guid, double>();
+			Dictionary<Guid, double> totalWeights = new Dictionary<Guid, double>();
+
+			foreach (var answer in scan.Answers)
+			{
+				Guid categoryUuid = answer.Question.Category.Uuid;
+
+				short score = answer.Score;
+
+				if (score == 0 || score == -1) // not applicable || i dont know, TODO, to be asked about how the calculation should work
+				{
+					continue;
+				}
+
+				short weight = answer.Question.Weight;
 
 				double weightedScore = score * weight;
 
@@ -75,4 +122,5 @@ namespace NiCeScanner.Utilities
 			return JsonConvert.SerializeObject(categoryResults);
 		}
 	}
+
 }

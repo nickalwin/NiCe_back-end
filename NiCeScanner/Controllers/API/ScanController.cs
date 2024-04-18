@@ -155,5 +155,54 @@ namespace NiCeScanner.Controllers.API
 				View_code = viewCode.Code,
 			};
 		}
+
+		[Route("{scanUuid}/updateAnswer/{questionUuid}")]
+		[HttpPut]
+		public async Task<ActionResult<object>> UpdateAnswer(string scanUuid, string questionUuid, [FromBody] PutScanUpdateAnswerRequest request)
+		{
+			Guid scanGuid = Guid.Parse(scanUuid);
+			Guid questionGuid = Guid.Parse(questionUuid);
+
+			Scan? scan = await _context.Scans
+				.Include(s => s.Answers)
+					.ThenInclude(a => a.Question)
+						.ThenInclude(q => q.Category)
+				.FirstOrDefaultAsync(s => s.Uuid == scanGuid);
+			
+			if (scan is null)
+			{
+				return NotFound("Scan not found");
+			}
+
+			Answer? answer = _context.Answers.FirstOrDefault(a => a.ScanId == scan.Id && a.Question.Uuid == questionGuid);
+
+			if (answer is null)
+			{
+				return NotFound("Answer not found");
+			}
+
+			answer.Score = request.Answer;
+			answer.Comment = request.Comment ?? "";
+
+			_context.Answers.Update(answer);
+			await _context.SaveChangesAsync();
+
+			_context.Entry(scan).Collection(s => s.Answers).Load();
+
+			Dictionary<Guid, double> results = ScanResultCalculator.CalculateResults(scan);
+			List<Category> categories = await _context.Categories.Where(c => results.Keys.Contains(c.Uuid)).ToListAsync();
+
+			scan.Results = ScanResultCalculator.SerializeResults(results, categories);
+
+			_context.Scans.Update(scan);
+			await _context.SaveChangesAsync();
+
+			var data = new {
+				answer = request.Answer,
+				comment = request.Comment ?? ""
+			};
+
+			return Ok(data);
+		}
 	}
 }
