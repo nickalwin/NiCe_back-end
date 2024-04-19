@@ -37,5 +37,7 @@ namespace NiCeScanner.Models
 		public Sector Sector { get; set; }
 
 		public ICollection<Answer> Answers { get; set; }
+
+
 	}
 }

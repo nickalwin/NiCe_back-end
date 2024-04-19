@@ -1,0 +1,14 @@
+﻿.table {
+    margin-bottom: 0;
+}
+
+.table-container {
+    background-color: #E8F3DB;
+    border: 1px solid #ccc;
+    border-radius: 10px; /* Added border radius */
+    overflow: hidden; /* Added to ensure border-radius works properly */
+}
+
+.table > thead {
+    background-color: #B7DFB9;
+}

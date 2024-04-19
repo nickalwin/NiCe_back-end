@@ -22,9 +22,10 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
 builder.Services.AddAuthorization(options =>
 {
 	options.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"));
-	options.AddPolicy("RequireResearcherRole", policy => policy.RequireRole("Admin", "Researcher"));
-	options.AddPolicy("RequireStudentRole", policy => policy.RequireRole("Admin", "Student"));
-	options.AddPolicy("RequireMemberRole", policy => policy.RequireRole("Admin", "Member"));
+	options.AddPolicy("RequireManagerRole", policy => policy.RequireRole("Admin", "Manager"));
+	options.AddPolicy("RequireResearcherRole", policy => policy.RequireRole("Admin", "Manager", "Researcher"));
+	options.AddPolicy("RequireStudentRole", policy => policy.RequireRole("Admin", "Manager", "Researcher", "Student"));
+	options.AddPolicy("RequireMemberRole", policy => policy.RequireRole("Admin", "Manager", "Researcher", "Student", "Member"));
 });
 
 builder.Services.AddControllersWithViews();
@@ -89,7 +90,7 @@ app.MapRazorPages();
 using (var scope = app.Services.CreateScope())
 {
 	var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-	var roles = new List<string> { "Admin", "Researcher", "Student", "Member" };
+	var roles = new List<string> { "Admin", "Manager", "Researcher", "Student", "Member" };
 
 	foreach (var role in roles)
 	{
@@ -110,6 +111,50 @@ using (var scope = app.Services.CreateScope())
 		var user = new IdentityUser { UserName = email, Email = email };
 		await userManager.CreateAsync(user, password);
 		userManager.AddToRoleAsync(user, "Admin");
+	}
+
+	userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+	name = "Manager";
+	email = "manager@manager.com";
+	password = "Manager@123";
+	if (await userManager.FindByEmailAsync(email) == null)
+	{
+		var user = new IdentityUser { UserName = email, Email = email };
+		await userManager.CreateAsync(user, password);
+		userManager.AddToRoleAsync(user, "Manager");
+	}
+
+	userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+	name = "Researcher";
+	email = "researcher@researcher.com";
+	password = "Researcher@123";
+	if (await userManager.FindByEmailAsync(email) == null)
+	{
+		var user = new IdentityUser { UserName = email, Email = email };
+		await userManager.CreateAsync(user, password);
+		userManager.AddToRoleAsync(user, "Researcher");
+	}
+
+	userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+	name = "Student";
+	email = "student@student.com";
+	password = "Student@123";
+	if (await userManager.FindByEmailAsync(email) == null)
+	{
+		var user = new IdentityUser { UserName = email, Email = email };
+		await userManager.CreateAsync(user, password);
+		userManager.AddToRoleAsync(user, "Student");
+	}
+
+	userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+	name = "Member";
+	email = "member@member.com";
+	password = "Member@123";
+	if (await userManager.FindByEmailAsync(email) == null)
+	{
+		var user = new IdentityUser { UserName = email, Email = email };
+		await userManager.CreateAsync(user, password);
+		userManager.AddToRoleAsync(user, "Member");
 	}
 }
 

@@ -1,61 +1,48 @@
 ﻿@using Newtonsoft.Json
 @using Newtonsoft.Json.Linq
-@model IEnumerable<NiCeScanner.Models.Scan>
+@model PaginatedList<NiCeScanner.Models.Scan>
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>@ViewData["Title"]</h1>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.ContactName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ContactEmail)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Sector)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreatedAt)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UpdatedAt)
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
+<div class="justify-content-between d-flex">
+    <a asp-action="Create">Create New</a>
+    <div class="search-container mb-4">
+        <form id="searchForm" asp-action="Index" method="get">
+            <div class="input-group">
+                <input id="searchInput" type="text" class="form-control" name="searchString" value="@ViewData["CurrentFilter"]" placeholder="Search...">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="submit">Search</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <a asp-action="DownloadExcel" class="btn btn-primary">Download Excel</a>
+</div>
 
-        var sectorData = JsonConvert.DeserializeObject<JObject>(item.Sector.Data);
-        var sectorText = sectorData?["nl"]?.Value<string>("name") ?? "N/A";
+<div id="tableContainer" class="table-container">
+    @Html.Partial("_ScanTable", Model)
+</div>
 
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ContactName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ContactEmail)
-            </td>
-            <td>
-                    @Html.DisplayFor(modelItem => sectorText)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreatedAt)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UpdatedAt)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#searchInput').on('input', function () {
+            var formData = $('#searchForm').serialize();
+            $.ajax({
+                type: 'GET',
+                url: $('#searchForm').attr('action'),
+                data: formData,
+                success: function (result) {
+                    $('#tableContainer').html(result);
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+    });
+</script>

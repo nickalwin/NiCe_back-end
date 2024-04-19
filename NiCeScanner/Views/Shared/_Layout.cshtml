@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -6,6 +10,7 @@
     <title>@ViewData["Title"] - NiCeScanner</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/Category.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/NiCeScanner.styles.css" asp-append-version="true" />
 </head>
 <body>
@@ -27,18 +32,44 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Category" asp-action="Index">Category</a>
-                            </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Scans" asp-action="Index">Scans</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Questions" asp-action="Index">Questions</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Mails" asp-action="Index">Mails</a>
-                        </li>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            var isAuthorized = await AuthorizationService.AuthorizeAsync(User, "RequireStudentRole");
+                            @if (isAuthorized.Succeeded)
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Category" asp-action="Index">Category</a>
+                                </li>
+                            }
+                            isAuthorized = await AuthorizationService.AuthorizeAsync(User, "RequireStudentRole");
+                            @if (isAuthorized.Succeeded)
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Scans" asp-action="Index">Scans</a>
+                                </li>
+                            }
+                            isAuthorized = await AuthorizationService.AuthorizeAsync(User, "RequireManagerRole");
+                            @if (isAuthorized.Succeeded)
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="ScanCodes" asp-action="Index">ScanCodes</a>
+                                </li>
+                            }
+                            isAuthorized = await AuthorizationService.AuthorizeAsync(User, "RequireStudentRole");
+                            @if (isAuthorized.Succeeded)
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Questions" asp-action="Index">Questions</a>
+                                </li>
+                            }
+                            isAuthorized = await AuthorizationService.AuthorizeAsync(User, "RequireManagerRole");
+                            @if (isAuthorized.Succeeded)
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Mails" asp-action="Index">Mails</a>
+                                </li>
+                            }
+                        }
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>
