@@ -50,14 +50,20 @@ builder.Services.AddEndpointsApiExplorer();
 
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())
+{
+	var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+	dbContext.Database.Migrate();
+}
+
+ApplicationDbInitializer.Seed(app);
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
 	app.UseSwagger();
 	app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "NiCeScanner v1"));
     app.UseMigrationsEndPoint();
-
-	ApplicationDbInitializer.Seed(app);
 }
 else
 {
