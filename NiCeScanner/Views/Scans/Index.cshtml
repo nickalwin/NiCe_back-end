@@ -23,6 +23,24 @@
     <a asp-action="DownloadExcel" class="btn btn-primary">Download Excel</a>
 </div>
 
+<div class="justify-content-between d-flex form-select">
+    <form id="filterForm" asp-action="Index" method="get">
+        <div class="input-group">
+            <select id="sectorFilter" class="form-control" name="sortOrderSector">
+                <option value="">All Sectors</option>
+                @foreach (var sector in ViewBag.Sectors)
+                {
+                    <option value="@sector">@sector</option>
+                }
+            </select>
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="submit">Apply</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+
 <div id="tableContainer" class="table-container">
     @Html.Partial("_ScanTable", Model)
 </div>

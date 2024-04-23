@@ -97,6 +97,11 @@ namespace NiCeScanner.Controllers
 			ViewData["CurrentFilter"] = searchString;
 
 			var scans = _context.Scans.Include(s => s.Sector).AsQueryable();
+			var sectors = await _context.Scans.Select(s => s.Sector).Distinct().ToListAsync();
+			var sectorData = sectors.Select(s => JsonConvert.DeserializeObject<JObject>(s.Data)).ToList();
+			var sectorNames = sectorData.Select(s => s["nl"]["name"].ToString()).ToList();
+			ViewBag.Sectors = sectorNames;
+
 
 			if (!string.IsNullOrEmpty(searchString))
 			{
