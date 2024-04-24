@@ -147,7 +147,7 @@ namespace NiCeScanner.Data
 							Weight = 0,
 							Statement = false,
 							Show = true,
-							Image = "https://placehold.co/600x400/EEE/31343C",
+							Image = null,
 							CreatedAt = DateTime.Now
 						};
 
@@ -171,7 +171,7 @@ namespace NiCeScanner.Data
 							Weight = 1,
 							Statement = false,
 							Show = true,
-							Image = "https://placehold.co/600x400/EEE/31343C",
+							Image = null,
 							CreatedAt = DateTime.Now
 						};
 
@@ -194,7 +194,7 @@ namespace NiCeScanner.Data
 							Weight = 2,
 							Statement = false,
 							Show = true,
-							Image = "https://placehold.co/600x400/EEE/31343C",
+							Image = null,
 							CreatedAt = DateTime.Now
 						};
 
@@ -217,7 +217,7 @@ namespace NiCeScanner.Data
 							Weight = 2,
 							Statement = false,
 							Show = true,
-							Image = "https://placehold.co/600x400/EEE/31343C",
+							Image = null,
 							CreatedAt = DateTime.Now
 						};
 
@@ -240,7 +240,7 @@ namespace NiCeScanner.Data
 							Weight = 2,
 							Statement = false,
 							Show = true,
-							Image = "https://placehold.co/600x400/EEE/31343C",
+							Image = null,
 							CreatedAt = DateTime.Now
 						};
 
@@ -263,7 +263,7 @@ namespace NiCeScanner.Data
 							Weight = 3,
 							Statement = false,
 							Show = true,
-							Image = "https://placehold.co/600x400/EEE/31343C",
+							Image = null,
 							CreatedAt = DateTime.Now
 						};
 
@@ -286,7 +286,7 @@ namespace NiCeScanner.Data
 							Weight = 3,
 							Statement = false,
 							Show = true,
-							Image = "https://placehold.co/600x400/EEE/31343C",
+							Image = null,
 							CreatedAt = DateTime.Now
 						};
 
@@ -309,7 +309,7 @@ namespace NiCeScanner.Data
 							Weight = 3,
 							Statement = false,
 							Show = true,
-							Image = "https://placehold.co/600x400/EEE/31343C",
+							Image = null,
 							CreatedAt = DateTime.Now
 						};
 
@@ -332,7 +332,7 @@ namespace NiCeScanner.Data
 							Weight = 3,
 							Statement = false,
 							Show = true,
-							Image = "https://placehold.co/600x400/EEE/31343C",
+							Image = null,
 							CreatedAt = DateTime.Now
 						};
 
@@ -355,7 +355,7 @@ namespace NiCeScanner.Data
 							Weight = 3,
 							Statement = false,
 							Show = true,
-							Image = "https://placehold.co/600x400/EEE/31343C",
+							Image = null,
 							CreatedAt = DateTime.Now
 						};
 
@@ -378,7 +378,7 @@ namespace NiCeScanner.Data
 							Weight = 2,
 							Statement = false,
 							Show = true,
-							Image = "https://placehold.co/600x400/EEE/31343C",
+							Image = null,
 							CreatedAt = DateTime.Now
 						};
 
@@ -401,7 +401,7 @@ namespace NiCeScanner.Data
 							Weight = 1,
 							Statement = false,
 							Show = true,
-							Image = "https://placehold.co/600x400/EEE/31343C",
+							Image = null,
 							CreatedAt = DateTime.Now
 						};
 						
@@ -424,7 +424,7 @@ namespace NiCeScanner.Data
 							Weight = 1,
 							Statement = false,
 							Show = true,
-							Image = "https://placehold.co/600x400/EEE/31343C",
+							Image = null,
 							CreatedAt = DateTime.Now
 						};
 
@@ -447,7 +447,7 @@ namespace NiCeScanner.Data
 							Weight = 1,
 							Statement = false,
 							Show = true,
-							Image = "https://placehold.co/600x400/EEE/31343C",
+							Image = null,
 							CreatedAt = DateTime.Now
 						};
 
@@ -470,7 +470,7 @@ namespace NiCeScanner.Data
 							Weight = 1,
 							Statement = false,
 							Show = true,
-							Image = "https://placehold.co/600x400/EEE/31343C",
+							Image = null,
 							CreatedAt = DateTime.Now
 						};
 
@@ -493,7 +493,7 @@ namespace NiCeScanner.Data
 							Weight = 1,
 							Statement = false,
 							Show = true,
-							Image = "https://placehold.co/600x400/EEE/31343C",
+							Image = null,
 							CreatedAt = DateTime.Now
 						};
 
@@ -516,7 +516,7 @@ namespace NiCeScanner.Data
 							Weight = 1,
 							Statement = false,
 							Show = true,
-							Image = "https://placehold.co/600x400/EEE/31343C",
+							Image = null,
 							CreatedAt = DateTime.Now
 						};
 
@@ -539,7 +539,7 @@ namespace NiCeScanner.Data
 							Weight = 1,
 							Statement = false,
 							Show = true,
-							Image = "https://placehold.co/600x400/EEE/31343C",
+							Image = null,
 							CreatedAt = DateTime.Now
 						};
 
@@ -562,7 +562,7 @@ namespace NiCeScanner.Data
 							Weight = 1,
 							Statement = false,
 							Show = true,
-							Image = "https://placehold.co/600x400/EEE/31343C",
+							Image = null,
 							CreatedAt = DateTime.Now
 						};
 
@@ -585,7 +585,7 @@ namespace NiCeScanner.Data
 							Weight = 1,
 							Statement = false,
 							Show = true,
-							Image = "https://placehold.co/600x400/EEE/31343C",
+							Image = null,
 							CreatedAt = DateTime.Now
 						};
 
@@ -608,7 +608,7 @@ namespace NiCeScanner.Data
 							Weight = 1,
 							Statement = false,
 							Show = true,
-							Image = "https://placehold.co/600x400/EEE/31343C",
+							Image = null,
 							CreatedAt = DateTime.Now
 						};
 
@@ -631,7 +631,7 @@ namespace NiCeScanner.Data
 							Weight = 1,
 							Statement = false,
 							Show = true,
-							Image = "https://placehold.co/600x400/EEE/31343C",
+							Image = null,
 							CreatedAt = DateTime.Now
 						};
 
@@ -654,7 +654,7 @@ namespace NiCeScanner.Data
 							Weight = 1,
 							Statement = false,
 							Show = true,
-							Image = "https://placehold.co/600x400/EEE/31343C",
+							Image = null,
 							CreatedAt = DateTime.Now
 						};
 
@@ -677,7 +677,7 @@ namespace NiCeScanner.Data
 							Weight = 1,
 							Statement = false,
 							Show = true,
-							Image = "https://placehold.co/600x400/EEE/31343C",
+							Image = null,
 							CreatedAt = DateTime.Now
 						};
 
@@ -700,7 +700,7 @@ namespace NiCeScanner.Data
 							Weight = 1,
 							Statement = false,
 							Show = true,
-							Image = "https://placehold.co/600x400/EEE/31343C",
+							Image = null,
 							CreatedAt = DateTime.Now
 						};
 
@@ -723,7 +723,7 @@ namespace NiCeScanner.Data
 							Weight = 1,
 							Statement = false,
 							Show = true,
-							Image = "https://placehold.co/600x400/EEE/31343C",
+							Image = null,
 							CreatedAt = DateTime.Now
 						};
 
@@ -746,7 +746,7 @@ namespace NiCeScanner.Data
 							Weight = 1,
 							Statement = false,
 							Show = true,
-							Image = "https://placehold.co/600x400/EEE/31343C",
+							Image = null,
 							CreatedAt = DateTime.Now
 						};
 
@@ -769,7 +769,7 @@ namespace NiCeScanner.Data
 							Weight = 1,
 							Statement = false,
 							Show = true,
-							Image = "https://placehold.co/600x400/EEE/31343C",
+							Image = null,
 							CreatedAt = DateTime.Now
 						};
 
@@ -792,7 +792,7 @@ namespace NiCeScanner.Data
 							Weight = 1,
 							Statement = false,
 							Show = true,
-							Image = "https://placehold.co/600x400/EEE/31343C",
+							Image = null,
 							CreatedAt = DateTime.Now
 						};
 
@@ -815,7 +815,7 @@ namespace NiCeScanner.Data
 							Weight = 1,
 							Statement = false,
 							Show = true,
-							Image = "https://placehold.co/600x400/EEE/31343C",
+							Image = null,
 							CreatedAt = DateTime.Now
 						};
 
@@ -838,7 +838,7 @@ namespace NiCeScanner.Data
 							Weight = 1,
 							Statement = false,
 							Show = true,
-							Image = "https://placehold.co/600x400/EEE/31343C",
+							Image = null,
 							CreatedAt = DateTime.Now
 						};
 
@@ -861,7 +861,7 @@ namespace NiCeScanner.Data
 							Weight = 1,
 							Statement = false,
 							Show = true,
-							Image = "https://placehold.co/600x400/EEE/31343C",
+							Image = null,
 							CreatedAt = DateTime.Now
 						};
 
@@ -884,7 +884,7 @@ namespace NiCeScanner.Data
 							Weight = 3,
 							Statement = false,
 							Show = true,
-							Image = "https://placehold.co/600x400/EEE/31343C",
+							Image = null,
 							CreatedAt = DateTime.Now
 						};
 
@@ -907,7 +907,7 @@ namespace NiCeScanner.Data
 							Weight = 2,
 							Statement = false,
 							Show = true,
-							Image = "https://placehold.co/600x400/EEE/31343C",
+							Image = null,
 							CreatedAt = DateTime.Now
 						};
 
@@ -930,7 +930,7 @@ namespace NiCeScanner.Data
 							Weight = 1,
 							Statement = false,
 							Show = true,
-							Image = "https://placehold.co/600x400/EEE/31343C",
+							Image = null,
 							CreatedAt = DateTime.Now
 						};
 
@@ -953,7 +953,7 @@ namespace NiCeScanner.Data
 							Weight = 1,
 							Statement = false,
 							Show = true,
-							Image = "https://placehold.co/600x400/EEE/31343C",
+							Image = null,
 							CreatedAt = DateTime.Now
 						};
 
@@ -976,7 +976,7 @@ namespace NiCeScanner.Data
 							Weight = 1,
 							Statement = false,
 							Show = true,
-							Image = "https://placehold.co/600x400/EEE/31343C",
+							Image = null,
 							CreatedAt = DateTime.Now
 						};
 
@@ -999,7 +999,7 @@ namespace NiCeScanner.Data
 							Weight = 3,
 							Statement = false,
 							Show = true,
-							Image = "https://placehold.co/600x400/EEE/31343C",
+							Image = null,
 							CreatedAt = DateTime.Now
 						};
 
@@ -1022,7 +1022,7 @@ namespace NiCeScanner.Data
 							Weight = 1,
 							Statement = false,
 							Show = true,
-							Image = "https://placehold.co/600x400/EEE/31343C",
+							Image = null,
 							CreatedAt = DateTime.Now
 						};
 
@@ -1045,7 +1045,7 @@ namespace NiCeScanner.Data
 							Weight = 2,
 							Statement = false,
 							Show = true,
-							Image = "https://placehold.co/600x400/EEE/31343C",
+							Image = null,
 							CreatedAt = DateTime.Now
 						};
 
@@ -1068,7 +1068,7 @@ namespace NiCeScanner.Data
 							Weight = 2,
 							Statement = false,
 							Show = true,
-							Image = "https://placehold.co/600x400/EEE/31343C",
+							Image = null,
 							CreatedAt = DateTime.Now
 						};
 
@@ -1091,7 +1091,7 @@ namespace NiCeScanner.Data
 							Weight = 1,
 							Statement = false,
 							Show = true,
-							Image = "https://placehold.co/600x400/EEE/31343C",
+							Image = null,
 							CreatedAt = DateTime.Now
 						};
 
@@ -1114,7 +1114,7 @@ namespace NiCeScanner.Data
 							Weight = 2,
 							Statement = false,
 							Show = true,
-							Image = "https://placehold.co/600x400/EEE/31343C",
+							Image = null,
 							CreatedAt = DateTime.Now
 						};
 
@@ -1137,7 +1137,7 @@ namespace NiCeScanner.Data
 							Weight = 1,
 							Statement = false,
 							Show = true,
-							Image = "https://placehold.co/600x400/EEE/31343C",
+							Image = null,
 							CreatedAt = DateTime.Now
 						};
 
@@ -1160,7 +1160,7 @@ namespace NiCeScanner.Data
 							Weight = 2,
 							Statement = false,
 							Show = true,
-							Image = "https://placehold.co/600x400/EEE/31343C",
+							Image = null,
 							CreatedAt = DateTime.Now
 						};
 
@@ -1183,7 +1183,7 @@ namespace NiCeScanner.Data
 							Weight = 2,
 							Statement = false,
 							Show = true,
-							Image = "https://placehold.co/600x400/EEE/31343C",
+							Image = null,
 							CreatedAt = DateTime.Now
 						};
 
@@ -1206,7 +1206,7 @@ namespace NiCeScanner.Data
 							Weight = 1,
 							Statement = false,
 							Show = true,
-							Image = "https://placehold.co/600x400/EEE/31343C",
+							Image = null,
 							CreatedAt = DateTime.Now
 						};
 
@@ -1229,7 +1229,7 @@ namespace NiCeScanner.Data
 							Weight = 1,
 							Statement = false,
 							Show = true,
-							Image = "https://placehold.co/600x400/EEE/31343C",
+							Image = null,
 							CreatedAt = DateTime.Now
 						};
 
@@ -1252,7 +1252,7 @@ namespace NiCeScanner.Data
 							Weight = 1,
 							Statement = false,
 							Show = true,
-							Image = "https://placehold.co/600x400/EEE/31343C",
+							Image = null,
 							CreatedAt = DateTime.Now
 						};
 
@@ -1275,7 +1275,7 @@ namespace NiCeScanner.Data
 							Weight = 1,
 							Statement = false,
 							Show = true,
-							Image = "https://placehold.co/600x400/EEE/31343C",
+							Image = null,
 							CreatedAt = DateTime.Now
 						};
 
@@ -1298,7 +1298,7 @@ namespace NiCeScanner.Data
 							Weight = 1,
 							Statement = false,
 							Show = true,
-							Image = "https://placehold.co/600x400/EEE/31343C",
+							Image = null,
 							CreatedAt = DateTime.Now
 						};
 
@@ -1321,7 +1321,7 @@ namespace NiCeScanner.Data
 							Weight = 1,
 							Statement = false,
 							Show = true,
-							Image = "https://placehold.co/600x400/EEE/31343C",
+							Image = null,
 							CreatedAt = DateTime.Now
 						};
 
@@ -1344,7 +1344,7 @@ namespace NiCeScanner.Data
 							Weight = 2,
 							Statement = false,
 							Show = true,
-							Image = "https://placehold.co/600x400/EEE/31343C",
+							Image = null,
 							CreatedAt = DateTime.Now
 						};
 
@@ -1367,7 +1367,7 @@ namespace NiCeScanner.Data
 							Weight = 1,
 							Statement = false,
 							Show = true,
-							Image = "https://placehold.co/600x400/EEE/31343C",
+							Image = null,
 							CreatedAt = DateTime.Now
 						};
 

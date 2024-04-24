@@ -171,13 +171,14 @@ namespace NiCeScanner.Controllers
 
             var question = await _context.Questions
                 .Include(q => q.Category)
+				.Include(q => q.Image)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (question == null)
             {
                 return NotFound();
             }
 
-            return View(question);
+			return View(question);
         }
 
 		// GET: Questions/Create
@@ -205,60 +206,76 @@ namespace NiCeScanner.Controllers
             return View(question);
         }
 
-		// GET: Questions/Edit/5
-		[Authorize(Policy = "RequireResearcherRole")]
+		// GET: QuestionForms/Edit/5
 		public async Task<IActionResult> Edit(long? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+		{
+			if (id == null)
+			{
+				return NotFound();
+			}
 
-            var question = await _context.Questions.FindAsync(id);
-            if (question == null)
-            {
-                return NotFound();
-            }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Id", question.CategoryId);
-            return View(question);
-        }
+			var question = await _context.Questions
+				.Include(q => q.Category)
+				.Include(q => q.Image)
+				.FirstOrDefaultAsync(q => q.Id == id);
 
-        // POST: Questions/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-		[Authorize(Policy = "RequireResearcherRole")]
-		public async Task<IActionResult> Edit(long id, [Bind("Id,Uuid,Data,CategoryId,Weight,Statement,Show,Image,CreatedAt,UpdatedAt")] Question question)
-        {
-            if (id != question.Id)
-            {
-                return NotFound();
-            }
+			if (question == null)
+			{
+				return NotFound();
+			}
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(question);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!QuestionExists(question.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Id", question.CategoryId);
-            return View(question);
-        }
+			ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Id", question.CategoryId);
+			ViewBag.Images = new SelectList(await _context.Images.ToListAsync(), "Id", "FileName", question.ImageId);
+
+			return View(question);
+		}
+
+		// POST: QuestionForms/Edit/5
+		// To protect from overposting attacks, enable the specific properties you want to bind to.
+		// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> Edit(long id, [Bind("Id,Uuid,Data,CategoryId,Weight,Statement,Show,ImageId,CreatedAt,UpdatedAt")] Question question)
+		{
+			if (id != question.Id)
+			{
+				return NotFound();
+			}
+
+			if (ModelState.IsValid)
+			{
+				try
+				{
+					_context.Update(question);
+					await _context.SaveChangesAsync();
+					TempData["Message"] = "Question updated successfully."; // Success message
+					return RedirectToAction(nameof(Index));
+				}
+				catch (DbUpdateConcurrencyException)
+				{
+					if (!QuestionExists(question.Id))
+					{
+						return NotFound();
+					}
+					else
+					{
+						throw;
+					}
+				}
+			}
+
+			// If ModelState is not valid, re-populate SelectList for CategoryId and Images
+			ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Id", question.CategoryId);
+			ViewBag.Images = new SelectList(await _context.Images.ToListAsync(), "Id", "FileName", question.ImageId);
+
+			// Add error message to TempData
+			TempData["ErrorMessage"] = "Failed to update question. Please check the input.";
+
+			return View(question);
+		}
+
+
+
 
 		// GET: Questions/Delete/5
 		[Authorize(Policy = "RequireResearcherRole")]

@@ -26,13 +26,16 @@ namespace NiCeScanner.Models
 
 		public bool Show { get; set; }
 
-		public string Image { get; set; }
-
+		public long? ImageId { get; set; }
 		public DateTime CreatedAt { get; set; }
 
 		public DateTime? UpdatedAt { get; set; }
 
 
 		public Category Category { get; set; }
+
+		[ForeignKey("ImageId")]
+		public ImageModel Image { get; set; }
+
 	}
 }

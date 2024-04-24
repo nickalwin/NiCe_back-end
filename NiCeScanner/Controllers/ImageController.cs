@@ -49,8 +49,8 @@ namespace NiCeScanner.Controllers
 			return RedirectToAction(nameof(Index));
 		}
 
-		// GET: Image/Display/id
-		public async Task<IActionResult> Display(int id)
+		[HttpGet("/Image/Display/{id}")]
+		public async Task<IActionResult> Display(long id)
 		{
 			var image = await _context.Images.FindAsync(id);
 			if (image == null)
@@ -59,7 +59,7 @@ namespace NiCeScanner.Controllers
 			return File(image.ImageData, "image/jpeg");
 		}
 
-		public async Task<IActionResult> Details(int id)
+		public async Task<IActionResult> Details(long id)
 		{
 			var image = await _context.Images.FindAsync(id);
 			if (image == null)
