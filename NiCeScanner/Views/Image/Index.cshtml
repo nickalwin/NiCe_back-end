@@ -1,0 +1,18 @@
+﻿@model List<ImageModel>
+
+<div class="justify-content-between d-flex">
+    <h2>Image Gallery</h2>
+    <div>
+        <a asp-action="Upload" class="btn btn-primary">Upload New Image</a>
+    </div>
+</div>
+
+@foreach (var image in Model)
+{
+    <div style="margin-bottom: 20px;">
+        <a href="@Url.Action("Details", new { id = image.Id })">
+            <img src="@Url.Action("Display", new { id = image.Id })" alt="@image.FileName" style="max-width: 300px; max-height: 200px;" />
+        </a>
+        <p>@image.FileName</p>
+    </div>
+}

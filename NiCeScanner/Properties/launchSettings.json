@@ -7,7 +7,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "dotnetRunMessages": true,
-      "applicationUrl": "https://nice-test-dev-backend.it-core.fun/"
+      "applicationUrl": "https://Localhost:44332"
     },
     "https": {
       "commandName": "Project",
