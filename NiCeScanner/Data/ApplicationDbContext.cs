@@ -29,7 +29,5 @@ namespace NiCeScanner.Data
 		public DbSet<ScanCode> ScanCodes { get; set; } = default!;
 
 		public DbSet<ImageModel> Images { get; set; } = default!;
-        public DbSet<NiCeScanner.Models.QuestionForm> QuestionForm { get; set; } = default!;
-
 	}
 }

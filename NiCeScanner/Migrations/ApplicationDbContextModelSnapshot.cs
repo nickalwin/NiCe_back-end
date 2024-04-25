@@ -238,7 +238,7 @@ namespace NiCeScanner.Migrations
 
                     b.HasIndex("ScanId");
 
-                    b.ToTable("Answers");
+                    b.ToTable("Answers", (string)null);
                 });
 
             modelBuilder.Entity("NiCeScanner.Models.Category", b =>
@@ -265,7 +265,7 @@ namespace NiCeScanner.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("NiCeScanner.Models.ImageModel", b =>
@@ -287,7 +287,7 @@ namespace NiCeScanner.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Images");
+                    b.ToTable("Images", (string)null);
                 });
 
             modelBuilder.Entity("NiCeScanner.Models.Mail", b =>
@@ -321,7 +321,7 @@ namespace NiCeScanner.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Mail");
+                    b.ToTable("Mail", (string)null);
                 });
 
             modelBuilder.Entity("NiCeScanner.Models.Opinion", b =>
@@ -341,7 +341,7 @@ namespace NiCeScanner.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Opinions");
+                    b.ToTable("Opinions", (string)null);
                 });
 
             modelBuilder.Entity("NiCeScanner.Models.Question", b =>
@@ -384,7 +384,7 @@ namespace NiCeScanner.Migrations
 
                     b.HasIndex("ImageId");
 
-                    b.ToTable("Questions");
+                    b.ToTable("Questions", (string)null);
                 });
 
             modelBuilder.Entity("NiCeScanner.Models.Scan", b =>
@@ -422,7 +422,7 @@ namespace NiCeScanner.Migrations
                     b.HasIndex("SectorId")
                         .IsUnique();
 
-                    b.ToTable("Scans");
+                    b.ToTable("Scans", (string)null);
                 });
 
             modelBuilder.Entity("NiCeScanner.Models.ScanCode", b =>
@@ -444,7 +444,7 @@ namespace NiCeScanner.Migrations
 
                     b.HasIndex("ScanId");
 
-                    b.ToTable("ScanCodes");
+                    b.ToTable("ScanCodes", (string)null);
                 });
 
             modelBuilder.Entity("NiCeScanner.Models.Sector", b =>
@@ -459,7 +459,7 @@ namespace NiCeScanner.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Sectors");
+                    b.ToTable("Sectors", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

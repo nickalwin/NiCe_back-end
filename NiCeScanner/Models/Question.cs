@@ -17,7 +17,6 @@ namespace NiCeScanner.Models
 
 		public string Data { get; set; }
 
-		[ForeignKey("Category")]
 		public long CategoryId { get; set; }
 
 		public short Weight { get; set; }
@@ -31,7 +30,7 @@ namespace NiCeScanner.Models
 
 		public DateTime? UpdatedAt { get; set; }
 
-
+		[ForeignKey("CategoryId")]
 		public Category Category { get; set; }
 
 		[ForeignKey("ImageId")]

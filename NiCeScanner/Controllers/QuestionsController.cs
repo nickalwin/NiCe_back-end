@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing.Printing;
 using System.Linq;
 using System.Threading.Tasks;
 using ClosedXML.Excel;
+using DocumentFormat.OpenXml.Office2010.Excel;
 using DocumentFormat.OpenXml.Spreadsheet;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -206,7 +208,7 @@ namespace NiCeScanner.Controllers
             return View(question);
         }
 
-		// GET: QuestionForms/Edit/5
+		// GET: Question/Edit/5
 		public async Task<IActionResult> Edit(long? id)
 		{
 			if (id == null)
@@ -214,11 +216,7 @@ namespace NiCeScanner.Controllers
 				return NotFound();
 			}
 
-			var question = await _context.Questions
-				.Include(q => q.Category)
-				.Include(q => q.Image)
-				.FirstOrDefaultAsync(q => q.Id == id);
-
+			var question = await _context.Questions.FindAsync(id);
 			if (question == null)
 			{
 				return NotFound();
@@ -226,56 +224,56 @@ namespace NiCeScanner.Controllers
 
 			ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Id", question.CategoryId);
 			ViewBag.Images = new SelectList(await _context.Images.ToListAsync(), "Id", "FileName", question.ImageId);
-
 			return View(question);
 		}
 
-		// POST: QuestionForms/Edit/5
-		// To protect from overposting attacks, enable the specific properties you want to bind to.
-		// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+		//POST: Question/Edit/5
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Edit(long id, [Bind("Id,Uuid,Data,CategoryId,Weight,Statement,Show,ImageId,CreatedAt,UpdatedAt")] Question question)
+		public async Task<IActionResult> Edit(long id, [Bind("Uuid,Data,CategoryId,Weight,Statement,Show,ImageId")] Question question)
 		{
-			if (id != question.Id)
-			{
-				return NotFound();
-			}
+			question.Id = id;
+			question.UpdatedAt = DateTime.UtcNow;
 
-			if (ModelState.IsValid)
+			//var category = await _context.Categories.FindAsync(question.CategoryId);
+			//var image = await _context.Images.FindAsync(question.ImageId);
+
+			//question.Category = category;
+			//question.Image = image;
+			ModelState["Category"].ValidationState = Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Valid;
+			ModelState["Image"].ValidationState = Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Valid;
+
+			var categoryIsValid = await _context.Categories.AnyAsync(c => c.Id == question.CategoryId);
+			var imageIsValid = await _context.Images.AnyAsync(i => i.Id == question.ImageId);
+
+			if (ModelState.IsValid && categoryIsValid && imageIsValid)
 			{
 				try
 				{
-					_context.Update(question);
+					_context.Attach(question).State = EntityState.Modified;
+
 					await _context.SaveChangesAsync();
-					TempData["Message"] = "Question updated successfully."; // Success message
-					return RedirectToAction(nameof(Index));
+
+					return Ok(new { message = "Question updated successfully." });
 				}
 				catch (DbUpdateConcurrencyException)
 				{
-					if (!QuestionExists(question.Id))
+					if (!QuestionExists(id))
 					{
 						return NotFound();
 					}
 					else
 					{
-						throw;
+						return BadRequest(new { error = "Failed to update question. Please check the input." });
 					}
 				}
 			}
-
-			// If ModelState is not valid, re-populate SelectList for CategoryId and Images
-			ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Id", question.CategoryId);
-			ViewBag.Images = new SelectList(await _context.Images.ToListAsync(), "Id", "FileName", question.ImageId);
-
-			// Add error message to TempData
-			TempData["ErrorMessage"] = "Failed to update question. Please check the input.";
-
-			return View(question);
+			else
+			{
+				var errors = ModelState.Values.SelectMany(v => v.Errors);
+				return BadRequest(new { error = "Technical issue, Model not valid.", model = question, errors = errors });
+			}
 		}
-
-
-
 
 		// GET: Questions/Delete/5
 		[Authorize(Policy = "RequireResearcherRole")]
