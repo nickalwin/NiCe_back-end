@@ -1,4 +1,4 @@
-﻿@using Newtonsoft.Json.Linq
+﻿@using Newtonsoft.Json.Linq 
 @model NiCeScanner.Models.Question
 
 @{
@@ -38,6 +38,9 @@
             {
                 <p>No question data available.</p>
             }
+            <div id="languageFieldsContainer">
+
+            </div>
             <div class="form-group">
                 <label for="LanguageSelect" class="control-label">Select Language</label>
                 <select id="LanguageSelect" class="form-control">
@@ -121,7 +124,6 @@
                                 $('#LanguageSelect').append('<option value="' + language.langCode + '">' + language.langEnglishName + '</option>');
                             });
                         } else if (typeof data.data === 'object') {
-                            // Handle object response
                             $('#LanguageSelect').append('<option value="' + data.langCode + '">' + data.langEnglishName + '</option>');
                         } else {
                             console.error('Unexpected response from server:', data);
@@ -135,19 +137,32 @@
             function createLanguageInput(languageKey, languageName) {
                 var inputField = $('<div class="form-group">'
                     + '<label for="Data_' + languageKey + '" class="control-label">Question (' + languageName + ')</label>'
+                    + '<div class="input-group">'
                     + '<input type="text" id="Data_' + languageKey + '" name="Data.' + languageKey + '.question" class="form-control" />'
+                    + '<div class="input-group-append">'
+                    + '<button type="button" class="btn btn-danger remove-language" data-language="' + languageKey + '"><i class="fas fa-times"></i></button>'
+                    + '</div>'
+                    + '</div>'
                     + '<span class="text-danger"></span>'
                     + '</div>');
+
                 $('#languageFieldsContainer').append(inputField);
+
+                if (!jsonData[languageKey]) {
+                    jsonData[languageKey] = {};
+                }
             }
 
-            $('#LanguageSelect').change(function () {
+            $(document).on('change', '#LanguageSelect', function () {
                 var selectedLanguage = $(this).val();
-                $('#languageFieldsContainer').empty(); // Clear previous input fields
                 if (selectedLanguage) {
                     var languageName = $('#LanguageSelect option:selected').text();
                     createLanguageInput(selectedLanguage, languageName);
                 }
+            });
+            $(document).on('click', '.remove-language', function () {
+                var languageKey = $(this).data('language');
+                $('#Data_' + languageKey).closest('.form-group').remove();
             });
 
             $('#CategorySelect').select2();
@@ -183,10 +198,10 @@
                 var jsonData = {};
                 $('[id^="Data."]').each(function () {
                     var key = $(this).attr('id').replace('Data.', '');
-                    var languageKey = key.split('.')[0]; // Extract language key
+                    var languageKey = key.split('.')[0];
                     var questionValue = $(this).val();
                     if (!jsonData[languageKey]) {
-                        jsonData[languageKey] = {}; // Create an object for the language key if it doesn't exist
+                        jsonData[languageKey] = {};
                     }
                     jsonData[languageKey]['question'] = questionValue;
                 });
