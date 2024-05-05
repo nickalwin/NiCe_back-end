@@ -30,8 +30,7 @@ namespace NiCeScanner.Controllers.API
 					Category_uuid = q.Category.Uuid,
 					Category_data = q.Category.Data,
 					Statement = q.Statement,
-					Image_uuid = q.Image.Uuid,
-					Image_data = Convert.ToBase64String(q.Image.ImageData)
+					Image_data = q.Image.ImageData.Length > 0 ? "data:image/jpeg;base64," + Convert.ToBase64String(q.Image.ImageData) : null,
 				})
 				.ToListAsync();
 

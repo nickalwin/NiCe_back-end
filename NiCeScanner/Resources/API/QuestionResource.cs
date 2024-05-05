@@ -7,7 +7,6 @@ namespace NiCeScanner.Resources.API
 		public required Guid Category_uuid { get; set; }
 		public required string Category_data { get; set; }
 		public required bool Statement { get; set; }
-		public required Guid Image_uuid { get; set; }
 		public string? Image_data { get; set; }
 	}
 }
