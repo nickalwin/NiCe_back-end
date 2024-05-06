@@ -1,0 +1,47 @@
+﻿@model ImageModel
+
+<div class="row">
+    <div class="col-12">
+        <h2>Image Details</h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <a asp-action="Index" class="btn btn-secondary mb-3">Back to Image Gallery</a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <img class="mb-3" src="@Url.Action("Display", new { id = Model.Id })" alt="@Model.FileName" />
+        <p class="mb-0">Filename:</p>
+        <div class="input-group mb-3">
+            <input type="text" id="newImageName" class="form-control" placeholder="Enter new image name" value="@Model.FileName" aria-label="Enter new image name" aria-describedby="button-edit-name">
+            <button class="btn btn-primary" type="button" id="button-edit-name">Edit Name</button>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#button-edit-name').click(function () {
+                var newName = $('#newImageName').val();
+                var imageId = '@Model.Id';
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("EditName", "Image")',
+                    data: { id: imageId, newName: newName },
+                    success: function () {
+                        $('#imageName').text(newName);
+                        $('#newImageName').val('');
+                    },
+                    error: function () {
+                        alert('Error occurred while updating image name.');
+                    }
+                });
+            });
+        });
+    </script>
+}
