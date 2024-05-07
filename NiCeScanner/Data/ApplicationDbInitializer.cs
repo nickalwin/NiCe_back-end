@@ -134,11 +134,13 @@ namespace NiCeScanner.Data
 							{
 								nl = new
 								{
+									header = "Energieniveau",
 									question = "Recover; Laagste niveau circulariteit: Primaire bedrijfsprocessen zorgen ervoor dat producten zo worden ontworpen dat materialen aan het einde van de levensduur veilig worden verbrand met terugwinning van energie?",
 									tooltip = "Bij diensten: wordt dmv van uw diensten vermeden dat poducten en materialen niet meer veilig kunnen worden verbrand met terugwinning van energie?"
 								},
 								en = new
 								{
+									header = "Energy level",
 									question = "Recover; Lowest circularity level: Primary business processes ensure that products are designed so that materials at the end of their lifespan can be safely incinerated with energy recovery?",
 									tooltip = "For services: does the use of your services prevent products and materials from being incinerated with energy recovery?"
 								}
@@ -157,11 +159,13 @@ namespace NiCeScanner.Data
 							{
 								nl = new
 								{
+									header = "Materiaalniveau",
 									question = "Recycling; In welke mate zijn de materialen in uw product gerecycled en recyclebaar, kunnen de materialen worden verwerkt tot grondstoffen met, bij voorkeur, dezelfde (hoogwaardige) of eventueel tot mindere (laagwaardige) kwaliteit dan de oorspronkelijke grondstof tot en wordt dit in de praktijk toegepast/geborgd?",
 									tooltip = "Bij diensten: Zet je producten die uit materialen bestaan die gerecycled kunnen worden?"
 								},
 								en = new
 								{
+									header = "Material level",
 									question = "Recycling; To what extent are the materials in your product recycled and recyclable, can the materials be processed into raw materials with, preferably, the same (high-quality) or possibly lower (low-quality) quality than the original raw material, and is this applied/guaranteed in practice?",
 									tooltip = "For services: Do you use products made from materials that can be recycled?"
 								}
@@ -181,11 +185,13 @@ namespace NiCeScanner.Data
 							{
 								nl = new
 								{
+									header = "Component/onderdeelniveau",
 									question = "Repair, Refurbish, Remanufacture en Repurpose; Primaire bedrijfsprocessen zorgen ervoor dat producten worden ontworpen zodat ze op efficiënte wijze worden gerepareerd, opgeknapt of geupdated? Zit er lange garantie op? Maakt u zelf gebruik van opgeknapte onderdelen/producten?",
 									tooltip = "Bij diensten: repair café, onderhoudscontracten, refurbishen, repareerbare producten inzetten bij diensten. Kun je vervangende onderdelen van reeds geleverde producten snel leveren aan je klanten? Lever je nog onderdelen van producten die uit de handel zijn genomen? Investeer je in betaalbaar onderhoud voor je klanten zodat de producten uit je productaanbod langer mee kunnen? Worden geretourneerde producten opgeknapt om opnieuw verkocht te worden (gerefurbished)? Verkoop je producten waarbij de onderdelen op een efficiënte wijze vervangen kunnen worden?"
 								},
 								en = new
 								{
+									header = "Component/part level",
 									question = "Repair, Refurbish, Remanufacture, and Repurpose; Primary business processes ensure that products are designed so that they can be efficiently repaired, refurbished, or updated? Is there a long warranty? Do you use refurbished parts/products yourself?",
 									tooltip = "For services: repair café, maintenance contracts, refurbishing, using repairable products in services. Can you quickly deliver replacement parts for products already delivered to your customers? Do you still supply parts for products that have been discontinued? Do you invest in affordable maintenance for your customers so that the products in your product range last longer? Are returned products refurbished for resale? Do you sell products where the parts can be efficiently replaced?"
 								}
@@ -204,11 +210,13 @@ namespace NiCeScanner.Data
 							{
 								nl = new
 								{
+									header = "Productniveau",
 									question = "Reuse: Primaire bedrijfsprocessen zorgen ervoor dat producten worden ontworpen voor een lange levensduur, producten en onderdelen daarvan worden hergebruikt in dezelfde functie en wordt dit in de praktijk door u geborgd (bv door statiegeld/terugkooopregeling)",
 									tooltip = "Bij diensten: bv gebruikte producten inzetten. Worden producten die bij uw diensten worden ingezet meerdere malen gebruikt? Zorgen voor delen en herverdelen van oude producten."
 								},
 								en = new
 								{
+									header = "Product level",
 									question = "Reuse: Primary business processes ensure that products are designed for a long lifespan, products and parts thereof are reused in the same function, and is this practice ensured by you (e.g., through deposit/repurchase scheme)?",
 									tooltip = "For services: e.g., using used products. Are products used in your services reused multiple times? Ensuring the sharing and redistribution of old products."
 								}
@@ -227,11 +235,13 @@ namespace NiCeScanner.Data
 							{
 								nl = new
 								{
+									header = "Proces en ontwerpniveau",
 									question = "Reduce: Primaire bedrijfsprocessen zorgen ervoor dat er continue aandacht is voor reductie van grondstoffen en primaire en kritieke grondstoffen, energie en water in producten en in de gebruiksfase?",
 									tooltip = "Bij diensten: Zet je producten in waarbij nagedacht is over efficiënt grondstofgebruik in productie- en gebruiksfase? Onderhoud van apparaten/machines zodat ze zuinig blijven."
 								},
 								en = new
 								{
+									header = "Process and design level",
 									question = "Reduce: Primary business processes ensure continuous attention to the reduction of raw materials and primary and critical materials, energy, and water in products and during the usage phase?",
 									tooltip = "For services: Do you use products where efficient use of raw materials in production and usage phase has been considered? Maintenance of appliances/machines to keep them efficient."
 								}
@@ -250,11 +260,13 @@ namespace NiCeScanner.Data
 							{
 								nl = new
 								{
+									header = "Proces en ontwerpniveau",
 									question = "Rethink: Primaire bedrijfsprocessen zorgen ervoor dat producten worden ontworpen vanuit circulariteitsprincipes, om zo lang mogelijk mee te gaan, voor standaardisatie en compatibiliteit, makkelijk onderhoud en reparatie, op te waarderen en aan te passen, demontage & recycling met end-of-life strategieën en alles met zo laag mogelijke negatieve impact?",
 									tooltip = "Wordt uw product bijvoorbeeld via platforms aangeboden t.b.v. intensiever gebruik? Of kan deze multifunctioneel worden ingezet?"
 								},
 								en = new
 								{
+									header = "Process and design level",
 									question = "Rethink: Primary business processes ensure that products are designed based on circularity principles, to last as long as possible, for standardization and compatibility, easy maintenance and repair, upgradability and adaptability, disassembly & recycling with end-of-life strategies, and all with the lowest possible negative impact?",
 									tooltip = "For example, is your product offered via platforms for more intensive use? Or can it be used multifunctionally?"
 								}
@@ -273,11 +285,13 @@ namespace NiCeScanner.Data
 							{
 								nl = new
 								{
+									header = "Proces en ontwerpniveau",
 									question = "Refuse: Voorkom je gebruik van grondstoffen, door oplossingen te gebruiken of ontwikkelen, waarmee producten overbodig worden, door van de functie af te zien of die met een radicaal ander en duurzamer product te leveren/gebruiken?",
 									tooltip = "Bij diensten: bijvoorbeeld een dienst ontwikkelen waardoor geen nieuwe producten hoeven worden gemaakt, bv een dienst om luiers te wassen. Heet water ipv chemische onkruidverdelger. Innovatie waarmee materialen gebruik wordt voorkomen"
 								},
 								en = new
 								{
+									header = "Process and design level",
 									question = "Refuse: Do you prevent the use of raw materials by using or developing solutions that render products unnecessary, by foregoing the function or by delivering/using a radically different and more sustainable product?",
 									tooltip = "For services: for example, developing a service that eliminates the need for new products, such as a diaper washing service. Hot water instead of chemical weed killer. Innovation to prevent material use."
 								}
@@ -296,11 +310,13 @@ namespace NiCeScanner.Data
 							{
 								nl = new
 								{
+									header = "Systeemniveau",
 									question = "Primaire bedrijfsprocessen zorgen ervoor dat er een logistiek systeem ingericht voor inzameling, sorteren en traceren van producten, onderdelen en materialen?",
 									tooltip = "Weet wat er met producten gebeurt, wat gaat als eerste kapot, wanneer en waarom worden producten afgedankt, worden ze gerepareerd, doorverkocht, gemodificeerd, weet waar de materialen in producten zijn, etc."
 								},
 								en = new
 								{
+									header = "System level",
 									question = "Primary business processes ensure that a logistics system is set up for the collection, sorting, and tracing of products, parts, and materials?",
 									tooltip = "Understand what happens to products, what breaks first, when and why products are discarded, whether they are repaired, resold, modified, know where the materials in products are, etc."
 								}
@@ -319,11 +335,13 @@ namespace NiCeScanner.Data
 							{
 								nl = new
 								{
+									header = "Systeemniveau",
 									question = "Primaire bedrijfsprocessen zorgen ervoor dat er doelbewust wordt gewerkt met circulaire business modellen en verdienmodellen?",
 									tooltip = "Er zijn veel verschillende circulaire business modellen en verdienmodellen. Bijvoorbeeld: Prestatiemodel (contract obv pay-per-performance), Tussenbatermodel (terugwinnen, opknappen & doorverkopen of repareren), Toegangmodel (toegang verschappen to product), klassiek duurzaam model (lange levensduur) en hybride model (combinatie lange levensduur en verkoop van bijbehorende verbruiksproducten)."
 								},
 								en = new
 								{
+									header = "System level",
 									question = "Do primary business processes ensure deliberate work with circular business models and revenue models?",
 									tooltip = "There are many different circular business models and revenue models. For example: Performance model (contract based on pay-per-performance), Middleman model (recover, refurbish & resell or repair), Access model (providing access to product), classic sustainable model (long lifespan), and hybrid model (combination of long lifespan and sale of associated consumables)."
 								}
@@ -342,11 +360,13 @@ namespace NiCeScanner.Data
 							{
 								nl = new
 								{
+									header = "Systeemniveau",
 									question = "Een groot deel van de omzet van het bedrijf bestaat uit circulaire activiteiten",
 									tooltip = ""
 								},
 								en = new
 								{
+									header = "System level",
 									question = "A large part of the company's revenue comes from circular activities",
 									tooltip = ""
 								}
@@ -365,11 +385,13 @@ namespace NiCeScanner.Data
 							{
 								nl = new
 								{
+									header = "Systeemniveau",
 									question = "Primaire bedrijfsprocessen zorgen ervoor dat uitvoeren van een LCA (LevensCyclus Analyse) of iets vergelijkbaars, standaard is?",
 									tooltip = ""
 								},
 								en = new
 								{
+									header = "System level",
 									question = "Primary business processes ensure that conducting an LCA (Life Cycle Assessment) or something similar is standard?",
 									tooltip = ""
 								}
@@ -388,11 +410,13 @@ namespace NiCeScanner.Data
 							{
 								nl = new
 								{
+									header = "Afval uitval",
 									question = "Primaire bedrijfsprocessen zijn zo ingericht dat zo min mogelijk materialen, energie en water verloren gaan in productie/bedrijfsprocessen?",
 									tooltip = "afval uitval"
 								},
 								en = new
 								{
+									header = "Waste loss",
 									question = "Primary business processes are designed to minimize the loss of materials, energy, and water in production/business processes?",
 									tooltip = "waste loss"
 								}
@@ -411,11 +435,13 @@ namespace NiCeScanner.Data
 							{
 								nl = new
 								{
+									header = "Reststromen",
 									question = "Primaire bedrijfsprocessen zijn zo ingericht dat reststromen (materialen, energie, water) uit productie/bedrijfsprocessen hergebruikt of gerecycled worden?",
 									tooltip = ""
 								},
 								en = new
 								{
+									header = "Byproducts",
 									question = "Primary business processes are designed so that byproducts (materials, energy, water) from production/business processes are reused or recycled?",
 									tooltip = ""
 								}
@@ -434,11 +460,13 @@ namespace NiCeScanner.Data
 							{
 								nl = new
 								{
+									header = "Levensduur machines",
 									question = "Verleng je de levensduur van je materiële activa, zoals machines en gebouwen door gepland onderhoud en reparaties?",
 									tooltip = "levensduur machines"
 								},
 								en = new
 								{
+									header = "Lifespan machines",
 									question = "Do you extend the lifespan of your tangible assets, such as machinery and buildings, through planned maintenance and repairs?",
 									tooltip = "machine lifespan"
 								}
@@ -457,11 +485,13 @@ namespace NiCeScanner.Data
 							{
 								nl = new
 								{
+									header = "Efficiënte en milieuvriendelijke productieprocessen",
 									question = "Zorg je voor minimale schadelijke emissies tijdens productie/bedrijfsprocessen en logistiek?",
 									tooltip = "Bv lokaal inkopen, milieuvriendelijke productieprocessen, efficiënte en duurzame transportmiddelen, niet voor niets rijden, etc"
 								},
 								en = new
 								{
+									header = "Efficient and environmentally friendly production processes",
 									question = "Do you ensure minimal harmful emissions during production/business processes and logistics?",
 									tooltip = "For example, sourcing locally, environmentally friendly production processes, efficient and sustainable transportation methods, avoiding unnecessary travel, etc."
 								}
@@ -480,11 +510,13 @@ namespace NiCeScanner.Data
 							{
 								nl = new
 								{
+									header = "Duurzame energie",
 									question = "Gebruik je energie uit hernieuwbare bronnen voor bedrijfsprocessen/productie (zon, wind, water, aardwarmte)?",
 									tooltip = "duurzame energie"
 								},
 								en = new
 								{
+									header = "Sustainable energy",
 									question = "Do you use energy from renewable sources for business processes/production (solar, wind, water, geothermal)?",
 									tooltip = "sustainable energy"
 								}
@@ -503,11 +535,13 @@ namespace NiCeScanner.Data
 							{
 								nl = new
 								{
+									header = "Verpakkingen",
 									question = "Wordt geen of circulair verpakkingsmateriaal gebruikt en wordt het verpakkingsmateriaal (karton, pallets) voor opslag en vervoer teruggenomen na levering?",
 									tooltip = "verpakkingen"
 								},
 								en = new
 								{
+									header = "Packaging",
 									question = "Is no or circular packaging material used, and is the packaging material (cardboard, pallets) taken back for storage and transportation after delivery?",
 									tooltip = "packaging"
 								}
@@ -526,11 +560,13 @@ namespace NiCeScanner.Data
 							{
 								nl = new
 								{
+									header = "Kringlopen sluiten",
 									question = "Wordt structureel samengewerkt met stakeholders om kringlopen te sluiten binnen en/of buiten de keten?",
 									tooltip = "Samenwerking in het valoriseren van reststromen (materialen, warmte, etc.), het afnemen van en/of leveren aan andere organisaties. Maak je afspraken met je klanten over mogelijke terugname van geleverde producten na gebruik? (zoals statiegeld of een minimale prijs waarvoor je producten wilt terugkopen na gebruik)?"
 								},
 								en = new
 								{
+									header = "Closing loops",
 									question = "Is there systematic collaboration with stakeholders to close loops within and/or outside the chain?",
 									tooltip = "Collaboration in valorizing byproducts (materials, heat, etc.), procuring from and/or supplying to other organizations. Do you make agreements with your customers about the possible return of delivered products after use? (such as deposit or a minimum price at which you want to buy back products after use)?"
 								}
@@ -549,11 +585,13 @@ namespace NiCeScanner.Data
 							{
 								nl = new
 								{
+									header = "Impactverbetering",
 									question = "Werkt u structureel samen met andere organisaties in de keten aan impactverbetering op milieu en sociale aspecten?",
 									tooltip = "Breed, regie, structureel vs incidenteel, Is keten coördinator aanwezig?"
 								},
 								en = new
 								{
+									header = "Impact improvement",
 									question = "Do you collaborate structurally with other organizations in the chain to improve environmental and social impact?",
 									tooltip = "Broad, coordination, structural vs incidental, Is there a chain coordinator present?"
 								}
@@ -572,11 +610,13 @@ namespace NiCeScanner.Data
 							{
 								nl = new
 								{
+									header = "Eisen aan leveranciers",
 									question = "Stel je eisen aan leveranciers wb circulariteit? (toxiciteit en recyclebaarheid van materialen, gerecyclede materialen, arbeidsomstandigheden, etc)",
 									tooltip = "Verzamel je de informatie over de herkomst van de materialen en de omstandigheden waaronder mensen deze materialen ontginnen?"
 								},
 								en = new
 								{
+									header = "Requirements for suppliers",
 									question = "Do you set requirements for suppliers regarding circularity? (toxicity and recyclability of materials, recycled materials, working conditions, etc)",
 									tooltip = "Do you gather information about the origin of materials and the conditions under which people extract these materials?"
 								}
@@ -595,11 +635,13 @@ namespace NiCeScanner.Data
 							{
 								nl = new
 								{
+									header = "Eisen aan leveranciers",
 									question = "Klantenportfolio, stel je eisen aan je klanten/opdrachtgevers wb circulariteit?",
 									tooltip = "bv afstand, intenties, waarvoor worden producten gebruikt, wordt bewust nagedacht over samenwerken met circulaire bedrijven of oude economie bedrijven"
 								},
 								en = new
 								{
+									header = "Requirements for suppliers",
 									question = "Customer portfolio, do you set requirements for your customers/clients regarding circularity?",
 									tooltip = "e.g., distance, intentions, what are the products used for, is there conscious consideration for collaborating with circular companies or traditional economy companies"
 								}
@@ -618,11 +660,13 @@ namespace NiCeScanner.Data
 							{
 								nl = new
 								{
+									header = "Informeren van afnemers",
 									question = "Worden afnemers transparant geïnformeerd over de circulaire impact van de organisatie.",
 									tooltip = "Transparante communicatie van wat goed gaat, maar ook van wat nog beter kan. Over materiaal- en energieverbruik van producten en diensten, de herkomst van materialen en recyclebaarheid, worden de True Price en Total Cost of Ownership gecommuniceerd?"
 								},
 								en = new
 								{
+									header = "Informing customers",
 									question = "Are customers transparently informed about the circular impact of the organization?",
 									tooltip = "Transparent communication of what is going well, but also of what can be improved. Does the communication include material and energy consumption of products and services, the origin of materials and recyclability, and are the True Price and Total Cost of Ownership communicated?"
 								}
@@ -641,11 +685,13 @@ namespace NiCeScanner.Data
 							{
 								nl = new
 								{
+									header = "Verantwoordelijkheid gebruiksfase",
 									question = "Samenwerkingsverbanden aangaan om verantwoordelijkheid te nemen voor producten in de gebruiksfase en daarna?",
 									tooltip = "Werk je samen zodat producten goed onderhouden en/of gerepareerd worden zodat producten langer efficiënt gebruikt worden? (onderhouds- en servicecontracten in samenwerking met andere marktpartijen) Werk je samen om product as a service of pay per performance, etc. te organiseren?"
 								},
 								en = new
 								{
+									header = "Responsibility usage phase",
 									question = "Establishing partnerships to take responsibility for products in the usage phase and beyond?",
 									tooltip = "Do you collaborate to ensure that products are well-maintained and/or repaired so that they are used efficiently for a longer period? (maintenance and service contracts in collaboration with other market parties) Do you collaborate to organize product as a service or pay-per-performance, etc.?"
 								}
@@ -664,11 +710,13 @@ namespace NiCeScanner.Data
 							{
 								nl = new
 								{
+									header = "Kennisdeling",
 									question = "Kennisdeling, inspireren, etc met andere organisaties",
 									tooltip = "Kennis delen waarmee de transitie kan worden versneld over producten, materialen en processen. Werkt u samen om inzichtelijk te maken waar in de keten de grootste milieu- en sociale impactverbetering te behalen is (bijv. aan de hand van LCA analyse)?"
 								},
 								en = new
 								{
+									header = "Knowledge sharing",
 									question = "Knowledge sharing, inspiring, etc. with other organizations",
 									tooltip = "Sharing knowledge to accelerate the transition regarding products, materials, and processes. Do you collaborate to identify where in the chain the greatest environmental and social impact improvement can be achieved (e.g., based on LCA analysis)?"
 								}
@@ -687,11 +735,13 @@ namespace NiCeScanner.Data
 							{
 								nl = new
 								{
+									header = "Overheidsbeleid",
 									question = "samenwerking om overheidsbeleid en wet- en regelgeving te beïnvloeden die circulariteit in de weg staan?",
 									tooltip = ""
 								},
 								en = new
 								{
+									header = "Government policy",
 									question = "Collaboration to influence government policies and regulations that hinder circularity?",
 									tooltip = ""
 								}
@@ -710,11 +760,13 @@ namespace NiCeScanner.Data
 							{
 								nl = new
 								{
+									header = "Visie en missie",
 									question = "Staat de circulaire ambitie en meervoudige waardecreatie expliciet in de visie en missie van de organisatie?",
 									tooltip = ""
 								},
 								en = new
 								{
+									header = "Vision and mission",
 									question = "Does the circular ambition and multiple value creation explicitly state in the organization's vision and mission?",
 									tooltip = ""
 								}
@@ -733,11 +785,13 @@ namespace NiCeScanner.Data
 							{
 								nl = new
 								{
+									header = "Concrete doelen",
 									question = "In hoeverre heeft de organisatie de visie vertaald naar concrete doelen om (uiterlijk in 2050) tot volledige circulariteit te komen?",
 									tooltip = ""
 								},
 								en = new
 								{
+									header = "Concrete goals",
 									question = "To what extent has the organization translated the vision into concrete goals to achieve full circularity (by 2050 at the latest)?",
 									tooltip = ""
 								}
@@ -756,11 +810,13 @@ namespace NiCeScanner.Data
 							{
 								nl = new
 								{
+									header = "Strategie",
 									question = "In hoeverre heeft de organisatie een strategie om tot volledige circulariteit te komen?",
 									tooltip = ""
 								},
 								en = new
 								{
+									header = "Strategy",
 									question = "To what extent does the organization have a strategy to achieve full circularity?",
 									tooltip = ""
 								}
@@ -779,11 +835,13 @@ namespace NiCeScanner.Data
 							{
 								nl = new
 								{
+									header = "Voorbeeldfunctie",
 									question = "In hoeverre heeft de organisatie een voorbeeldfunctie als koploper in de sector als het gaat om circulariteit?",
 									tooltip = ""
 								},
 								en = new
 								{
+									header = "Role model",
 									question = "To what extent does the organization serve as a role model as a frontrunner in the sector when it comes to circularity?",
 									tooltip = ""
 								}
@@ -802,11 +860,13 @@ namespace NiCeScanner.Data
 							{
 								nl = new
 								{
+									header = "Transparantie",
 									question = "In hoeverre publiceert de organisatie transparant over hun circulaire en maatschappelijke impact (zowel positieve als negatieve impact) in bijvoorbeeld een jaarverslag?",
 									tooltip = ""
 								},
 								en = new
 								{
+									header = "Transparency",
 									question = "To what extent does the organization transparently publish their circular and societal impact (both positive and negative impact) in, for example, an annual report?",
 									tooltip = ""
 								}
@@ -825,11 +885,13 @@ namespace NiCeScanner.Data
 							{
 								nl = new
 								{
+									header = "Personeelsbeleid",
 									question = "Is het personeelsbeleid expliciet gericht op sociale aspecten zoals inclusiviteit en behoud en ontwikkeling van werkvermogen.",
 									tooltip = ""
 								},
 								en = new
 								{
+									header = "Personnel policy",
 									question = "Is the personnel policy explicitly focused on social aspects such as inclusivity and retention and development of work capacity?",
 									tooltip = ""
 								}
@@ -848,11 +910,13 @@ namespace NiCeScanner.Data
 							{
 								nl = new
 								{
+									header = "Wervings-, scholings- en kennisbeleid",
 									question = "Is het wervings-, scholings- en kennisbeleid gericht op kennis en kunde in huis halen en delen op gebied van circulaire economie.",
 									tooltip = ""
 								},
 								en = new
 								{
+									header = "Recruitment, training, and knowledge policy",
 									question = "Is the recruitment, training, and knowledge policy focused on acquiring and sharing knowledge and skills in the field of circular economy?",
 									tooltip = ""
 								}
@@ -871,11 +935,13 @@ namespace NiCeScanner.Data
 							{
 								nl = new
 								{
+									header = "Huisvesting",
 									question = "In hoeverre zijn door organisatie gebruikte gebouwen en terreinen circulair ontwikkeld?",
 									tooltip = ""
 								},
 								en = new
 								{
+									header = "Housing",
 									question = "To what extent are buildings and premises used by the organization developed in a circular manner?",
 									tooltip = ""
 								}
@@ -894,11 +960,13 @@ namespace NiCeScanner.Data
 							{
 								nl = new
 								{
+									header = "Waterverbruik",
 									question = "In hoeverre wordt zuinig omgegaan met water, regenwater opgevangen, waterberging en water gezuiverd?",
 									tooltip = ""
 								},
 								en = new
 								{
+									header = "Water consumption",
 									question = "To what extent is water used efficiently, rainwater harvested, water stored, and water purified?",
 									tooltip = ""
 								}
@@ -917,11 +985,13 @@ namespace NiCeScanner.Data
 							{
 								nl = new
 								{
+									header = "Afvalscheiding",
 									question = "In welke mate doet de organisatie aan afvalscheiding in de bedrijfsvoering op kantoren en kantine e.d.?",
 									tooltip = ""
 								},
 								en = new
 								{
+									header = "Waste separation",
 									question = "To what extent does the organization practice waste separation in its operations in offices, canteens, etc.?",
 									tooltip = ""
 								}
@@ -940,11 +1010,13 @@ namespace NiCeScanner.Data
 							{
 								nl = new
 								{
+									header = "Grondstoffen",
 									question = "In welke mate worden zo min mogelijk grondstoffen en kantoorartikelen ge- en ver-bruikt? (papier, water, pennen, etc.)",
 									tooltip = ""
 								},
 								en = new
 								{
+									header = "Raw materials",
 									question = "To what extent are as few resources and office supplies used and consumed as possible? (paper, water, pens, etc.)",
 									tooltip = ""
 								}
@@ -963,11 +1035,13 @@ namespace NiCeScanner.Data
 							{
 								nl = new
 								{
+									header = "Inrichting",
 									question = "In welke mate wordt kantoorinrichting zo lang mogelijk in gebruik gehouden en zo efficiënt mogelijk gebruikt? (laptops, bureaustoelen, flexibele werkplekken, etc.)",
 									tooltip = ""
 								},
 								en = new
 								{
+									header = "Furnishing",
 									question = "To what extent is office furniture kept in use for as long as possible and used as efficiently as possible? (laptops, office chairs, flexible workspaces, etc.)",
 									tooltip = ""
 								}
@@ -986,11 +1060,13 @@ namespace NiCeScanner.Data
 							{
 								nl = new
 								{
+									header = "Inkoopbeleid, circulair inkopen, lokaal inkopen",
 									question = "In hoeverre is het inkoopbeleid (naast inkoop productie) gericht op circulair en lokaal inkopen? Denk aan kantoorinrichting en artikelen, etc.",
 									tooltip = ""
 								},
 								en = new
 								{
+									header = "Procurement policy, circular procurement, local procurement",
 									question = "To what extent is the procurement policy (besides production procurement) focused on circular and local sourcing? Think of office furniture and items, etc.",
 									tooltip = ""
 								}
@@ -1009,11 +1085,13 @@ namespace NiCeScanner.Data
 							{
 								nl = new
 								{
+									header = "Schoonmaak",
 									question = "Wordt op een duurzame manier schoongemaakt?",
 									tooltip = ""
 								},
 								en = new
 								{
+									header = "Cleaning",
 									question = "Is cleaning done in a sustainable manner?",
 									tooltip = ""
 								}
@@ -1032,11 +1110,13 @@ namespace NiCeScanner.Data
 							{
 								nl = new
 								{
+									header = "Catering",
 									question = "In hoeverre zijn producten in de kantine en catering duurzaam en lokaal en worden wegwerpartikelen vermeden?",
 									tooltip = ""
 								},
 								en = new
 								{
+									header = "Catering",
 									question = "To what extent are products in the canteen and catering sustainable and locally sourced, and are disposable items avoided?",
 									tooltip = ""
 								}
@@ -1055,11 +1135,13 @@ namespace NiCeScanner.Data
 							{
 								nl = new
 								{
+									header = "Duurzame energie",
 									question = "Wordt door de organisatie duurzame energie opgewekt?",
 									tooltip = ""
 								},
 								en = new
 								{
+									header = "Sustainable energy",
 									question = "Does the organization generate sustainable energy?",
 									tooltip = ""
 								}
@@ -1078,11 +1160,13 @@ namespace NiCeScanner.Data
 							{
 								nl = new
 								{
+									header = "Energiegebruik",
 									question = "Gebruikt uw organisatie groene stroom?",
 									tooltip = ""
 								},
 								en = new
 								{
+									header = "Energy use",
 									question = "Does your organization use green energy?",
 									tooltip = ""
 								}
@@ -1101,11 +1185,13 @@ namespace NiCeScanner.Data
 							{
 								nl = new
 								{
+									header = "Energiegebruik",
 									question = "In hoeverre is de organisatie organisatiebreed bezig met energiebesparende maatregelen en verlagen van CO2 voetafdruk?",
 									tooltip = "Weet u hoe u de CO2-voetafdruk van uw organisatie kunt berekenen? Kent uw de kosten die ontstaan door de actuele Europese CO2-prijs? Gebruikt uw organisatie tools om mogelijke energiebesparing te ontdekken? Kent u subsidiemogelijkheden voor energiebesparingen?"
 								},
 								en = new
 								{
+									header = "Energy use",
 									question = "To what extent is the organization actively implementing energy-saving measures across the organization to reduce its CO2 footprint?",
 									tooltip = "Do you know how to calculate your organization's CO2 footprint? Are you aware of the costs associated with the current European CO2 price? Does your organization use tools to identify potential energy savings? Are you familiar with subsidy opportunities for energy savings?"
 								}
@@ -1124,11 +1210,13 @@ namespace NiCeScanner.Data
 							{
 								nl = new
 								{
+									header = "Energiegebruik",
 									question = "Compenseert uw organisatie de CO2-uitstoot?",
 									tooltip = ""
 								},
 								en = new
 								{
+									header = "Energy use",
 									question = "Does your organization offset its CO2 emissions?",
 									tooltip = ""
 								}
@@ -1147,11 +1235,13 @@ namespace NiCeScanner.Data
 							{
 								nl = new
 								{
+									header = "Mobiliteit werknemers",
 									question = "In hoeverre treft de organisatie maatregelen om de CO-voetafdruk van de mobiliteit van werknemers te verkleinen?",
 									tooltip = "Heeft uw organisatie dienstauto’s? Kent uw bedrijf de woon-werk-trajecten van de medewerkers en het daarbij gebruikte vervoersmiddel? Gebruikt uw bedrijf openbaar vervoerskaarten? Schakelt uw bedrijf over van fossiel naar elektrisch vervoer? Kent uw bedrijf de CO2-voetafdruk van het (vlieg-)verkeer?"
 								},
 								en = new
 								{
+									header = "Employee mobility",
 									question = "To what extent does the organization take measures to reduce the CO2 footprint of employee mobility?",
 									tooltip = "Does your organization have company cars? Does your company know the commuting routes of its employees and the means of transportation used? Does your company use public transportation cards? Is your company transitioning from fossil fuel to electric vehicles? Does your company know the CO2 footprint of its (air) travel?"
 								}
@@ -1170,11 +1260,13 @@ namespace NiCeScanner.Data
 							{
 								nl = new
 								{
+									header = "Diversiteit",
 									question = "In hoeverre heeft de organisatie een divers personeelsbestand?",
 									tooltip = "Mensen met afstand tot arbeidsmarkt, gehandicapten, 50+ ers, leertrajecten, culturele achtergronden, gender"
 								},
 								en = new
 								{
+									header = "Diversity",
 									question = "To what extent does the organization have a diverse workforce?",
 									tooltip = "People with distance to the labor market, disabled people, individuals over 50, training programs, cultural backgrounds, gender"
 								}
@@ -1193,11 +1285,13 @@ namespace NiCeScanner.Data
 							{
 								nl = new
 								{
+									header = "Fysieke en mentale veiligheid",
 									question = "In hoeverre is in de organisatie sprake van gezonde en veilige fysieke en mentale werkomstandigheden?",
 									tooltip = "Informeren van werknemers over gezond en velig werken, gebruik van een antidiscriminatieprotocol, rekening houden met de balans tussen werk en privé, aandacht voor fysieke, sensorische (bv lawaai) en mentale belasting van werk, doelbewust beleid om verspilling en uitputting van medewerkers te voorkomen."
 								},
 								en = new
 								{
+									header = "Physical and mental safety",
 									question = "To what extent are healthy and safe physical and mental working conditions maintained within the organization?",
 									tooltip = "Informing employees about healthy and safe working, use of an anti-discrimination protocol, consideration for work-life balance, attention to physical, sensory (e.g. noise), and mental workloads, deliberate policy to prevent waste and exhaustion of employees."
 								}
@@ -1216,11 +1310,13 @@ namespace NiCeScanner.Data
 							{
 								nl = new
 								{
+									header = "Werkzekerheid",
 									question = "In onze organisatie sprake van werkzekerheid voor de werknemers?",
 									tooltip = "Niet onnodig werken met zzp-constructies en arbeidscontracten voor bepaalde tijd, enz."
 								},
 								en = new
 								{
+									header = "Job security",
 									question = "Does our organization provide job security for its employees?",
 									tooltip = "Avoiding unnecessary use of self-employed (ZZP) constructions and fixed-term employment contracts, etc."
 								}
@@ -1239,11 +1335,13 @@ namespace NiCeScanner.Data
 							{
 								nl = new
 								{
+									header = "Autonomie",
 									question = "In onze organisatie zijn werknemers vrij om te beslissen hoe het werk wordt georganiseerd?",
 									tooltip = "Thuiswerken, werktijden, enz."
 								},
 								en = new
 								{
+									header = "Autonomy",
 									question = "In our organization, do employees have the freedom to decide how the work is organized?",
 									tooltip = "Remote work, working hours, etc."
 								}
@@ -1262,11 +1360,13 @@ namespace NiCeScanner.Data
 							{
 								nl = new
 								{
+									header = "Competentie",
 									question = "In onze organisatie sluit de kennis, vaardigheden en interesse van werknemers erg goed aan bij het werk dat ze doen?",
 									tooltip = "In onze organisatie vinden werknemers het werk interessant. In onze organisatie is het talent van de werknemer het uitgangspunt voor de uit te voeren taken."
 								},
 								en = new
 								{
+									header = "Competence",
 									question = "In our organization, do the knowledge, skills, and interests of employees align well with the work they do?",
 									tooltip = "In our organization, employees find the work interesting. In our organization, the talent of the employee is the basis for the tasks to be performed."
 								}
@@ -1285,11 +1385,13 @@ namespace NiCeScanner.Data
 							{
 								nl = new
 								{
+									header = "Betrokkenheid",
 									question = "Er worden concrete acties ingezet zodat werknemers zich betrokken voelen bij de organisatie?",
 									tooltip = "Bedrijfsuitjes, werktevredenheidsenquêtes, personeelscyclus"
 								},
 								en = new
 								{
+									header = "Engagement",
 									question = "Are concrete actions taken to make employees feel engaged with the organization?",
 									tooltip = "Company outings, employee satisfaction surveys, personnel cycle"
 								}
@@ -1308,11 +1410,13 @@ namespace NiCeScanner.Data
 							{
 								nl = new
 								{
+									header = "Ontwikkeling",
 									question = "In onze organisatie wordt de ontwikkeling van kennis en vaardigheden en persoonlijke ontwikkeling gestimuleerd?",
 									tooltip = "Werknemers kunnen werken aan persoonlijke ontwikkeling. Er worden ook werknemers aangenomen die niet direct perfect voldoen aan de vacature-eisen. Er is tijd en ruimte om te groeien in een baan. Werknemersbelang staat voorop bij het aanbieden van scholing. Er is tijd en geld voor coaching van werknemers, ook bij onvoldoende functioneren."
 								},
 								en = new
 								{
+									header = "Development",
 									question = "In our organization, is the development of knowledge, skills, and personal growth encouraged?",
 									tooltip = "Employees can work on personal development. Employees are hired even if they don't perfectly match the job requirements. There is time and space for growth within a job. Employee welfare is a priority when offering training. Time and resources are allocated for employee coaching, even when performance is insufficient."
 								}
@@ -1331,11 +1435,13 @@ namespace NiCeScanner.Data
 							{
 								nl = new
 								{
+									header = "Arbeid in externe keten",
 									question = "In hoeverre wordt in de hele keten rekening gehouden met sociale aspecten zoals slavernij, kinderarbeid, extreme armoede, buitensporige werktijden, etc.?",
 									tooltip = "Er wordt niet alleen gekeken naar arbeidsvoorwaarden binnen het bedrijf, maar in de hele levenscyclus van de producten van de organisatie, naar aspecten zoals minimum aanvaardbaar loon (het duurzame loon op lange termijn, of het fatsoenlijke leefloon op korte termijn), kinderarbeid (dwangarbeid, niet in staat om naar school te gaan), extreme armoede (afgeleid van de absolute armoedegrens van de Wereldbank), buitensporige werktijden (dwangarbeid, onvrijwillig), veiligheid en gezondheid op het werk (gebaseerd op statistieken van de IAO)"
 								},
 								en = new
 								{
+									header = "Labor in external chain",
 									question = "To what extent are social aspects such as slavery, child labor, extreme poverty, excessive working hours, etc., taken into account throughout the entire chain?",
 									tooltip = "Not only are labor conditions within the company considered, but throughout the entire lifecycle of the organization's products, aspects such as minimum acceptable wage (sustainable wage in the long term, or decent living wage in the short term), child labor (forced labor, inability to attend school), extreme poverty (derived from the World Bank's absolute poverty line), excessive working hours (forced labor, involuntary), workplace safety and health (based on ILO statistics)."
 								}
@@ -1354,11 +1460,13 @@ namespace NiCeScanner.Data
 							{
 								nl = new
 								{
+									header = "Beloning",
 									question = "In hoeverre krijgen werknemers een eerlijke beloning en goede secundaire arbeidsvoorwaarden?",
 									tooltip = "scheve verhoudingen, tov branchegenoten, winstuitkering alle werknemers"
 								},
 								en = new
 								{
+									header = "Reward",
 									question = "To what extent do employees receive fair compensation and good secondary employment benefits?",
 									tooltip = "imbalance, compared to industry peers, profit sharing for all employees"
 								}
