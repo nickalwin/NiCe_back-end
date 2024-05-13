@@ -17,6 +17,8 @@ namespace NiCeScanner.Models
 
 		public string Data { get; set; }
 
+		public string Color { get; set; }
+
 		public bool Show { get; set; }
 
 		public DateTime CreatedAt { get; set; }

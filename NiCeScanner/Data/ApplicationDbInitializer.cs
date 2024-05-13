@@ -27,6 +27,7 @@ namespace NiCeScanner.Data
 								name = "Innovation in raw material use",
 							}
 						}),
+						Color = "lichtroze",
 						Show = true,
 						CreatedAt = DateTime.Now,
 						UpdatedAt = DateTime.Now,
@@ -45,6 +46,7 @@ namespace NiCeScanner.Data
 								name = "Production and logistics",
 							}
 						}),
+						Color = "blauw",
 						Show = true,
 						CreatedAt = DateTime.Now,
 						UpdatedAt = DateTime.Now,
@@ -63,6 +65,7 @@ namespace NiCeScanner.Data
 								name = "Chain collaboration",
 							}
 						}),
+						Color = "goud",
 						Show = true,
 						CreatedAt = DateTime.Now,
 						UpdatedAt = DateTime.Now,
@@ -81,6 +84,7 @@ namespace NiCeScanner.Data
 								name = "Ambition",
 							}
 						}),
+						Color = "appelgroen",
 						Show = true,
 						CreatedAt = DateTime.Now,
 						UpdatedAt = DateTime.Now,
@@ -99,6 +103,7 @@ namespace NiCeScanner.Data
 								name = "Facility",
 							}
 						}),
+						Color = "lichtblauw",
 						Show = true,
 						CreatedAt = DateTime.Now,
 						UpdatedAt = DateTime.Now,
@@ -117,6 +122,7 @@ namespace NiCeScanner.Data
 								name = "Labor",
 							}
 						}),
+						Color = "donkerroze",
 						Show = true,
 						CreatedAt = DateTime.Now,
 						UpdatedAt = DateTime.Now,

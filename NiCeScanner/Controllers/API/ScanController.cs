@@ -156,6 +156,37 @@ namespace NiCeScanner.Controllers.API
 			};
 		}
 
+		[HttpDelete]
+		[Route("{uuid}/deleteContactInfo")]
+		public async Task<ActionResult<object>> DeleteContactInfo(string uuid)
+		{
+			Guid guid = Guid.Parse(uuid);
+
+			Scan? scan = await _context.Scans.FirstOrDefaultAsync(s => s.Uuid == guid);
+
+			if (scan is null)
+			{
+				return NotFound("Scan not found");
+			}
+
+			scan.ContactName = "";
+			scan.ContactEmail = "";
+
+			_context.Scans.Update(scan);
+
+			// from answers remove comments for this scan
+			List<Answer> answers = await _context.Answers.Where(a => a.ScanId == scan.Id).ToListAsync();
+			foreach (Answer answer in answers)
+			{
+				answer.Comment = "";
+				_context.Answers.Update(answer);
+			}
+
+			await _context.SaveChangesAsync();
+
+			return Ok();
+		}
+
 		[Route("{scanUuid}/updateAnswer/{questionUuid}")]
 		[HttpPut]
 		public async Task<ActionResult<object>> UpdateAnswer(string scanUuid, string questionUuid, [FromBody] PutScanUpdateAnswerRequest request)
