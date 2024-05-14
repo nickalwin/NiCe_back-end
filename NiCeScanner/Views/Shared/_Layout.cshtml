@@ -78,6 +78,13 @@
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Image" asp-action="Index">Images</a>
                                 </li>
                             }
+                            isAuthorized = await AuthorizationService.AuthorizeAsync(User, "RequireAdminRole");
+                            @if (isAuthorized.Succeeded)
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Index">Users</a>
+                                </li>
+                            }
                         }
                     </ul>
                     <partial name="_LoginPartial" />
