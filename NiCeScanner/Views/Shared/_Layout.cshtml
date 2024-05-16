@@ -57,6 +57,12 @@
                                     <a class="nav-link text-dark" asp-area="" asp-controller="ScanCodes" asp-action="Index">ScanCodes</a>
                                 </li>
                             }
+                            @if (isAuthorized.Succeeded)
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Links" asp-action="Index">Links</a>
+                                </li>
+                            }
                             isAuthorized = await AuthorizationService.AuthorizeAsync(User, "RequireStudentRole");
                             @if (isAuthorized.Succeeded)
                             {
