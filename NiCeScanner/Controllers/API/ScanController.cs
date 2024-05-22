@@ -29,6 +29,7 @@ namespace NiCeScanner.Controllers.API
 				.Include(s => s.Answers)
 					.ThenInclude(a => a.Question)
 						.ThenInclude(q => q.Category)
+							.ThenInclude(c => c.Links)
 				.FirstOrDefaultAsync(s => s.Uuid == guid);
 
 			if (scan == null)
@@ -41,6 +42,11 @@ namespace NiCeScanner.Controllers.API
 				.Select(g => new ScanResultDataResource
 				{
 					Category_uuid = g.Key,
+					Category_links = g.First().Question.Category.Links.Select(l => new LinkResource
+					{
+						Name = l.Name,
+						Href = l.Href
+					}),
 					Grouped_answers = g.Select(a => new GroupedCategoryQuestionsResource
 					{
 						Question_data = a.Question.Data,

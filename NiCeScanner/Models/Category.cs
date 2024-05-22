@@ -27,6 +27,8 @@ namespace NiCeScanner.Models
 
 
 		public ICollection<Question> Questions { get; set; }
+
+		public ICollection<Link> Links { get; set; }
 	}
 
 }

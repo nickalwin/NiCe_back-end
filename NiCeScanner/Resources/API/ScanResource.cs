@@ -25,6 +25,8 @@ namespace NiCeScanner.Resources.API
 	{
 		public required Guid Category_uuid { get; set; }
 
+		public required IEnumerable<LinkResource> Category_links { get; set; }
+
 		public required IEnumerable<GroupedCategoryQuestionsResource> Grouped_answers { get; set; }
 	}
 

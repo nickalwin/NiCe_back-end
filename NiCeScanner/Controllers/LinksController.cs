@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using NiCeScanner.Models;
 
 namespace NiCeScanner.Controllers
 {
+	[Authorize]
 	public class LinksController : Controller
 	{
 		private readonly ApplicationDbContext _context;
@@ -57,16 +59,27 @@ namespace NiCeScanner.Controllers
 		// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Create([Bind("Id,Name,Href,CategoryId,CreatedAt,UpdatedAt")] Link link)
+		public async Task<IActionResult> Create([Bind("Name,Href,CategoryId")] LinkForm form)
 		{
 			if (ModelState.IsValid)
 			{
+				var link = new Link
+				{
+					Name = form.Name,
+					Href = form.Href,
+					CategoryId = form.CategoryId,
+					CreatedAt = DateTime.Now,
+					UpdatedAt = DateTime.Now
+				};
+
 				_context.Add(link);
 				await _context.SaveChangesAsync();
 				return RedirectToAction(nameof(Index));
 			}
-			ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Id", link.CategoryId);
-			return View(link);
+
+			ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Id", form.CategoryId);
+			
+			return View(form);
 		}
 
 		// GET: Links/Edit/5
@@ -83,7 +96,13 @@ namespace NiCeScanner.Controllers
 				return NotFound();
 			}
 			ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Id", link.CategoryId);
-			return View(link);
+			var form = new LinkForm
+			{
+				Name = link.Name,
+				Href = link.Href,
+			};
+
+			return View(form);
 		}
 
 		// POST: Links/Edit/5
@@ -91,35 +110,28 @@ namespace NiCeScanner.Controllers
 		// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Edit(long id, [Bind("Id,Name,Href,CategoryId,CreatedAt,UpdatedAt")] Link link)
+		public async Task<IActionResult> Edit(long id, [Bind("Name,Href,CategoryId")] LinkForm form)
 		{
-			if (id != link.Id)
+			var link = new Link
 			{
-				return NotFound();
-			}
+				Id = id,
+				Name = form.Name,
+				Href = form.Href,
+				CategoryId = form.CategoryId,
+				UpdatedAt = DateTime.Now
+			};
 
 			if (ModelState.IsValid)
 			{
-				try
-				{
-					_context.Update(link);
-					await _context.SaveChangesAsync();
-				}
-				catch (DbUpdateConcurrencyException)
-				{
-					if (!LinkExists(link.Id))
-					{
-						return NotFound();
-					}
-					else
-					{
-						throw;
-					}
-				}
+				_context.Update(link);
+				await _context.SaveChangesAsync();
+
 				return RedirectToAction(nameof(Index));
 			}
+
 			ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Id", link.CategoryId);
-			return View(link);
+
+			return View(form);
 		}
 
 		// GET: Links/Delete/5
