@@ -31,5 +31,9 @@ namespace NiCeScanner.Data
 		public DbSet<ImageModel> Images { get; set; } = default!;
         
 		public DbSet<Link> Links { get; set; } = default!;
+        
+		public DbSet<AdviceCondition> AdviceConditions { get; set; } = default!;
+        
+		public DbSet<Advice> Advices { get; set; } = default!;
 	}
 }
