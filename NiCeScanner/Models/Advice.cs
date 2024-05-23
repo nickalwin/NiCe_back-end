@@ -9,9 +9,9 @@ namespace NiCeScanner.Models
 		public long Id { get; set; }
 		public string Data { get; set; } = default!;
 
-		public string AdditionalLink { get; set; } = default!;
+		public string? AdditionalLink { get; set; } = default!;
 
-		public string AdditionalLinkName { get; set; } = default!;
+		public string? AdditionalLinkName { get; set; } = default!;
 
 		public int Condition { get; set; }
 
