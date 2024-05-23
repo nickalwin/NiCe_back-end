@@ -13,11 +13,16 @@ namespace NiCeScanner.Models
 
 		public string AdditionalLinkName { get; set; } = default!;
 
+		public int Condition { get; set; }
+
+		public long QuestionId { get; set; }
+
 		public DateTime CreatedAt { get; set; }
 
 		public DateTime? UpdatedAt { get; set; }
 
-		public ICollection<AdviceCondition> AdviceConditions { get; set; } = default!;
+		[ForeignKey("QuestionId")]
+		public Question Question { get; set; } = default!;
 	}
 
 }

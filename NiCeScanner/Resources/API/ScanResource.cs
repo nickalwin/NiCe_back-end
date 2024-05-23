@@ -1,3 +1,5 @@
+using NiCeScanner.Models;
+
 namespace NiCeScanner.Resources.API
 {
 	class ScanResultElement
@@ -19,6 +21,7 @@ namespace NiCeScanner.Resources.API
 
 		public required string Comment { get; set; }
 
+		public required string Advice { get; set; }
 	}
 
 	public class ScanResultDataResource

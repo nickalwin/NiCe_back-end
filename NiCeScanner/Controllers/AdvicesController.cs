@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using NiCeScanner.Data;
@@ -46,6 +42,8 @@ namespace NiCeScanner.Controllers
 		// GET: Advices/Create
 		public IActionResult Create()
 		{
+			ViewData["QuestionId"] = new SelectList(_context.Questions, "Id", "Id");
+
 			return View();
 		}
 
@@ -54,15 +52,27 @@ namespace NiCeScanner.Controllers
 		// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Create([Bind("Id,Data,AdditionalLink,AdditionalLinkName,CreatedAt,UpdatedAt")] Advice advice)
+		public async Task<IActionResult> Create([Bind("Data,Condition,QuestionId,AdditionalLink,AdditionalLinkName")] AdviceForm form)
 		{
+			var advice = new Advice
+			{
+				Data = form.Data,
+				Condition = form.Condition,
+				QuestionId = form.QuestionId,
+				AdditionalLink = form.AdditionalLink,
+				AdditionalLinkName = form.AdditionalLinkName,
+				CreatedAt = DateTime.Now,
+				UpdatedAt = DateTime.Now
+			};
+
 			if (ModelState.IsValid)
 			{
 				_context.Add(advice);
 				await _context.SaveChangesAsync();
 				return RedirectToAction(nameof(Index));
 			}
-			return View(advice);
+
+			return View(form);
 		}
 
 		// GET: Advices/Edit/5
@@ -78,7 +88,17 @@ namespace NiCeScanner.Controllers
 			{
 				return NotFound();
 			}
-			return View(advice);
+
+			ViewData["QuestionId"] = new SelectList(_context.Questions, "Id", "Id");
+
+			return View(new AdviceForm
+			{
+				Data = advice.Data,
+				Condition = advice.Condition,
+				QuestionId = advice.QuestionId,
+				AdditionalLink = advice.AdditionalLink,
+				AdditionalLinkName = advice.AdditionalLinkName
+			});
 		}
 
 		// POST: Advices/Edit/5
@@ -86,15 +106,22 @@ namespace NiCeScanner.Controllers
 		// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Edit(long id, [Bind("Id,Data,AdditionalLink,AdditionalLinkName,CreatedAt,UpdatedAt")] Advice advice)
+		public async Task<IActionResult> Edit(long id, [Bind("Data,Condition,QuestionId,AdditionalLink,AdditionalLinkName")] AdviceForm form)
 		{
-			if (id != advice.Id)
-			{
-				return NotFound();
-			}
-
 			if (ModelState.IsValid)
 			{
+				var advice = await _context.Advices.FindAsync(id);
+				if (advice == null)
+				{
+					return NotFound();
+				}
+				advice.Data = form.Data;
+				advice.Condition = form.Condition;
+				advice.QuestionId = form.QuestionId;
+				advice.AdditionalLink = form.AdditionalLink;
+				advice.AdditionalLinkName = form.AdditionalLinkName;
+				advice.UpdatedAt = DateTime.Now;
+
 				try
 				{
 					_context.Update(advice);
@@ -113,7 +140,7 @@ namespace NiCeScanner.Controllers
 				}
 				return RedirectToAction(nameof(Index));
 			}
-			return View(advice);
+			return View(form);
 		}
 
 		// GET: Advices/Delete/5

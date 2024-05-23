@@ -36,5 +36,6 @@ namespace NiCeScanner.Models
 		[ForeignKey("ImageId")]
 		public ImageModel Image { get; set; }
 
+		public Advice Advice { get; set; } = default!;
 	}
 }

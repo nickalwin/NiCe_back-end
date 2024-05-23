@@ -28,6 +28,9 @@ namespace NiCeScanner.Controllers.API
 			var scan = await _context.Scans
 				.Include(s => s.Answers)
 					.ThenInclude(a => a.Question)
+						.ThenInclude(q => q.Advice)
+				.Include(s => s.Answers)
+					.ThenInclude(a => a.Question)
 						.ThenInclude(q => q.Category)
 							.ThenInclude(c => c.Links)
 				.FirstOrDefaultAsync(s => s.Uuid == guid);
@@ -52,7 +55,9 @@ namespace NiCeScanner.Controllers.API
 						Question_data = a.Question.Data,
 						Question_uuid = a.Question.Uuid,
 						Answer = a.Score,
-						Comment = a.Comment
+						Comment = a.Comment,
+						Advice = a.Question.Advice != null
+							? (a.Score <= a.Question.Advice.Condition ? a.Question.Advice.Data : "") : ""
 					})
 				});
 
