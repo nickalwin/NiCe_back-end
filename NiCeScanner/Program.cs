@@ -2,6 +2,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using NiCeScanner.Data;
 using NiCeScanner.Controllers;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using NiCeScanner.Models;
+using Microsoft.Extensions.Options;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,7 +19,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DevDatabase")));
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+builder.Services.AddTransient<IEmailSender, EmailSender>();
+
+builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
 	.AddRoles<IdentityRole>()
 	.AddEntityFrameworkStores<ApplicationDbContext>();
 
@@ -83,7 +90,6 @@ app.UseStaticFiles();
 
 app.UseCors("AllowAll");
 
-
 app.UseRouting();
 
 app.UseAuthorization();
@@ -112,6 +118,17 @@ using (var scope = app.Services.CreateScope())
 	string name = "Admin";
 	string email = "admin@admin.com";
 	string password = "Admin@123";
+	if (await userManager.FindByEmailAsync(email) == null)
+	{
+		var user = new IdentityUser { UserName = email, Email = email };
+		await userManager.CreateAsync(user, password);
+		userManager.AddToRoleAsync(user, "Admin");
+	}
+
+	userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+	name = "Nick Oost";
+	email = "nick.alwin.oost@gmail.com";
+	password = "Test@123";
 	if (await userManager.FindByEmailAsync(email) == null)
 	{
 		var user = new IdentityUser { UserName = email, Email = email };

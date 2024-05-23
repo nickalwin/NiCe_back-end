@@ -1,37 +1,65 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using NiCeScanner.Data;
 using NiCeScanner.Models;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace NiCeScanner.Controllers
 {
+	[Authorize(Roles = "Admin")]
 	public class UsersController : Controller
 	{
 		private readonly UserManager<IdentityUser> _userManager;
 		private readonly RoleManager<IdentityRole> _roleManager;
 		private readonly ApplicationDbContext _context;
+		private readonly ILogger<UsersController> _logger;
+		private readonly IEmailSender _emailSender;
 
-		public UsersController(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager, ApplicationDbContext context)
+		public UsersController(
+			UserManager<IdentityUser> userManager,
+			RoleManager<IdentityRole> roleManager,
+			ApplicationDbContext context,
+			ILogger<UsersController> logger,
+			IEmailSender emailSender)
 		{
 			_userManager = userManager;
 			_roleManager = roleManager;
 			_context = context;
+			_logger = logger;
+			_emailSender = emailSender;
 		}
 
-		public IActionResult Index()
+		public async Task<IActionResult> Index()
 		{
-			var users = _userManager.Users.Select(c => new UserRolesViewModel()
-			{
-				Id = c.Id,
-				UserName = c.UserName,
-				Roles = string.Join(",", _userManager.GetRolesAsync(c).Result)
-			}).ToList();
+			var users = _userManager.Users.ToList();
+			var roleRequests = _context.UserRoleRequests.Where(r => r.Status == null).ToList();
 
-			return View(users);
+			var userRolesViewModel = new List<UserRolesViewModel>();
+
+			foreach (var user in users)
+			{
+				var roles = await _userManager.GetRolesAsync(user);
+				var pendingRequest = roleRequests.FirstOrDefault(r => r.User == user.UserName);
+
+				userRolesViewModel.Add(new UserRolesViewModel
+				{
+					Id = user.Id,
+					UserName = user.UserName,
+					Roles = string.Join(", ", roles),
+					IsPendingRoleRequest = pendingRequest != null,
+					RequestedRole = pendingRequest?.Role,
+					RequestReason = pendingRequest?.Reason
+				});
+			}
+
+			return View(userRolesViewModel);
 		}
 
 		// GET: UserRolesView/Edit/5
@@ -55,10 +83,9 @@ namespace NiCeScanner.Controllers
 			{
 				Id = id,
 				UserName = user.UserName,
-				Roles = userRoles.FirstOrDefault() // Set the current role of the user
-			};
+				Roles = string.Join(", ", userRoles)
+		};
 
-			// Create a list of SelectListItem for the dropdown
 			ViewBag.RoleList = roles.Select(r => new SelectListItem { Value = r.Name, Text = r.Name }).ToList();
 
 			return View(viewModel);
@@ -67,7 +94,7 @@ namespace NiCeScanner.Controllers
 		// POST: UserRolesView/Edit/5
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Edit(string id, [Bind("Id,UserName,Roles")] UserRolesViewModel viewModel)
+		public async Task<IActionResult> Edit(string id, UserRolesViewModel viewModel)
 		{
 			if (id != viewModel.Id)
 			{
@@ -84,9 +111,12 @@ namespace NiCeScanner.Controllers
 						return NotFound();
 					}
 
-					// Update user roles
-					await _userManager.RemoveFromRolesAsync(user, await _userManager.GetRolesAsync(user));
-					await _userManager.AddToRoleAsync(user, viewModel.Roles);
+					// Remove all existing roles of the user
+					var userRoles = await _userManager.GetRolesAsync(user);
+					await _userManager.RemoveFromRolesAsync(user, userRoles.ToArray());
+
+					// Add selected roles to the user
+					await _userManager.AddToRolesAsync(user, viewModel.Roles.Split(',').Select(r => r.Trim()));
 
 					return RedirectToAction(nameof(Index));
 				}
@@ -97,6 +127,7 @@ namespace NiCeScanner.Controllers
 			}
 			return View(viewModel);
 		}
+
 
 
 		// GET: UserRolesView/Delete/5
@@ -157,5 +188,33 @@ namespace NiCeScanner.Controllers
 			return View(viewModel);
 		}
 
+
+		[HttpPost]
+		public async Task<IActionResult> HandleRoleRequest(string userId, bool isApproved)
+		{
+			var user = await _userManager.FindByIdAsync(userId);
+			if (user == null)
+			{
+				return NotFound($"Unable to find user with ID '{userId}'.");
+			}
+
+			var pendingRequest = _context.UserRoleRequests.FirstOrDefault(r => r.User == user.UserName && r.Status == null);
+			if (pendingRequest != null)
+			{
+				pendingRequest.Status = isApproved;
+				pendingRequest.HandledBy = User.Identity.Name;
+				_context.Update(pendingRequest);
+				await _context.SaveChangesAsync();
+
+				if (isApproved)
+				{
+					await _userManager.AddToRoleAsync(user, pendingRequest.Role);
+				}
+
+				await _emailSender.SendEmailAsync(user.Email, "Role Request Update", isApproved ? "Your role request has been approved." : "Your role request has been denied.");
+			}
+
+			return RedirectToAction(nameof(Index));
+		}
 	}
 }

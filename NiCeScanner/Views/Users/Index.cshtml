@@ -1,44 +1,107 @@
 ﻿@model IEnumerable<NiCeScanner.Models.UserRolesViewModel>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Users";
 }
 
-<h1>Index</h1>
+<h1>Users</h1>
 
-@{
-    //TODO: add creating users
-}
-@* <p>
-    <a asp-action="Create">Create New</a>
-</p> *@
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.UserName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Roles)
-            </th>
+            <th>@Html.DisplayNameFor(model => model.UserName)</th>
+            <th>@Html.DisplayNameFor(model => model.Roles)</th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.UserName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Roles)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.UserName)</td>
+                <td>@Html.DisplayFor(modelItem => item.Roles)</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    @if (item.IsPendingRoleRequest)
+                    {
+                        <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#roleRequestModal" data-username="@item.UserName" data-role="@item.RequestedRole" data-reason="@item.RequestReason" data-userid="@item.Id">
+                            Pending Request
+                        </button>
+                    }
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+
+<!-- Modal -->
+<div class="modal fade" id="roleRequestModal" tabindex="-1" role="dialog" aria-labelledby="roleRequestModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="roleRequestModalLabel">Role Request Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Username:</strong> <span id="modalUsername"></span></p>
+                <p><strong>Requested Role:</strong> <span id="modalRole"></span></p>
+                <p><strong>Reason:</strong> <span id="modalReason"></span></p>
+                <input type="hidden" id="modalUserId" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-success" id="approveButton">Approve</button>
+                <button type="button" class="btn btn-danger" id="denyButton">Deny</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $('#roleRequestModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var username = button.data('username');
+            var role = button.data('role');
+            var reason = button.data('reason');
+            var userId = button.data('userid');
+
+            var modal = $(this);
+            modal.find('#modalUsername').text(username);
+            modal.find('#modalRole').text(role);
+            modal.find('#modalReason').text(reason);
+            modal.find('#modalUserId').val(userId);
+        });
+
+        $('#approveButton').on('click', function () {
+            var userId = $('#modalUserId').val();
+            handleRoleRequest(userId, true);
+        });
+
+        $('#denyButton').on('click', function () {
+            var userId = $('#modalUserId').val();
+            handleRoleRequest(userId, false);
+        });
+
+        function handleRoleRequest(userId, isApproved) {
+            $.ajax({
+                url: '@Url.Action("HandleRoleRequest", "Users")',
+                type: 'POST',
+                data: {
+                    userId: userId,
+                    isApproved: isApproved
+                },
+                success: function () {
+                    location.reload();
+                },
+                error: function () {
+                    alert('An error occurred while processing the request.');
+                }
+            });
+        }
+    </script>
+}
