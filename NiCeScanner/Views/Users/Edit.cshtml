@@ -1,0 +1,109 @@
+﻿@model NiCeScanner.Models.UserRolesViewModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>UserRolesViewModel</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="UserName" class="control-label"></label>
+                <input asp-for="UserName" class="form-control" readonly />
+                <span asp-validation-for="UserName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Roles" class="control-label"></label>
+                <div id="selectedRoles">
+                    @if (ViewBag.RoleList != null)
+                    {
+                        @foreach (var role in Model.Roles.Split(", "))
+                        {
+                            <div class="role-item m-2">
+                                <input type="hidden" name="selectedRoles" value="@role" />
+                                <span>@role</span>
+                                <button type="button" class="btn btn-danger btn-sm deleteRole">Delete</button>
+                            </div>
+                        }}
+                </div>
+                <select id="roleDropdown" class="form-control">
+                    <option value="">Select a role</option>
+                    @if (ViewBag.RoleList != null)
+                    {
+                        foreach (var role in ViewBag.RoleList as List<SelectListItem>)
+                        {
+                            <option value="@role.Value">@role.Text</option>
+                        }
+                    }
+                </select>
+
+                <button type="button" id="addRoleBtn" class="btn btn-primary mt-2">Add Role</button>
+                <input type="hidden" id="Roles" asp-for="Roles" />
+                <span asp-validation-for="Roles" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    <script>
+        // Function to add a role to the selected roles
+        $('#addRoleBtn').on('click', function () {
+            var selectedRole = $('#roleDropdown').val();
+            if (selectedRole) {
+                // Check if the selected role is already in the list of selected roles
+                var roleExists = false;
+                $('#selectedRoles input[name="selectedRoles"]').each(function () {
+                    if ($(this).val() === selectedRole) {
+                        roleExists = true;
+                        return false; // Exit the loop if the role is found
+                    }
+                });
+
+                if (!roleExists) {
+                    $('#selectedRoles').append('<div class="role-item m-2">' +
+                        '<input type="hidden" name="selectedRoles" value="' + selectedRole + '" />' +
+                        '<span>' + selectedRole + ' </span>' +
+                        '<button type="button" class="btn btn-danger btn-sm deleteRole">Delete</button>' +
+                        '</div>');
+
+                    // Update the Roles property in the hidden field
+                    updateRoles();
+                } else {
+                    // Alert the user that the role is already selected
+                    alert('The role is already selected.');
+                }
+            }
+        });
+
+        // Function to delete a role from the view
+        $(document).on('click', '.deleteRole', function () {
+            $(this).closest('.role-item').remove();
+
+            // Update the Roles property in the hidden field
+            updateRoles();
+        });
+
+        // Function to update the Roles property in the hidden field
+        function updateRoles() {
+            var roles = [];
+            $('#selectedRoles input[name="selectedRoles"]').each(function () {
+                roles.push($(this).val());
+            });
+            $('#Roles').val(roles.join(','));
+        }
+    </script>
+}
