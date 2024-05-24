@@ -61,7 +61,6 @@ namespace NiCeScanner.Controllers.API
 					})
 				});
 
-			// get the average results for those categories
 			var scans = await _context.Scans.ToListAsync();
 			var allResults = new List<ScanResultElement>();
 

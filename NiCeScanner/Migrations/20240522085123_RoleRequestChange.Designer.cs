@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NiCeScanner.Data;
 
@@ -10,9 +11,11 @@ using NiCeScanner.Data;
 namespace NiCeScanner.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240522085123_RoleRequestChange")]
+    partial class RoleRequestChange
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.4");
@@ -247,10 +250,6 @@ namespace NiCeScanner.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Color")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
@@ -292,38 +291,6 @@ namespace NiCeScanner.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Images");
-                });
-
-            modelBuilder.Entity("NiCeScanner.Models.Link", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<long>("CategoryId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Href")
-                        .IsRequired()
-                        .HasMaxLength(400)
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(400)
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CategoryId");
-
-                    b.ToTable("Links");
                 });
 
             modelBuilder.Entity("NiCeScanner.Models.Mail", b =>
@@ -599,17 +566,6 @@ namespace NiCeScanner.Migrations
                     b.Navigation("Scan");
                 });
 
-            modelBuilder.Entity("NiCeScanner.Models.Link", b =>
-                {
-                    b.HasOne("NiCeScanner.Models.Category", "Category")
-                        .WithMany("Links")
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Category");
-                });
-
             modelBuilder.Entity("NiCeScanner.Models.Question", b =>
                 {
                     b.HasOne("NiCeScanner.Models.Category", "Category")
@@ -651,8 +607,6 @@ namespace NiCeScanner.Migrations
 
             modelBuilder.Entity("NiCeScanner.Models.Category", b =>
                 {
-                    b.Navigation("Links");
-
                     b.Navigation("Questions");
                 });
 

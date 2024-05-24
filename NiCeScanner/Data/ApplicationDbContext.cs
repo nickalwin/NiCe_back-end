@@ -33,5 +33,7 @@ namespace NiCeScanner.Data
 		public DbSet<Link> Links { get; set; } = default!;
                 
 		public DbSet<Advice> Advices { get; set; } = default!;
+
+		public DbSet<UserRoleRequests> UserRoleRequests { get; set; } = default!;
 	}
 }
