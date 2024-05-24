@@ -5,6 +5,8 @@ VisualStudioVersion = 17.8.34525.116
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NiCeScanner", "NiCeScanner\NiCeScanner.csproj", "{AD790EC8-0D4A-4FA1-ADB4-634E89EE6126}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NiCETest", "NiCETest\NiCETest.csproj", "{61A6023B-7B47-4861-AE6F-098650F393E2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{AD790EC8-0D4A-4FA1-ADB4-634E89EE6126}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AD790EC8-0D4A-4FA1-ADB4-634E89EE6126}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AD790EC8-0D4A-4FA1-ADB4-634E89EE6126}.Release|Any CPU.Build.0 = Release|Any CPU
+		{61A6023B-7B47-4861-AE6F-098650F393E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{61A6023B-7B47-4861-AE6F-098650F393E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{61A6023B-7B47-4861-AE6F-098650F393E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{61A6023B-7B47-4861-AE6F-098650F393E2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
