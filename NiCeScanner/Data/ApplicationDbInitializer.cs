@@ -1,13 +1,82 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using NiCeScanner.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace NiCeScanner.Data
 {
 	public class ApplicationDbInitializer
 	{
-		public static void Seed(IApplicationBuilder appBuilder)
+		public static async void Seed(IApplicationBuilder appBuilder)
 		{
+			using (var scope = appBuilder.ApplicationServices.CreateScope())
+			{
+				var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+				var roles = new List<string> { "Admin", "Manager", "Researcher", "Student", "Member" };
+
+				foreach (var role in roles)
+				{
+					if (!await roleManager.RoleExistsAsync(role))
+					{
+						roleManager.CreateAsync(new IdentityRole(role)).Wait();
+					}
+				}
+
+				var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+				string name = "Admin";
+				string email = "admin@admin.com";
+				string password = "Admin@123";
+				if (await userManager.FindByEmailAsync(email) == null)
+				{
+					var user = new IdentityUser { UserName = email, Email = email, EmailConfirmed = true };
+					await userManager.CreateAsync(user, password);
+					userManager.AddToRoleAsync(user, "Admin");
+				}
+
+				userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+				name = "Manager";
+				email = "manager@manager.com";
+				password = "Manager@123";
+				if (await userManager.FindByEmailAsync(email) == null)
+				{
+					var user = new IdentityUser { UserName = email, Email = email, EmailConfirmed = true };
+					await userManager.CreateAsync(user, password);
+					userManager.AddToRoleAsync(user, "Manager");
+				}
+
+				userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+				name = "Researcher";
+				email = "researcher@researcher.com";
+				password = "Researcher@123";
+				if (await userManager.FindByEmailAsync(email) == null)
+				{
+					var user = new IdentityUser { UserName = email, Email = email, EmailConfirmed = true };
+					await userManager.CreateAsync(user, password);
+					userManager.AddToRoleAsync(user, "Researcher");
+				}
+
+				userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+				name = "Student";
+				email = "student@student.com";
+				password = "Student@123";
+				if (await userManager.FindByEmailAsync(email) == null)
+				{
+					var user = new IdentityUser { UserName = email, Email = email, EmailConfirmed = true };
+					await userManager.CreateAsync(user, password);
+					userManager.AddToRoleAsync(user, "Student");
+				}
+
+				userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+				name = "Member";
+				email = "member@member.com";
+				password = "Member@123";
+				if (await userManager.FindByEmailAsync(email) == null)
+				{
+					var user = new IdentityUser { UserName = email, Email = email, EmailConfirmed = true };
+					await userManager.CreateAsync(user, password);
+					userManager.AddToRoleAsync(user, "Member");
+				}
+			}
+
 			using (IServiceScope serviceScope = appBuilder.ApplicationServices.CreateScope())
 			{
 				ApplicationDbContext context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
@@ -132,6 +201,338 @@ namespace NiCeScanner.Data
 						c1, c2, c3, c4, c5, c6
 					);
 
+					ImageModel img1 = new ImageModel()
+					{
+						FileName = "Innovation_1.jpg",
+						ImageData = System.IO.File.ReadAllBytes("wwwroot/images/Innovation/Innovation_1.jpg"),
+					};
+
+					ImageModel img2 = new ImageModel()
+					{
+						FileName = "Innovation_2.png",
+						ImageData = System.IO.File.ReadAllBytes("wwwroot/images/Innovation/Innovation_2.png"),
+					};
+
+					ImageModel img3 = new ImageModel()
+					{
+						FileName = "Innovation_3.jpg",
+						ImageData = System.IO.File.ReadAllBytes("wwwroot/images/Innovation/Innovation_3.jpg"),
+					};
+
+					ImageModel img4 = new ImageModel()
+					{
+						FileName = "Innovation_4.jpg",
+						ImageData = System.IO.File.ReadAllBytes("wwwroot/images/Innovation/Innovation_4.jpg"),
+					};
+
+					ImageModel img5 = new ImageModel()
+					{
+						FileName = "Innovation_5.png",
+						ImageData = System.IO.File.ReadAllBytes("wwwroot/images/Innovation/Innovation_5.png"),
+					};
+
+					ImageModel img6 = new ImageModel()
+					{
+						FileName = "Innovation_6.jpg",
+						ImageData = System.IO.File.ReadAllBytes("wwwroot/images/Innovation/Innovation_6.jpg"),
+					};
+
+					ImageModel img7 = new ImageModel()
+					{
+						FileName = "Innovation_7.png",
+						ImageData = System.IO.File.ReadAllBytes("wwwroot/images/Innovation/Innovation_7.png"),
+					};
+
+					ImageModel img8 = new ImageModel()
+					{
+						FileName = "Innovation_8.jpeg",
+						ImageData = System.IO.File.ReadAllBytes("wwwroot/images/Innovation/Innovation_8.jpeg"),
+					};
+
+					ImageModel img9 = new ImageModel()
+					{
+						FileName = "Innovation_9.png",
+						ImageData = System.IO.File.ReadAllBytes("wwwroot/images/Innovation/Innovation_9.png"),
+					};
+
+					ImageModel img10 = new ImageModel()
+					{
+						FileName = "Innovation_10.jpg",
+						ImageData = System.IO.File.ReadAllBytes("wwwroot/images/Innovation/Innovation_10.jpg"),
+					};
+
+					ImageModel img11 = new ImageModel()
+					{
+						FileName = "Innovation_11.jpeg",
+						ImageData = System.IO.File.ReadAllBytes("wwwroot/images/Innovation/Innovation_11.jpeg"),
+					};
+
+					ImageModel img12 = new ImageModel()
+					{
+						FileName = "Productie_1.jpg",
+						ImageData = System.IO.File.ReadAllBytes("wwwroot/images/Productie/Productie_1.jpg"),
+					};
+
+					ImageModel img13 = new ImageModel()
+					{
+						FileName = "Productie_2.jpeg",
+						ImageData = System.IO.File.ReadAllBytes("wwwroot/images/Productie/Productie_2.jpeg"),
+					};
+
+					ImageModel img14 = new ImageModel()
+					{
+						FileName = "Productie_3.jpeg",
+						ImageData = System.IO.File.ReadAllBytes("wwwroot/images/Productie/Productie_3.jpeg"),
+					};
+
+					ImageModel img15 = new ImageModel()
+					{
+						FileName = "Productie_4.png",
+						ImageData = System.IO.File.ReadAllBytes("wwwroot/images/Productie/Productie_4.png"),
+					};
+					
+					ImageModel img16 = new ImageModel()
+					{
+						FileName = "Productie_5.png",
+						ImageData = System.IO.File.ReadAllBytes("wwwroot/images/Productie/Productie_5.png"),
+					};
+
+					ImageModel img17 = new ImageModel()
+					{
+						FileName = "Productie_6.png",
+						ImageData = System.IO.File.ReadAllBytes("wwwroot/images/Productie/Productie_6.png"),
+					};
+
+					ImageModel img18 = new ImageModel()
+					{
+						FileName = "Chain_1.jpg",
+						ImageData = System.IO.File.ReadAllBytes("wwwroot/images/Chain/Chain_1.jpg"),
+					};
+
+					ImageModel img19 = new ImageModel()
+					{
+						FileName = "Chain_2.png",
+						ImageData = System.IO.File.ReadAllBytes("wwwroot/images/Chain/Chain_2.png"),
+					};
+
+					ImageModel img20 = new ImageModel()
+					{
+						FileName = "Chain_3.png",
+						ImageData = System.IO.File.ReadAllBytes("wwwroot/images/Chain/Chain_3.png"),
+					};
+
+					ImageModel img21 = new ImageModel()
+					{
+						FileName = "Chain_4.jpeg",
+						ImageData = System.IO.File.ReadAllBytes("wwwroot/images/Chain/Chain_4.jpeg"),
+					};
+
+					ImageModel img22 = new ImageModel()
+					{
+						FileName = "Chain_5.jpg",
+						ImageData = System.IO.File.ReadAllBytes("wwwroot/images/Chain/Chain_5.jpg"),
+					};
+
+					ImageModel img23 = new ImageModel()
+					{
+						FileName = "Chain_6.png",
+						ImageData = System.IO.File.ReadAllBytes("wwwroot/images/Chain/Chain_6.png"),
+					};
+
+					ImageModel img24 = new ImageModel()
+					{
+						FileName = "Chain_7.jpeg",
+						ImageData = System.IO.File.ReadAllBytes("wwwroot/images/Chain/Chain_7.jpeg"),
+					};
+
+					ImageModel img25 = new ImageModel()
+					{
+						FileName = "Chain_8.png",
+						ImageData = System.IO.File.ReadAllBytes("wwwroot/images/Chain/Chain_8.png"),
+					};
+
+					ImageModel img26 = new ImageModel()
+					{
+						FileName = "Ambitie_1.png",
+						ImageData = System.IO.File.ReadAllBytes("wwwroot/images/Ambitie/Ambitie_1.png"),
+					};
+
+					ImageModel img27 = new ImageModel()
+					{
+						FileName = "Ambitie_2.jpg",
+						ImageData = System.IO.File.ReadAllBytes("wwwroot/images/Ambitie/Ambitie_2.jpg"),
+					};
+					
+					ImageModel img28 = new ImageModel()
+					{
+						FileName = "Ambitie_3.jpg",
+						ImageData = System.IO.File.ReadAllBytes("wwwroot/images/Ambitie/Ambitie_3.jpg"),
+					};
+
+					ImageModel img29 = new ImageModel()
+					{
+						FileName = "Ambitie_4.jpeg",
+						ImageData = System.IO.File.ReadAllBytes("wwwroot/images/Ambitie/Ambitie_4.jpeg"),
+					};
+
+					ImageModel img30 = new ImageModel()
+					{
+						FileName = "Ambitie_5.jpg",
+						ImageData = System.IO.File.ReadAllBytes("wwwroot/images/Ambitie/Ambitie_5.jpg"),
+					};
+
+					ImageModel img31 = new ImageModel()
+					{
+						FileName = "Ambitie_6.png",
+						ImageData = System.IO.File.ReadAllBytes("wwwroot/images/Ambitie/Ambitie_6.png"),
+					};
+
+					// ImageModel img32 = new ImageModel()
+					// {
+					// 	FileName = "Ambitie_7.jpg",
+					// 	ImageData = System.IO.File.ReadAllBytes("wwwroot/images/Facility/Ambitie_7.jpg"),
+					// };
+
+					ImageModel img33 = new ImageModel()
+					{
+						FileName = "Facility_1.jpg",
+						ImageData = System.IO.File.ReadAllBytes("wwwroot/images/Facility/Facility_1.jpg"),
+					};
+
+					ImageModel img34 = new ImageModel()
+					{
+						FileName = "Facility_2.jpg",
+						ImageData = System.IO.File.ReadAllBytes("wwwroot/images/Facility/Facility_2.jpg"),
+					};
+					ImageModel img35 = new ImageModel()
+					{
+						FileName = "Facility_3.jpg",
+						ImageData = System.IO.File.ReadAllBytes("wwwroot/images/Facility/Facility_3.jpg"),
+					};
+
+					ImageModel img36 = new ImageModel()
+					{
+						FileName = "Facility_4.jpg",
+						ImageData = System.IO.File.ReadAllBytes("wwwroot/images/Facility/Facility_4.jpg"),
+					};
+
+					ImageModel img37 = new ImageModel()
+					{
+						FileName = "Facility_5.jpg",
+						ImageData = System.IO.File.ReadAllBytes("wwwroot/images/Facility/Facility_5.jpg"),
+					};
+
+					ImageModel img38 = new ImageModel()
+					{
+						FileName = "Facility_6.jpeg",
+						ImageData = System.IO.File.ReadAllBytes("wwwroot/images/Facility/Facility_6.jpeg"),
+					};
+
+					ImageModel img39 = new ImageModel()
+					{
+						FileName = "Facility_7.png",
+						ImageData = System.IO.File.ReadAllBytes("wwwroot/images/Facility/Facility_7.png"),
+					};
+
+					ImageModel img40 = new ImageModel()
+					{
+						FileName = "Facility_8.jpeg",
+						ImageData = System.IO.File.ReadAllBytes("wwwroot/images/Facility/Facility_8.jpeg"),
+					};
+
+					ImageModel img41 = new ImageModel()
+					{
+						FileName = "Facility_9.jpeg",
+						ImageData = System.IO.File.ReadAllBytes("wwwroot/images/Facility/Facility_9.jpeg"),
+					};
+
+					ImageModel img42 = new ImageModel()
+					{
+						FileName = "Facility_10.jpg",
+						ImageData = System.IO.File.ReadAllBytes("wwwroot/images/Facility/Facility_10.jpg"),
+					};
+
+					ImageModel img43 = new ImageModel()
+					{
+						FileName = "Facility_11.jpg",
+						ImageData = System.IO.File.ReadAllBytes("wwwroot/images/Facility/Facility_11.jpg"),
+					};
+
+					ImageModel img44 = new ImageModel()
+					{
+						FileName = "Facility_12.jpg",
+						ImageData = System.IO.File.ReadAllBytes("wwwroot/images/Facility/Facility_12.jpg"),
+					};
+
+					ImageModel img45 = new ImageModel()
+					{
+						FileName = "Facility_13.jpg",
+						ImageData = System.IO.File.ReadAllBytes("wwwroot/images/Facility/Facility_13.jpg"),
+					};
+
+					ImageModel img46 = new ImageModel()
+					{
+						FileName = "Labor_1.jpg",
+						ImageData = System.IO.File.ReadAllBytes("wwwroot/images/Labor/Labor_1.jpg"),
+					};
+
+					ImageModel img47 = new ImageModel()
+					{
+						FileName = "Labor_2.jpg",
+						ImageData = System.IO.File.ReadAllBytes("wwwroot/images/Labor/Labor_2.jpg"),
+					};
+
+					ImageModel img48 = new ImageModel()
+					{
+						FileName = "Labor_3.jpg",
+						ImageData = System.IO.File.ReadAllBytes("wwwroot/images/Labor/Labor_3.jpg"),
+					};
+
+					ImageModel img49 = new ImageModel()
+					{
+						FileName = "Labor_4.jpg",
+						ImageData = System.IO.File.ReadAllBytes("wwwroot/images/Labor/Labor_4.jpg"),
+					};
+
+					// ImageModel img50 = new ImageModel()
+					// {
+					// 	FileName = "Labor_5.jpg",
+					// 	ImageData = System.IO.File.ReadAllBytes("wwwroot/images/Labor/Labor_5.jpg"),
+					// };
+
+					ImageModel img51 = new ImageModel()
+					{
+						FileName = "Labor_6.jpg",
+						ImageData = System.IO.File.ReadAllBytes("wwwroot/images/Labor/Labor_6.jpg"),
+					};
+
+					ImageModel img52 = new ImageModel()
+					{
+						FileName = "Labor_7.jpg",
+						ImageData = System.IO.File.ReadAllBytes("wwwroot/images/Labor/Labor_7.jpg"),
+					};
+
+					ImageModel img53 = new ImageModel()
+					{
+						FileName = "Labor_8.jpg",
+						ImageData = System.IO.File.ReadAllBytes("wwwroot/images/Labor/Labor_8.jpg"),
+					};
+
+					ImageModel img54 = new ImageModel()
+					{
+						FileName = "Labor_9.jpg",
+						ImageData = System.IO.File.ReadAllBytes("wwwroot/images/Labor/Labor_9.jpg"),
+					};
+
+					context.Images.AddRange(
+						img1, img2, img3, img4, img5, img6, img7, img8, img9, img10, img11, img12, img13, img14, img15, img16, img17,
+						img18, img19, img20, img21, img22, img23, img24, img25, img26, img27, img28, img29, img30, img31,
+						/*img32,*/ img33, img34, img35, img36, img37, img38, img39, img40, img41, img42, img43, img44, img45, img46,
+						img47, img48, img49, /*img50,*/ img51, img52, img53, img54
+					);
+
+					context.SaveChanges();
+
 					if (!context.Questions.Any())
 					{
 						Question q1 = new Question()
@@ -155,7 +556,7 @@ namespace NiCeScanner.Data
 							Weight = 0,
 							Statement = false,
 							Show = true,
-							Image = null,
+							ImageId = img1.Id,
 							CreatedAt = DateTime.Now
 						};
 
@@ -177,11 +578,11 @@ namespace NiCeScanner.Data
 								}
 							}),
 
-						Category = c1,
+							Category = c1,
 							Weight = 1,
 							Statement = false,
 							Show = true,
-							Image = null,
+							ImageId = img2.Id,
 							CreatedAt = DateTime.Now
 						};
 
@@ -206,7 +607,7 @@ namespace NiCeScanner.Data
 							Weight = 2,
 							Statement = false,
 							Show = true,
-							Image = null,
+							ImageId = img3.Id,
 							CreatedAt = DateTime.Now
 						};
 
@@ -231,7 +632,7 @@ namespace NiCeScanner.Data
 							Weight = 2,
 							Statement = false,
 							Show = true,
-							Image = null,
+							ImageId = img4.Id,
 							CreatedAt = DateTime.Now
 						};
 
@@ -256,7 +657,7 @@ namespace NiCeScanner.Data
 							Weight = 2,
 							Statement = false,
 							Show = true,
-							Image = null,
+							ImageId = img5.Id,
 							CreatedAt = DateTime.Now
 						};
 
@@ -281,7 +682,7 @@ namespace NiCeScanner.Data
 							Weight = 3,
 							Statement = false,
 							Show = true,
-							Image = null,
+							ImageId = img6.Id,
 							CreatedAt = DateTime.Now
 						};
 
@@ -306,7 +707,7 @@ namespace NiCeScanner.Data
 							Weight = 3,
 							Statement = false,
 							Show = true,
-							Image = null,
+							ImageId = img7.Id,
 							CreatedAt = DateTime.Now
 						};
 
@@ -331,7 +732,7 @@ namespace NiCeScanner.Data
 							Weight = 3,
 							Statement = false,
 							Show = true,
-							Image = null,
+							ImageId = img8.Id,
 							CreatedAt = DateTime.Now
 						};
 
@@ -356,7 +757,7 @@ namespace NiCeScanner.Data
 							Weight = 3,
 							Statement = false,
 							Show = true,
-							Image = null,
+							ImageId = img9.Id,
 							CreatedAt = DateTime.Now
 						};
 
@@ -381,7 +782,7 @@ namespace NiCeScanner.Data
 							Weight = 3,
 							Statement = false,
 							Show = true,
-							Image = null,
+							ImageId = img10.Id,
 							CreatedAt = DateTime.Now
 						};
 
@@ -406,7 +807,7 @@ namespace NiCeScanner.Data
 							Weight = 2,
 							Statement = false,
 							Show = true,
-							Image = null,
+							ImageId = img11.Id,
 							CreatedAt = DateTime.Now
 						};
 
@@ -427,11 +828,11 @@ namespace NiCeScanner.Data
 									tooltip = "waste loss"
 								}
 							}),
-						Category = c2,
+							Category = c2,
 							Weight = 1,
 							Statement = false,
 							Show = true,
-							Image = null,
+							ImageId = img12.Id,
 							CreatedAt = DateTime.Now
 						};
 						
@@ -452,11 +853,11 @@ namespace NiCeScanner.Data
 									tooltip = ""
 								}
 							}),
-						Category = c2,
+							Category = c2,
 							Weight = 1,
 							Statement = false,
 							Show = true,
-							Image = null,
+							ImageId = img13.Id,
 							CreatedAt = DateTime.Now
 						};
 
@@ -477,11 +878,11 @@ namespace NiCeScanner.Data
 									tooltip = "machine lifespan"
 								}
 							}),
-						Category = c2,
+							Category = c2,
 							Weight = 1,
 							Statement = false,
 							Show = true,
-							Image = null,
+							ImageId = img14.Id,
 							CreatedAt = DateTime.Now
 						};
 
@@ -502,11 +903,11 @@ namespace NiCeScanner.Data
 									tooltip = "For example, sourcing locally, environmentally friendly production processes, efficient and sustainable transportation methods, avoiding unnecessary travel, etc."
 								}
 							}),
-						Category = c2,
+							Category = c2,
 							Weight = 1,
 							Statement = false,
 							Show = true,
-							Image = null,
+							ImageId = img15.Id,
 							CreatedAt = DateTime.Now
 						};
 
@@ -527,11 +928,11 @@ namespace NiCeScanner.Data
 									tooltip = "sustainable energy"
 								}
 							}),
-						Category = c2,
+							Category = c2,
 							Weight = 1,
 							Statement = false,
 							Show = true,
-							Image = null,
+							ImageId = img16.Id,
 							CreatedAt = DateTime.Now
 						};
 
@@ -552,11 +953,11 @@ namespace NiCeScanner.Data
 									tooltip = "packaging"
 								}
 							}),
-						Category = c2,
+							Category = c2,
 							Weight = 1,
 							Statement = false,
 							Show = true,
-							Image = null,
+							ImageId = img17.Id,
 							CreatedAt = DateTime.Now
 						};
 
@@ -577,11 +978,11 @@ namespace NiCeScanner.Data
 									tooltip = "Collaboration in valorizing byproducts (materials, heat, etc.), procuring from and/or supplying to other organizations. Do you make agreements with your customers about the possible return of delivered products after use? (such as deposit or a minimum price at which you want to buy back products after use)?"
 								}
 							}),
-						Category = c3,
+							Category = c3,
 							Weight = 1,
 							Statement = false,
 							Show = true,
-							Image = null,
+							ImageId = img18.Id,
 							CreatedAt = DateTime.Now
 						};
 
@@ -602,11 +1003,11 @@ namespace NiCeScanner.Data
 									tooltip = "Broad, coordination, structural vs incidental, Is there a chain coordinator present?"
 								}
 							}),
-						Category = c3,
+							Category = c3,
 							Weight = 1,
 							Statement = false,
 							Show = true,
-							Image = null,
+							ImageId = img19.Id,
 							CreatedAt = DateTime.Now
 						};
 
@@ -627,11 +1028,11 @@ namespace NiCeScanner.Data
 									tooltip = "Do you gather information about the origin of materials and the conditions under which people extract these materials?"
 								}
 							}),
-						Category = c3,
+							Category = c3,
 							Weight = 1,
 							Statement = false,
 							Show = true,
-							Image = null,
+							ImageId = img20.Id,
 							CreatedAt = DateTime.Now
 						};
 
@@ -652,11 +1053,11 @@ namespace NiCeScanner.Data
 									tooltip = "e.g., distance, intentions, what are the products used for, is there conscious consideration for collaborating with circular companies or traditional economy companies"
 								}
 							}),
-						Category = c3,
+							Category = c3,
 							Weight = 1,
 							Statement = false,
 							Show = true,
-							Image = null,
+							ImageId = img21.Id,
 							CreatedAt = DateTime.Now
 						};
 
@@ -677,11 +1078,11 @@ namespace NiCeScanner.Data
 									tooltip = "Transparent communication of what is going well, but also of what can be improved. Does the communication include material and energy consumption of products and services, the origin of materials and recyclability, and are the True Price and Total Cost of Ownership communicated?"
 								}
 							}),
-						Category = c3,
+							Category = c3,
 							Weight = 1,
 							Statement = false,
 							Show = true,
-							Image = null,
+							ImageId = img22.Id,
 							CreatedAt = DateTime.Now
 						};
 
@@ -702,11 +1103,11 @@ namespace NiCeScanner.Data
 									tooltip = "Do you collaborate to ensure that products are well-maintained and/or repaired so that they are used efficiently for a longer period? (maintenance and service contracts in collaboration with other market parties) Do you collaborate to organize product as a service or pay-per-performance, etc.?"
 								}
 							}),
-						Category = c3,
+							Category = c3,
 							Weight = 1,
 							Statement = false,
 							Show = true,
-							Image = null,
+							ImageId = img23.Id,
 							CreatedAt = DateTime.Now
 						};
 
@@ -727,11 +1128,11 @@ namespace NiCeScanner.Data
 									tooltip = "Sharing knowledge to accelerate the transition regarding products, materials, and processes. Do you collaborate to identify where in the chain the greatest environmental and social impact improvement can be achieved (e.g., based on LCA analysis)?"
 								}
 							}),
-						Category = c3,
+							Category = c3,
 							Weight = 1,
 							Statement = false,
 							Show = true,
-							Image = null,
+							ImageId = img24.Id,
 							CreatedAt = DateTime.Now
 						};
 
@@ -752,11 +1153,11 @@ namespace NiCeScanner.Data
 									tooltip = ""
 								}
 							}),
-						Category = c3,
+							Category = c3,
 							Weight = 1,
 							Statement = false,
 							Show = true,
-							Image = null,
+							ImageId = img25.Id,
 							CreatedAt = DateTime.Now
 						};
 
@@ -777,11 +1178,11 @@ namespace NiCeScanner.Data
 									tooltip = ""
 								}
 							}),
-						Category = c4,
+							Category = c4,
 							Weight = 1,
 							Statement = false,
 							Show = true,
-							Image = null,
+							ImageId = img27.Id,
 							CreatedAt = DateTime.Now
 						};
 
@@ -802,11 +1203,11 @@ namespace NiCeScanner.Data
 									tooltip = ""
 								}
 							}),
-						Category = c4,
+							Category = c4,
 							Weight = 1,
 							Statement = false,
 							Show = true,
-							Image = null,
+							ImageId = img27.Id,
 							CreatedAt = DateTime.Now
 						};
 
@@ -827,11 +1228,11 @@ namespace NiCeScanner.Data
 									tooltip = ""
 								}
 							}),
-						Category = c4,
+							Category = c4,
 							Weight = 1,
 							Statement = false,
 							Show = true,
-							Image = null,
+							ImageId = img28.Id,
 							CreatedAt = DateTime.Now
 						};
 
@@ -852,11 +1253,11 @@ namespace NiCeScanner.Data
 									tooltip = ""
 								}
 							}),
-						Category = c4,
+							Category = c4,
 							Weight = 1,
 							Statement = false,
 							Show = true,
-							Image = null,
+							ImageId = img29.Id,
 							CreatedAt = DateTime.Now
 						};
 
@@ -877,11 +1278,11 @@ namespace NiCeScanner.Data
 									tooltip = ""
 								}
 							}),
-						Category = c4,
+							Category = c4,
 							Weight = 1,
 							Statement = false,
 							Show = true,
-							Image = null,
+							ImageId = img30.Id,
 							CreatedAt = DateTime.Now
 						};
 
@@ -902,11 +1303,11 @@ namespace NiCeScanner.Data
 									tooltip = ""
 								}
 							}),
-						Category = c4,
+							Category = c4,
 							Weight = 1,
 							Statement = false,
 							Show = true,
-							Image = null,
+							ImageId = img31.Id,
 							CreatedAt = DateTime.Now
 						};
 
@@ -927,11 +1328,11 @@ namespace NiCeScanner.Data
 									tooltip = ""
 								}
 							}),
-						Category = c4,
+							Category = c4,
 							Weight = 1,
 							Statement = false,
 							Show = true,
-							Image = null,
+							// ImageId = img32.Id,
 							CreatedAt = DateTime.Now
 						};
 
@@ -956,7 +1357,7 @@ namespace NiCeScanner.Data
 							Weight = 3,
 							Statement = false,
 							Show = true,
-							Image = null,
+							ImageId = img33.Id,
 							CreatedAt = DateTime.Now
 						};
 
@@ -981,7 +1382,7 @@ namespace NiCeScanner.Data
 							Weight = 2,
 							Statement = false,
 							Show = true,
-							Image = null,
+							ImageId = img34.Id,
 							CreatedAt = DateTime.Now
 						};
 
@@ -1002,11 +1403,11 @@ namespace NiCeScanner.Data
 									tooltip = ""
 								}
 							}),
-						Category = c5,
+							Category = c5,
 							Weight = 1,
 							Statement = false,
 							Show = true,
-							Image = null,
+							ImageId = img35.Id,
 							CreatedAt = DateTime.Now
 						};
 
@@ -1027,11 +1428,11 @@ namespace NiCeScanner.Data
 									tooltip = ""
 								}
 							}),
-						Category = c5,
+							Category = c5,
 							Weight = 1,
 							Statement = false,
 							Show = true,
-							Image = null,
+							ImageId = img36.Id,
 							CreatedAt = DateTime.Now
 						};
 
@@ -1052,11 +1453,11 @@ namespace NiCeScanner.Data
 									tooltip = ""
 								}
 							}),
-						Category = c5,
+							Category = c5,
 							Weight = 1,
 							Statement = false,
 							Show = true,
-							Image = null,
+							ImageId = img37.Id,
 							CreatedAt = DateTime.Now
 						};
 
@@ -1081,7 +1482,7 @@ namespace NiCeScanner.Data
 							Weight = 3,
 							Statement = false,
 							Show = true,
-							Image = null,
+							ImageId = img38.Id,
 							CreatedAt = DateTime.Now
 						};
 
@@ -1102,11 +1503,11 @@ namespace NiCeScanner.Data
 									tooltip = ""
 								}
 							}),
-						Category = c5,
+							Category = c5,
 							Weight = 1,
 							Statement = false,
 							Show = true,
-							Image = null,
+							ImageId = img39.Id,
 							CreatedAt = DateTime.Now
 						};
 
@@ -1131,7 +1532,7 @@ namespace NiCeScanner.Data
 							Weight = 2,
 							Statement = false,
 							Show = true,
-							Image = null,
+							ImageId = img40.Id,
 							CreatedAt = DateTime.Now
 						};
 
@@ -1156,7 +1557,7 @@ namespace NiCeScanner.Data
 							Weight = 2,
 							Statement = false,
 							Show = true,
-							Image = null,
+							ImageId = img41.Id,
 							CreatedAt = DateTime.Now
 						};
 
@@ -1177,11 +1578,11 @@ namespace NiCeScanner.Data
 									tooltip = ""
 								}
 							}),
-						Category = c5,
+							Category = c5,
 							Weight = 1,
 							Statement = false,
 							Show = true,
-							Image = null,
+							ImageId = img42.Id,
 							CreatedAt = DateTime.Now
 						};
 
@@ -1206,7 +1607,7 @@ namespace NiCeScanner.Data
 							Weight = 2,
 							Statement = false,
 							Show = true,
-							Image = null,
+							ImageId = img43.Id,
 							CreatedAt = DateTime.Now
 						};
 
@@ -1227,11 +1628,11 @@ namespace NiCeScanner.Data
 									tooltip = ""
 								}
 							}),
-						Category = c5,
+							Category = c5,
 							Weight = 1,
 							Statement = false,
 							Show = true,
-							Image = null,
+							ImageId = img44.Id,
 							CreatedAt = DateTime.Now
 						};
 
@@ -1256,7 +1657,7 @@ namespace NiCeScanner.Data
 							Weight = 2,
 							Statement = false,
 							Show = true,
-							Image = null,
+							ImageId = img45.Id,
 							CreatedAt = DateTime.Now
 						};
 
@@ -1281,7 +1682,7 @@ namespace NiCeScanner.Data
 							Weight = 2,
 							Statement = false,
 							Show = true,
-							Image = null,
+							ImageId = img46.Id,
 							CreatedAt = DateTime.Now
 						};
 
@@ -1302,11 +1703,11 @@ namespace NiCeScanner.Data
 									tooltip = "Informing employees about healthy and safe working, use of an anti-discrimination protocol, consideration for work-life balance, attention to physical, sensory (e.g. noise), and mental workloads, deliberate policy to prevent waste and exhaustion of employees."
 								}
 							}),
-						Category = c6,
+							Category = c6,
 							Weight = 1,
 							Statement = false,
 							Show = true,
-							Image = null,
+							ImageId = img47.Id,
 							CreatedAt = DateTime.Now
 						};
 
@@ -1327,11 +1728,11 @@ namespace NiCeScanner.Data
 									tooltip = "Avoiding unnecessary use of self-employed (ZZP) constructions and fixed-term employment contracts, etc."
 								}
 							}),
-						Category = c6,
+							Category = c6,
 							Weight = 1,
 							Statement = false,
 							Show = true,
-							Image = null,
+							ImageId = img48.Id,
 							CreatedAt = DateTime.Now
 						};
 
@@ -1352,11 +1753,11 @@ namespace NiCeScanner.Data
 									tooltip = "Remote work, working hours, etc."
 								}
 							}),
-						Category = c6,
+							Category = c6,
 							Weight = 1,
 							Statement = false,
 							Show = true,
-							Image = null,
+							ImageId = img49.Id,
 							CreatedAt = DateTime.Now
 						};
 
@@ -1377,11 +1778,11 @@ namespace NiCeScanner.Data
 									tooltip = "In our organization, employees find the work interesting. In our organization, the talent of the employee is the basis for the tasks to be performed."
 								}
 							}),
-						Category = c6,
+							Category = c6,
 							Weight = 1,
 							Statement = false,
 							Show = true,
-							Image = null,
+							// ImageId = img50.Id,
 							CreatedAt = DateTime.Now
 						};
 
@@ -1402,11 +1803,11 @@ namespace NiCeScanner.Data
 									tooltip = "Company outings, employee satisfaction surveys, personnel cycle"
 								}
 							}),
-						Category = c6,
+							Category = c6,
 							Weight = 1,
 							Statement = false,
 							Show = true,
-							Image = null,
+							ImageId = img51.Id,
 							CreatedAt = DateTime.Now
 						};
 
@@ -1427,11 +1828,11 @@ namespace NiCeScanner.Data
 									tooltip = "Employees can work on personal development. Employees are hired even if they don't perfectly match the job requirements. There is time and space for growth within a job. Employee welfare is a priority when offering training. Time and resources are allocated for employee coaching, even when performance is insufficient."
 								}
 							}),
-						Category = c6,
+							Category = c6,
 							Weight = 1,
 							Statement = false,
 							Show = true,
-							Image = null,
+							ImageId = img52.Id,
 							CreatedAt = DateTime.Now
 						};
 
@@ -1456,7 +1857,7 @@ namespace NiCeScanner.Data
 							Weight = 2,
 							Statement = false,
 							Show = true,
-							Image = null,
+							ImageId = img53.Id,
 							CreatedAt = DateTime.Now
 						};
 
@@ -1477,11 +1878,11 @@ namespace NiCeScanner.Data
 									tooltip = "imbalance, compared to industry peers, profit sharing for all employees"
 								}
 							}),
-						Category = c6,
+							Category = c6,
 							Weight = 1,
 							Statement = false,
 							Show = true,
-							Image = null,
+							ImageId = img54.Id,
 							CreatedAt = DateTime.Now
 						};
 
