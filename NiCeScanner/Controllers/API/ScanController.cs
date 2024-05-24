@@ -28,7 +28,11 @@ namespace NiCeScanner.Controllers.API
 			var scan = await _context.Scans
 				.Include(s => s.Answers)
 					.ThenInclude(a => a.Question)
+						.ThenInclude(q => q.Advice)
+				.Include(s => s.Answers)
+					.ThenInclude(a => a.Question)
 						.ThenInclude(q => q.Category)
+							.ThenInclude(c => c.Links)
 				.FirstOrDefaultAsync(s => s.Uuid == guid);
 
 			if (scan == null)
@@ -41,12 +45,19 @@ namespace NiCeScanner.Controllers.API
 				.Select(g => new ScanResultDataResource
 				{
 					Category_uuid = g.Key,
+					Category_links = g.First().Question.Category.Links.Select(l => new LinkResource
+					{
+						Name = l.Name,
+						Href = l.Href
+					}),
 					Grouped_answers = g.Select(a => new GroupedCategoryQuestionsResource
 					{
 						Question_data = a.Question.Data,
 						Question_uuid = a.Question.Uuid,
 						Answer = a.Score,
-						Comment = a.Comment
+						Comment = a.Comment,
+						Advice = a.Question.Advice != null
+							? (a.Score <= a.Question.Advice.Condition ? a.Question.Advice.Data : "") : ""
 					})
 				});
 
@@ -153,6 +164,37 @@ namespace NiCeScanner.Controllers.API
 				Edit_code = editCode.Code,
 				View_code = viewCode.Code,
 			};
+		}
+
+		[HttpDelete]
+		[Route("{uuid}/deleteContactInfo")]
+		public async Task<ActionResult<object>> DeleteContactInfo(string uuid)
+		{
+			Guid guid = Guid.Parse(uuid);
+
+			Scan? scan = await _context.Scans.FirstOrDefaultAsync(s => s.Uuid == guid);
+
+			if (scan is null)
+			{
+				return NotFound("Scan not found");
+			}
+
+			scan.ContactName = "";
+			scan.ContactEmail = "";
+
+			_context.Scans.Update(scan);
+
+			// from answers remove comments for this scan
+			List<Answer> answers = await _context.Answers.Where(a => a.ScanId == scan.Id).ToListAsync();
+			foreach (Answer answer in answers)
+			{
+				answer.Comment = "";
+				_context.Answers.Update(answer);
+			}
+
+			await _context.SaveChangesAsync();
+
+			return Ok();
 		}
 
 		[Route("{scanUuid}/updateAnswer/{questionUuid}")]

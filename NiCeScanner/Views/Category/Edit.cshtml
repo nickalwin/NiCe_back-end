@@ -1,4 +1,4 @@
-﻿@model NiCeScanner.Models.Category
+﻿@model NiCeScanner.Models.CategoryForm
 
 @{
     ViewData["Title"] = "Edit";
@@ -10,7 +10,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <form asp-action="Edit" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
@@ -23,6 +23,17 @@
                     <input class="form-check-input" asp-for="Show" /> @Html.DisplayNameFor(model => model.Show)
                 </label>
             </div>
+            <div class="form-group">
+                <label asp-for="Color" class="control-label"></label>
+                <select asp-for="Color" class="form-control">
+                    <option value="goud">goud</option>
+                    <option value="appelgroen">appelgroen</option>
+                    <option value="lichtroze">lichtroze</option>
+                    <option value="blauw">blauw</option>
+                    <option value="lichtblauw">lichtblauw</option>
+                    <option value="donkerroze">donkerroze</option>
+                </select>
+                <span asp-validation-for="Color" class="text-danger"></span>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>

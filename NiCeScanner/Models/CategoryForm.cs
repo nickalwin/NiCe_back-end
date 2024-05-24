@@ -4,25 +4,12 @@ namespace NiCeScanner.Models
 {
 	public class CategoryForm
 	{
-		public CategoryForm()
-		{
-			CreatedAt = DateTime.Now;
-			UpdatedAt = DateTime.Now;
-			Uuid = Guid.NewGuid();
-		}
+		public required long Id { get; set; }
+		
+		public required string Data { get; set; }
 
-		[Key]
-		public long Id { get; set; }
+		public required string Color { get; set; }
 
-		public Guid Uuid { get; set; }
-
-		[MaxLength(255)]
-		public string Name { get; set; }
-
-		public bool Show { get; set; }
-
-		public DateTime CreatedAt { get; set; }
-
-		public DateTime? UpdatedAt { get; set; }
+		public required bool Show { get; set; }
 	}
 }

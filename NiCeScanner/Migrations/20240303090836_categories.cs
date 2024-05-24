@@ -18,6 +18,7 @@ namespace NiCeScanner.Migrations
 						.Annotation("SqlServer:Identity", "1, 1"),
 					Uuid = table.Column<Guid>(nullable: false),
 					Data = table.Column<string>(type: "json", nullable: false),
+					Color = table.Column<string>(nullable: false),
 					Show = table.Column<bool>(nullable: false),
 					CreatedAt = table.Column<DateTime>(nullable: false),
 					UpdatedAt = table.Column<DateTime>(nullable: true)

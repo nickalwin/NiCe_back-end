@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NiCeScanner.Data;
 
@@ -10,9 +11,11 @@ using NiCeScanner.Data;
 namespace NiCeScanner.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240516085202_links")]
+    partial class links
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.4");
@@ -294,38 +297,6 @@ namespace NiCeScanner.Migrations
                     b.ToTable("Images");
                 });
 
-            modelBuilder.Entity("NiCeScanner.Models.Link", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<long>("CategoryId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Href")
-                        .IsRequired()
-                        .HasMaxLength(400)
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(400)
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CategoryId");
-
-                    b.ToTable("Links");
-                });
-
             modelBuilder.Entity("NiCeScanner.Models.Mail", b =>
                 {
                     b.Property<int>("Id")
@@ -498,37 +469,6 @@ namespace NiCeScanner.Migrations
                     b.ToTable("Sectors");
                 });
 
-            modelBuilder.Entity("NiCeScanner.Models.UserRoleRequests", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("HandledBy")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Reason")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("RequestedOn")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Role")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<bool?>("Status")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("User")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("UserRoleRequests");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -599,17 +539,6 @@ namespace NiCeScanner.Migrations
                     b.Navigation("Scan");
                 });
 
-            modelBuilder.Entity("NiCeScanner.Models.Link", b =>
-                {
-                    b.HasOne("NiCeScanner.Models.Category", "Category")
-                        .WithMany("Links")
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Category");
-                });
-
             modelBuilder.Entity("NiCeScanner.Models.Question", b =>
                 {
                     b.HasOne("NiCeScanner.Models.Category", "Category")
@@ -651,8 +580,6 @@ namespace NiCeScanner.Migrations
 
             modelBuilder.Entity("NiCeScanner.Models.Category", b =>
                 {
-                    b.Navigation("Links");
-
                     b.Navigation("Questions");
                 });
 

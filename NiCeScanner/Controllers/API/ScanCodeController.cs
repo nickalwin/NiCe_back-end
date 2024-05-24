@@ -41,6 +41,7 @@ namespace NiCeScanner.Controllers.API
 			return new ValidatedScanCodeResource
 			{
 				Scan_uuid = scan.Uuid,
+				Scan_code = scanCode.Code,
 				Editable = scanCode.CanEdit
 			};
 		}
