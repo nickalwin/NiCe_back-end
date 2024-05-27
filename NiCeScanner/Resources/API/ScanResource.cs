@@ -1,3 +1,5 @@
+using NiCeScanner.Models;
+
 namespace NiCeScanner.Resources.API
 {
 	class ScanResultElement
@@ -19,11 +21,14 @@ namespace NiCeScanner.Resources.API
 
 		public required string Comment { get; set; }
 
+		public required string Advice { get; set; }
 	}
 
 	public class ScanResultDataResource
 	{
 		public required Guid Category_uuid { get; set; }
+
+		public required IEnumerable<LinkResource> Category_links { get; set; }
 
 		public required IEnumerable<GroupedCategoryQuestionsResource> Grouped_answers { get; set; }
 	}

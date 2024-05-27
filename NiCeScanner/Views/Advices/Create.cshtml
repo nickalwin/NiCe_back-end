@@ -1,0 +1,52 @@
+﻿@model NiCeScanner.Models.AdviceForm
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Advice</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Data" class="control-label"></label>
+                <input asp-for="Data" class="form-control" />
+                <span asp-validation-for="Data" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AdditionalLink" class="control-label"></label>
+                <input asp-for="AdditionalLink" class="form-control" />
+                <span asp-validation-for="AdditionalLink" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AdditionalLinkName" class="control-label"></label>
+                <input asp-for="AdditionalLinkName" class="form-control" />
+                <span asp-validation-for="AdditionalLinkName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="QuestionId" class="control-label"></label>
+                <select asp-for="QuestionId" class ="form-control" asp-items="ViewBag.QuestionId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Condition" class="control-label">Score less than or equal to:</label>
+                <input asp-for="Condition" class="form-control" min="0" max="5" type="number" />
+                <span asp-validation-for="Condition" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

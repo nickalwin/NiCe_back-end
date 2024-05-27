@@ -1,4 +1,5 @@
-﻿@model NiCeScanner.Models.Question
+﻿@using Newtonsoft.Json.Linq 
+@model NiCeScanner.Models.Question
 
 @{
     ViewData["Title"] = "Edit";
@@ -10,22 +11,45 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <form id="editForm" asp-action="Edit" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="Uuid" class="control-label"></label>
-                <input asp-for="Uuid" class="form-control" />
-                <span asp-validation-for="Uuid" class="text-danger"></span>
+            @if (Model.Data != null)
+            {
+                var jsonData = JObject.Parse(Model.Data);
+                var allLanguages = new JObject();
+
+                @foreach (var language in jsonData)
+                {
+                    var languageKey = language.Key;
+                    var questionProperty = $"Data.{languageKey}.question";
+                    var questionValue = (string)language.Value["question"];
+
+                    <div class="form-group">
+                        <label for="@questionProperty" class="control-label">Question (@languageKey)</label>
+                        <input type="text" id="@questionProperty" name="@questionProperty" value="@questionValue" class="form-control" />
+                        <span class="text-danger"></span>
+                    </div>
+                    allLanguages.Add(new JProperty(languageKey, new JObject(new JProperty("question", questionValue))));
+                }
+                <input type="hidden" asp-for="Data" class="form-control" id="jsonData" />
+            }
+            else
+            {
+                <p>No question data available.</p>
+            }
+            <div id="languageFieldsContainer">
+
             </div>
             <div class="form-group">
-                <label asp-for="Data" class="control-label"></label>
-                <input asp-for="Data" class="form-control" />
-                <span asp-validation-for="Data" class="text-danger"></span>
+                <label for="LanguageSelect" class="control-label">Select Language</label>
+                <select id="LanguageSelect" class="form-control">
+                    <option value="">Select Language</option>
+                </select>
             </div>
             <div class="form-group">
                 <label asp-for="CategoryId" class="control-label"></label>
-                <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
+                <select asp-for="CategoryId" id="CategorySelect" class="form-control" asp-items="ViewBag.Category"></select>
                 <span asp-validation-for="CategoryId" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -44,31 +68,147 @@
                 </label>
             </div>
             <div class="form-group">
-                <label asp-for="Image" class="control-label"></label>
-                <input asp-for="Image" class="form-control" />
-                <span asp-validation-for="Image" class="text-danger"></span>
+                <label asp-for="ImageId" class="control-label">Select an Image</label>
+                <select asp-for="ImageId" id="ImageSelect" class="form-control" asp-items="ViewBag.Images">
+                    <option value="">No Image</option>
+                </select>
+                <span asp-validation-for="ImageId" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="CreatedAt" class="control-label"></label>
-                <input asp-for="CreatedAt" class="form-control" />
-                <span asp-validation-for="CreatedAt" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UpdatedAt" class="control-label"></label>
-                <input asp-for="UpdatedAt" class="form-control" />
-                <span asp-validation-for="UpdatedAt" class="text-danger"></span>
-            </div>
-            <div class="form-group">
+            <div class="form-group mt-4">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
     </div>
+    <div class="col-md-4" id="imagePreviewContainer">
+        <h4>Image Preview</h4>
+        <img id="imagePreview" src="@Url.Action("Display", "Image", new { id = Model.ImageId })" alt="Image Preview" class="img-thumbnail" />
+    </div>
 </div>
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @TempData["ErrorMessage"]
+    </div>
+}
 
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        $(function () {
+            $(document).ready(function () {
+                var request = {
+                    method: 'GET',
+                    headers: {
+                        'X-RapidAPI-Key': 'c81e2a0abfmsh7fefcc85f8eae1fp1173fdjsn1a6c1d5c7ea6',
+                        'X-RapidAPI-Host': 'languages-data.p.rapidapi.com'
+                    }
+                };
+
+                fetch('https://languages-data.p.rapidapi.com/languages', request)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (Array.isArray(data.data)) {
+                            data.data.forEach(language => {
+                                $('#LanguageSelect').append('<option value="' + language.langCode + '">' + language.langEnglishName + '</option>');
+                            });
+                        } else if (typeof data.data === 'object') {
+                            $('#LanguageSelect').append('<option value="' + data.langCode + '">' + data.langEnglishName + '</option>');
+                        } else {
+                            console.error('Unexpected response from server:', data);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching languages:', error);
+                    });
+            });
+
+            function createLanguageInput(languageKey, languageName) {
+                var inputField = $('<div class="form-group">'
+                    + '<label for="Data_' + languageKey + '" class="control-label">Question (' + languageName + ')</label>'
+                    + '<div class="input-group">'
+                    + '<input type="text" id="Data_' + languageKey + '" name="Data.' + languageKey + '.question" class="form-control" />'
+                    + '<div class="input-group-append">'
+                    + '<button type="button" class="btn btn-danger remove-language" data-language="' + languageKey + '"><i class="fas fa-times"></i></button>'
+                    + '</div>'
+                    + '</div>'
+                    + '<span class="text-danger"></span>'
+                    + '</div>');
+
+                $('#languageFieldsContainer').append(inputField);
+
+                if (!jsonData[languageKey]) {
+                    jsonData[languageKey] = {};
+                }
+            }
+
+            $(document).on('change', '#LanguageSelect', function () {
+                var selectedLanguage = $(this).val();
+                if (selectedLanguage) {
+                    var languageName = $('#LanguageSelect option:selected').text();
+                    createLanguageInput(selectedLanguage, languageName);
+                }
+            });
+            $(document).on('click', '.remove-language', function () {
+                var languageKey = $(this).data('language');
+                $('#Data_' + languageKey).closest('.form-group').remove();
+            });
+
+            $('#CategorySelect').select2();
+            $('#ImageSelect').select2();
+            $('#LanguageSelect').select2();
+
+            $(document).on('select2:open', (e) => {
+                const selectId = e.target.id;
+
+                $(".select2-search__field[aria-controls='select2-" + selectId + "-results']").each(function (
+                    key,
+                    value,
+                ) {
+                    value.focus();
+                });
+            });
+
+            if (!$('#ImageSelect').val()) {
+                $('#imagePreviewContainer').hide();
+            }
+            $('#ImageSelect').change(function () {
+                var imageId = $(this).val();
+                if (imageId) {
+                    $('#imagePreview').attr('src', '/Image/Display/' + imageId);
+                    $('#imagePreviewContainer').show();
+                } else {
+                    $('#imagePreview').attr('src', '').hide();
+                    $('#imagePreviewContainer').hide();
+                }
+            });
+
+            $('#editForm').submit(function (event) {
+                var jsonData = {};
+                $('[id^="Data."]').each(function () {
+                    var key = $(this).attr('id').replace('Data.', '');
+                    var languageKey = key.split('.')[0];
+                    var questionValue = $(this).val();
+                    if (!jsonData[languageKey]) {
+                        jsonData[languageKey] = {};
+                    }
+                    jsonData[languageKey]['question'] = questionValue;
+                });
+                $('#jsonData').val(JSON.stringify(jsonData));
+            });
+        });
+    </script>
+
+
 }

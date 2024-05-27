@@ -27,5 +27,13 @@ namespace NiCeScanner.Data
 		public DbSet<Sector> Sectors { get; set; } = default!;
 
 		public DbSet<ScanCode> ScanCodes { get; set; } = default!;
+
+		public DbSet<ImageModel> Images { get; set; } = default!;
+        
+		public DbSet<Link> Links { get; set; } = default!;
+                
+		public DbSet<Advice> Advices { get; set; } = default!;
+
+		public DbSet<UserRoleRequests> UserRoleRequests { get; set; } = default!;
 	}
 }

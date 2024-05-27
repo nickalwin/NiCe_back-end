@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using OfficeOpenXml.FormulaParsing.Excel.Functions;
 
 namespace NiCeScanner.Areas.Identity.Pages.Account
 {
@@ -21,11 +22,13 @@ namespace NiCeScanner.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
+		private readonly UserManager<IdentityUser> _userManager;
 
         public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger)
         {
             _signInManager = signInManager;
             _logger = logger;
+			_userManager = signInManager.UserManager;
         }
 
         /// <summary>
@@ -126,6 +129,11 @@ namespace NiCeScanner.Areas.Identity.Pages.Account
                     _logger.LogWarning("User account locked out.");
                     return RedirectToPage("./Lockout");
                 }
+				if (!await IsEmailConfirmed(Input.Email))
+				{
+					ModelState.AddModelError(string.Empty, "Email not confirmed.");
+					return Page();
+				}
                 else
                 {
                     ModelState.AddModelError(string.Empty, "Invalid login attempt.");
@@ -136,5 +144,17 @@ namespace NiCeScanner.Areas.Identity.Pages.Account
             // If we got this far, something failed, redisplay form
             return Page();
         }
-    }
+
+
+		private async Task<bool> IsEmailConfirmed(string email)
+		{
+			var user = await _userManager.FindByEmailAsync(email);
+			if (user == null)
+			{
+				// User does not exist
+				return false;
+			}
+			return await _userManager.IsEmailConfirmedAsync(user);
+		}
+	}
 }

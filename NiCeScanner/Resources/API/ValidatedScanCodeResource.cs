@@ -4,6 +4,8 @@
 	{
 		public required Guid Scan_uuid { get; set; }
 
+		public required Guid Scan_code { get; set; }
+
 		public required bool Editable { get; set; }
 	}
 }

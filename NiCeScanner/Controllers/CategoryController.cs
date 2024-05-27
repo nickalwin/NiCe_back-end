@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using NiCeScanner.Data;
-using NiCeScanner.Migrations;
 using NiCeScanner.Models;
 
 namespace NiCeScanner.Controllers
@@ -173,11 +167,11 @@ namespace NiCeScanner.Controllers
 			{
 				var category = new Category
 				{
-					Uuid = categoryForm.Uuid,
+					//Uuid = categoryForm.Uuid,
 					//Name = categoryForm.Name,
 					Show = categoryForm.Show,
-					CreatedAt = categoryForm.CreatedAt,
-					UpdatedAt = categoryForm.UpdatedAt
+					//CreatedAt = categoryForm.CreatedAt,
+					//UpdatedAt = categoryForm.UpdatedAt
 				};
 
 				_context.Add(category);
@@ -192,53 +186,48 @@ namespace NiCeScanner.Controllers
 		[Authorize(Policy = "RequireResearcherRole")]
 		public async Task<IActionResult> Edit(long? id)
         {
-            if (id == null)
-            {
+            if (id is null)
                 return NotFound();
-            }
 
             var category = await _context.Categories.FindAsync(id);
-            if (category == null)
-            {
+            if (category is null)
                 return NotFound();
-            }
-            return View(category);
+
+            return View(new CategoryForm
+			{
+				Id = category.Id,
+				Data = category.Data,
+				Color = category.Color,
+				Show = category.Show
+			});
         }
 
         // POST: Category/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
 		[Authorize(Policy = "RequireResearcherRole")]
-		public async Task<IActionResult> Edit(long id, [Bind("Id,Uuid,Name,Show,CreatedAt,UpdatedAt")] Category category)
+		public async Task<IActionResult> Edit(long id, [Bind("Id,Data,Color,Show")] CategoryForm form)
         {
-            if (id != category.Id)
-            {
+            if (id != form.Id)
                 return NotFound();
-            }
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(category);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!CategoryExists(category.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+				var category = await _context.Categories.FindAsync(id);
+				if (category is null)
+					return NotFound();
+
+				category.Data = form.Data;
+				category.Color = form.Color;
+				category.Show = form.Show;
+
+				_context.Update(category);
+				await _context.SaveChangesAsync();
+
+				return RedirectToAction(nameof(Details), new { id });
             }
-            return View(category);
+
+            return View(form);
         }
 
 		// GET: Category/Delete/5

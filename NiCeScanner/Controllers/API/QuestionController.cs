@@ -22,14 +22,16 @@ namespace NiCeScanner.Controllers.API
 			var questions = await _context.Questions
 				.Where(q => q.Show)
 				.Include(q => q.Category)
+				.Include(q => q.Image)
 				.Select(q => new QuestionResource
 				{
 					Uuid = q.Uuid,
 					Data = q.Data,
 					Category_uuid = q.Category.Uuid,
 					Category_data = q.Category.Data,
+					Category_color = q.Category.Color,
 					Statement = q.Statement,
-					Image = q.Image,
+					Image_data = q.Image.ImageData.Length > 0 ? "data:image/jpeg;base64," + Convert.ToBase64String(q.Image.ImageData) : null,
 				})
 				.ToListAsync();
 

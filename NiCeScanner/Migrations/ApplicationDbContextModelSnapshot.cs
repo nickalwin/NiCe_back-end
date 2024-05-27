@@ -15,7 +15,7 @@ namespace NiCeScanner.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "8.0.3");
+            modelBuilder.HasAnnotation("ProductVersion", "8.0.4");
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -247,12 +247,15 @@ namespace NiCeScanner.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("Color")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("Data")
                         .IsRequired()
-                        .HasMaxLength(255)
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("Show")
@@ -267,6 +270,60 @@ namespace NiCeScanner.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("NiCeScanner.Models.ImageModel", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<byte[]>("ImageData")
+                        .IsRequired()
+                        .HasColumnType("BLOB");
+
+                    b.Property<Guid>("Uuid")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Images");
+                });
+
+            modelBuilder.Entity("NiCeScanner.Models.Link", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<long>("CategoryId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Href")
+                        .IsRequired()
+                        .HasMaxLength(400)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(400)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("Links");
                 });
 
             modelBuilder.Entity("NiCeScanner.Models.Mail", b =>
@@ -339,9 +396,8 @@ namespace NiCeScanner.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Image")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                    b.Property<long?>("ImageId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("Show")
                         .HasColumnType("INTEGER");
@@ -361,6 +417,8 @@ namespace NiCeScanner.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
+
+                    b.HasIndex("ImageId");
 
                     b.ToTable("Questions");
                 });
@@ -403,19 +461,72 @@ namespace NiCeScanner.Migrations
                     b.ToTable("Scans");
                 });
 
+            modelBuilder.Entity("NiCeScanner.Models.ScanCode", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("CanEdit")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid>("Code")
+                        .HasColumnType("TEXT");
+
+                    b.Property<long>("ScanId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ScanId");
+
+                    b.ToTable("ScanCodes");
+                });
+
             modelBuilder.Entity("NiCeScanner.Models.Sector", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("Data")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
                     b.ToTable("Sectors");
+                });
+
+            modelBuilder.Entity("NiCeScanner.Models.UserRoleRequests", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("HandledBy")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Reason")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("RequestedOn")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool?>("Status")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("User")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserRoleRequests");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -488,6 +599,17 @@ namespace NiCeScanner.Migrations
                     b.Navigation("Scan");
                 });
 
+            modelBuilder.Entity("NiCeScanner.Models.Link", b =>
+                {
+                    b.HasOne("NiCeScanner.Models.Category", "Category")
+                        .WithMany("Links")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+                });
+
             modelBuilder.Entity("NiCeScanner.Models.Question", b =>
                 {
                     b.HasOne("NiCeScanner.Models.Category", "Category")
@@ -496,7 +618,13 @@ namespace NiCeScanner.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("NiCeScanner.Models.ImageModel", "Image")
+                        .WithMany("Questions")
+                        .HasForeignKey("ImageId");
+
                     b.Navigation("Category");
+
+                    b.Navigation("Image");
                 });
 
             modelBuilder.Entity("NiCeScanner.Models.Scan", b =>
@@ -510,7 +638,25 @@ namespace NiCeScanner.Migrations
                     b.Navigation("Sector");
                 });
 
+            modelBuilder.Entity("NiCeScanner.Models.ScanCode", b =>
+                {
+                    b.HasOne("NiCeScanner.Models.Scan", "Scan")
+                        .WithMany()
+                        .HasForeignKey("ScanId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Scan");
+                });
+
             modelBuilder.Entity("NiCeScanner.Models.Category", b =>
+                {
+                    b.Navigation("Links");
+
+                    b.Navigation("Questions");
+                });
+
+            modelBuilder.Entity("NiCeScanner.Models.ImageModel", b =>
                 {
                     b.Navigation("Questions");
                 });
