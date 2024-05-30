@@ -161,17 +161,17 @@ namespace NiCeScanner.Controllers
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		[Authorize(Policy = "RequireResearcherRole")]
-		public async Task<IActionResult> Create([Bind("Name,Show")] CategoryForm categoryForm)
+		public async Task<IActionResult> Create([Bind("Data,Show,Color")] CategoryForm categoryForm)
 		{
 			if (ModelState.IsValid)
 			{
 				var category = new Category
 				{
-					//Uuid = categoryForm.Uuid,
-					//Name = categoryForm.Name,
+					Data = categoryForm.Data,
 					Show = categoryForm.Show,
-					//CreatedAt = categoryForm.CreatedAt,
-					//UpdatedAt = categoryForm.UpdatedAt
+					Color = categoryForm.Color,
+					CreatedAt = DateTime.Now,
+					UpdatedAt = DateTime.Now
 				};
 
 				_context.Add(category);

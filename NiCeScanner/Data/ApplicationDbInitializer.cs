@@ -200,6 +200,106 @@ namespace NiCeScanner.Data
 					context.Categories.AddRange(
 						c1, c2, c3, c4, c5, c6
 					);
+					
+					Link l1 = new Link()
+					{
+						Name = "Quickscan Circulaire Businessmodellen",
+						Href = "https://circulairemaakindustrie.nl/documenten/quickscan-circulaire-businessmodellen",
+						Category = c1,
+						CreatedAt = DateTime.Now
+					};
+
+					Link l2 = new Link()
+					{
+						Name = "Self Assessment Tool Milieu Impact (Excel-bestand)",
+						Href = "https://circulairemaakindustrie.nl/documenten/self-assessment-tool-milieu-impact",
+						Category = c1,
+						CreatedAt = DateTime.Now
+					};
+
+					Link l3 = new Link()
+					{
+						Name = "Quickscan Circulaire Businessmodellen",
+						Href = "https://circulairemaakindustrie.nl/documenten/quickscan-circulaire-businessmodellen",
+						Category = c2,
+						CreatedAt = DateTime.Now
+					};
+
+					Link l4 = new Link()
+					{
+						Name = "Self Assessment Tool Milieu Impact (Excel-bestand)",
+						Href = "https://circulairemaakindustrie.nl/documenten/self-assessment-tool-milieu-impact",
+						Category = c2,
+						CreatedAt = DateTime.Now
+					};
+
+					Link l5 = new Link()
+					{
+						Name = "Quickscan Circulaire Businessmodellen",
+						Href = "https://circulairemaakindustrie.nl/documenten/quickscan-circulaire-businessmodellen",
+						Category = c3,
+						CreatedAt = DateTime.Now
+					};
+
+					Link l6 = new Link()
+					{
+						Name = "Self Assessment Tool Milieu Impact (Excel-bestand)",
+						Href = "https://circulairemaakindustrie.nl/documenten/self-assessment-tool-milieu-impact",
+						Category = c3,
+						CreatedAt = DateTime.Now
+					};
+
+					Link l7 = new Link()
+					{
+						Name = "Quickscan Circulaire Businessmodellen",
+						Href = "https://circulairemaakindustrie.nl/documenten/quickscan-circulaire-businessmodellen",
+						Category = c4,
+						CreatedAt = DateTime.Now
+					};
+
+					Link l8 = new Link()
+					{
+						Name = "Self Assessment Tool Milieu Impact (Excel-bestand)",
+						Href = "https://circulairemaakindustrie.nl/documenten/self-assessment-tool-milieu-impact",
+						Category = c4,
+						CreatedAt = DateTime.Now
+					};
+
+					Link l9 = new Link()
+					{
+						Name = "Quickscan Circulaire Businessmodellen",
+						Href = "https://circulairemaakindustrie.nl/documenten/quickscan-circulaire-businessmodellen",
+						Category = c5,
+						CreatedAt = DateTime.Now
+					};
+
+					Link l10 = new Link()
+					{
+						Name = "Self Assessment Tool Milieu Impact (Excel-bestand)",
+						Href = "https://circulairemaakindustrie.nl/documenten/self-assessment-tool-milieu-impact",
+						Category = c5,
+						CreatedAt = DateTime.Now
+					};
+
+					Link l11 = new Link()
+					{
+						Name = "Quickscan Circulaire Businessmodellen",
+						Href = "https://circulairemaakindustrie.nl/documenten/quickscan-circulaire-businessmodellen",
+						Category = c6,
+						CreatedAt = DateTime.Now
+					};
+
+					Link l12 = new Link()
+					{
+						Name = "Self Assessment Tool Milieu Impact (Excel-bestand)",
+						Href = "https://circulairemaakindustrie.nl/documenten/self-assessment-tool-milieu-impact",
+						Category = c6,
+						CreatedAt = DateTime.Now
+					};
+
+					context.Links.AddRange(
+						l1, l2, l3, l4, l5, l6, l7, l8, l9, l10, l11, l12
+					);
 
 					ImageModel img1 = new ImageModel()
 					{

@@ -7,12 +7,14 @@
     </div>
 </div>
 
-@foreach (var image in Model)
-{
-    <div style="margin-bottom: 20px;">
-        <a href="@Url.Action("Details", new { id = image.Id })">
-            <img src="@Url.Action("Display", new { id = image.Id })" alt="@image.FileName" style="max-width: 300px; max-height: 200px;" />
-        </a>
-        <p>@image.FileName</p>
-    </div>
-}
+<div style="display: flex; flex-wrap: wrap; justify-content: space-around;">
+    @foreach (var image in Model)
+    {
+        <div style="margin: 20px; flex-basis: calc(33.33% - 40px); box-sizing: border-box;">
+            <a href="@Url.Action("Details", new { id = image.Id })">
+                <img src="@Url.Action("Display", new { id = image.Id })" alt="@image.FileName" style="max-width: 100%; height: auto;" />
+            </a>
+            <p>@image.FileName</p>
+        </div>
+    }
+</div>

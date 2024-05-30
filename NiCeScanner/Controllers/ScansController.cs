@@ -176,31 +176,6 @@ namespace NiCeScanner.Controllers
 			return View(scan);
 		}
 
-
-		// GET: Scans/Create
-		public IActionResult Create()
-		{
-			ViewData["SectorId"] = new SelectList(_context.Sectors, "Id", "Id");
-			return View();
-		}
-
-		// POST: Scans/Create
-		// To protect from overposting attacks, enable the specific properties you want to bind to.
-		// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-		[HttpPost]
-		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Create([Bind("Id,Uuid,ContactName,ContactEmail,SectorId,Results,CreatedAt,UpdatedAt")] Scan scan)
-		{
-			if (ModelState.IsValid)
-			{
-				_context.Add(scan);
-				await _context.SaveChangesAsync();
-				return RedirectToAction(nameof(Index));
-			}
-			ViewData["SectorId"] = new SelectList(_context.Sectors, "Id", "Id", scan.SectorId);
-			return View(scan);
-		}
-
 		// GET: Scans/Edit/5
 		public async Task<IActionResult> Edit(long? id)
 		{
