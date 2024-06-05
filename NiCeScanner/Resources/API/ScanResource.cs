@@ -19,6 +19,8 @@ namespace NiCeScanner.Resources.API
 		
 		public required short Answer { get; set; }
 
+		public required bool Is_statement { get; set; }
+
 		public required string Comment { get; set; }
 
 		public required string Advice { get; set; }

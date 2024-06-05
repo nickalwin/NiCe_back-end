@@ -55,6 +55,7 @@ namespace NiCeScanner.Controllers.API
 						Question_data = a.Question.Data,
 						Question_uuid = a.Question.Uuid,
 						Answer = a.Score,
+						Is_statement = a.Question.Statement,
 						Comment = a.Comment,
 						Advice = a.Question.Advice != null
 							? (a.Score <= a.Question.Advice.Condition ? a.Question.Advice.Data : "") : ""
