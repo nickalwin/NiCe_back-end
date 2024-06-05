@@ -1,4 +1,6 @@
 ﻿@model NiCeScanner.Models.Scan
+@using Newtonsoft.Json
+@using Newtonsoft.Json.Linq
 
 @{
     ViewData["Title"] = "Delete";
@@ -29,12 +31,22 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.ContactEmail)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Results)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Results)
-        </dd>
+        @{
+            var results = JsonConvert.DeserializeObject<JArray>(Model.Results);
+            if (results == null) return;
+            foreach (var result in results)
+            {
+                var categoryData = JsonConvert.DeserializeObject<JObject>(result["category_data"].ToString());
+                var categoryText = categoryData?["nl"]?.Value<string>("name") ?? "N/A";
+                var mean = result["mean"]?.Value<double>() ?? 0.0;
+                <dt class="col-sm-2">
+                    @categoryText (mean)
+                </dt>
+                <dd class="col-sm-10">
+                    @mean
+                </dd>
+            }
+        }
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.CreatedAt)
         </dt>
@@ -50,8 +62,12 @@
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Sector)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Sector.Id)
+        @{
+            var sectorData = JsonConvert.DeserializeObject<JObject>(Model.Sector.Data);
+            var sectorText = sectorData?["nl"]?.Value<string>("name") ?? "N/A";
+        }
+        <dd class="col-sm-10">
+            @sectorText
         </dd>
     </dl>
     
