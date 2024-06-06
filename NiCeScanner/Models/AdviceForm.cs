@@ -8,7 +8,7 @@ namespace NiCeScanner.Models
 
 		public string AdditionalLink { get; set; } = default!;
 
-		public string AdditionalLinkName { get; set; } = default!;
+		public string? AdditionalLinkName { get; set; } = default!;
 
 		public int Condition { get; set; }
 

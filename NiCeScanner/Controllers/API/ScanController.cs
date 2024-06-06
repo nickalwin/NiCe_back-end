@@ -60,6 +60,7 @@ namespace NiCeScanner.Controllers.API
 						Advice = a.Question.Advice != null
 							? (a.Score <= a.Question.Advice.Condition ? a.Question.Advice.Data : "") : ""
 					})
+					.Where(a => a.Answer != 0) // Filter out not applicable questions
 				});
 
 			var scans = await _context.Scans.ToListAsync();

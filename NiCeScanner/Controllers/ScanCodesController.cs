@@ -87,16 +87,22 @@ namespace NiCeScanner.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Code,CanEdit,ScanId")] ScanCode scanCode)
+        public async Task<IActionResult> Create([Bind("Code,CanEdit,ScanId")] ScanCodeForm form)
         {
             if (ModelState.IsValid)
             {
+				var scanCode = new ScanCode
+				{
+					Code = form.Code,
+					CanEdit = form.CanEdit,
+					ScanId = form.ScanId
+				};
                 _context.Add(scanCode);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ScanId"] = new SelectList(_context.Scans, "Id", "Id", scanCode.ScanId);
-            return View(scanCode);
+            ViewData["ScanId"] = new SelectList(_context.Scans, "Id", "Id", form.ScanId);
+            return View(form);
         }
 
         // GET: ScanCodes/Edit/5

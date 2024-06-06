@@ -16,9 +16,12 @@ namespace NiCeScanner.Controllers
 		}
 
 		// GET: Advices
-		public async Task<IActionResult> Index()
+		public async Task<IActionResult> Index(int pageNumber = 1)
 		{
-			return View(await _context.Advices.ToListAsync());
+			int pageSize = 10;
+			var paginatedList = await PaginatedList<Advice>.CreateAsync(_context.Advices.Include(a => a.Question).OrderBy(a => a.Data), pageNumber, pageSize);
+
+			return View(paginatedList);
 		}
 
 		// GET: Advices/Details/5

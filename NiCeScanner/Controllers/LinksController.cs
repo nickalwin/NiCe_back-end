@@ -22,10 +22,12 @@ namespace NiCeScanner.Controllers
 		}
 
 		// GET: Links
-		public async Task<IActionResult> Index()
+		public async Task<IActionResult> Index(int pageNumber = 1)
 		{
-			var applicationDbContext = _context.Links.Include(l => l.Category);
-			return View(await applicationDbContext.ToListAsync());
+			int pageSize = 10;
+			var paginatedList = await PaginatedList<Link>.CreateAsync(_context.Links.Include(l => l.Category).OrderBy(l => l.Name), pageNumber, pageSize);
+
+			return View(paginatedList);
 		}
 
 		// GET: Links/Details/5
