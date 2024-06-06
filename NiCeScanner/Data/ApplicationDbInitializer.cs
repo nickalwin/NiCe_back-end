@@ -309,8 +309,8 @@ namespace NiCeScanner.Data
 
 					ImageModel img2 = new ImageModel()
 					{
-						FileName = "Innovation_2.png",
-						ImageData = System.IO.File.ReadAllBytes("wwwroot/images/Innovation/Innovation_2.png"),
+						FileName = "Innovation_2.jpg",
+						ImageData = System.IO.File.ReadAllBytes("wwwroot/images/Innovation/Innovation_2.jpg"),
 					};
 
 					ImageModel img3 = new ImageModel()
@@ -339,14 +339,14 @@ namespace NiCeScanner.Data
 
 					ImageModel img7 = new ImageModel()
 					{
-						FileName = "Innovation_7.png",
-						ImageData = System.IO.File.ReadAllBytes("wwwroot/images/Innovation/Innovation_7.png"),
+						FileName = "Innovation_7.jpg",
+						ImageData = System.IO.File.ReadAllBytes("wwwroot/images/Innovation/Innovation_7.jpg"),
 					};
 
 					ImageModel img8 = new ImageModel()
 					{
-						FileName = "Innovation_8.jpeg",
-						ImageData = System.IO.File.ReadAllBytes("wwwroot/images/Innovation/Innovation_8.jpeg"),
+						FileName = "Innovation_8.jpg",
+						ImageData = System.IO.File.ReadAllBytes("wwwroot/images/Innovation/Innovation_8.jpg"),
 					};
 
 					ImageModel img9 = new ImageModel()
@@ -387,8 +387,8 @@ namespace NiCeScanner.Data
 
 					ImageModel img15 = new ImageModel()
 					{
-						FileName = "Productie_4.png",
-						ImageData = System.IO.File.ReadAllBytes("wwwroot/images/Productie/Productie_4.png"),
+						FileName = "Productie_4.jpg",
+						ImageData = System.IO.File.ReadAllBytes("wwwroot/images/Productie/Productie_4.jpg"),
 					};
 					
 					ImageModel img16 = new ImageModel()
@@ -483,8 +483,8 @@ namespace NiCeScanner.Data
 
 					ImageModel img31 = new ImageModel()
 					{
-						FileName = "Ambitie_6.png",
-						ImageData = System.IO.File.ReadAllBytes("wwwroot/images/Ambitie/Ambitie_6.png"),
+						FileName = "Ambitie_6.jpg",
+						ImageData = System.IO.File.ReadAllBytes("wwwroot/images/Ambitie/Ambitie_6.jpg"),
 					};
 
 					// ImageModel img32 = new ImageModel()
@@ -530,8 +530,8 @@ namespace NiCeScanner.Data
 
 					ImageModel img39 = new ImageModel()
 					{
-						FileName = "Facility_7.png",
-						ImageData = System.IO.File.ReadAllBytes("wwwroot/images/Facility/Facility_7.png"),
+						FileName = "Facility_7.jpg",
+						ImageData = System.IO.File.ReadAllBytes("wwwroot/images/Facility/Facility_7.jpg"),
 					};
 
 					ImageModel img40 = new ImageModel()
