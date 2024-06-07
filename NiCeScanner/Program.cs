@@ -56,11 +56,12 @@ var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
 {
-	var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+	ApplicationDbContext dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 	dbContext.Database.Migrate();
+	
+	DatabaseSeeder.Seed(dbContext, "wwwroot/images/");
 }
 
-ApplicationDbInitializer.Seed(app);
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
