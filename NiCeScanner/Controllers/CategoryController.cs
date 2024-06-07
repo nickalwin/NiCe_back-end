@@ -143,6 +143,7 @@ namespace NiCeScanner.Controllers
 
             var category = await _context.Categories
                 .FirstOrDefaultAsync(m => m.Id == id);
+            
             if (category == null)
             {
                 return NotFound();
@@ -180,8 +181,7 @@ namespace NiCeScanner.Controllers
 			}
 			return View(categoryForm);
 		}
-
-
+		
 		// GET: Category/Edit/5
 		[Authorize(Policy = "RequireResearcherRole")]
 		public async Task<IActionResult> Edit(long? id)
