@@ -19,6 +19,20 @@ public class CategoryControllerTests
     }
 
     [TestMethod]
+    public async Task Index_ReturnsViewResult_WithListOfCategories()
+    {
+        int categoryCount = _context.Categories.Count();
+
+        var result = await _categoryController.Index(null, null, null, null, null, null, null, null);
+
+        Assert.IsInstanceOfType(result, typeof(ViewResult));
+        Assert.IsNotNull(((ViewResult)result).Model);
+
+        var model = (PaginatedList<Category>)((ViewResult)result).Model!;
+        Assert.AreEqual(categoryCount > 10 ? 10 : categoryCount, model.Count);        
+    }
+
+    [TestMethod]
     public async Task Details_ReturnsNotFoundResult_WhenIdIsNull()
     {
         long? id = null;

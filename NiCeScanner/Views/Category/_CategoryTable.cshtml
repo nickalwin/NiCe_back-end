@@ -7,12 +7,22 @@
         <tr>
             <th>
                 <a asp-action="Index"
-                   asp-route-searchString="@ViewData["SearchString"]"
-                   asp-route-sortOrderCategory="@ViewData["CategorySortParm"]"
-                   asp-route-sortOrderShow="@ViewData["SortOrderShow"]"
-                   asp-route-sortOrderCreatedAt="@ViewData["SortOrderCreatedAt"]"
-                   asp-route-sortOrderUpdatedAt="@ViewData["SortOrderUpdatedAt"]"
-                >@Html.DisplayNameFor(model => model[0].Data)</a>
+                    asp-route-searchString="@ViewData["SearchString"]"
+                    asp-route-sortOrderCategory="@ViewData["CategorySortParm"]"
+                    asp-route-sortOrderShow="@ViewData["SortOrderShow"]"
+                    asp-route-sortOrderCreatedAt="@ViewData["SortOrderCreatedAt"]"
+                    asp-route-sortOrderUpdatedAt="@ViewData["SortOrderUpdatedAt"]"
+                >
+                    Content
+                    @if (ViewData["SortOrderCategory"] != null && ViewData["SortOrderCategory"].ToString() == "Category_desc")
+                    {
+                        <span>&darr;</span>
+                    }
+                    else if (ViewData["SortOrderCategory"] != null && ViewData["SortOrderCategory"].ToString() == "Category")
+                    {
+                        <span>&uarr;</span>
+                    }
+                </a>
             </th>
             <th>
                 <a asp-action="Index"
@@ -21,7 +31,17 @@
                     asp-route-sortOrderShow="@ViewData["ShowSortParm"]"
                     asp-route-sortOrderCreatedAt="@ViewData["SortOrderCreatedAt"]"
                     asp-route-sortOrderUpdatedAt="@ViewData["SortOrderUpdatedAt"]"
-                    >@Html.DisplayNameFor(model => model[0].Show)</a>
+                >
+                    @Html.DisplayNameFor(model => model[0].Show)
+                    @if (ViewData["SortOrderShow"] != null && ViewData["SortOrderShow"].ToString() == "Show_desc")
+                    {
+                        <span>&darr;</span>
+                    }
+                    else if (ViewData["SortOrderShow"] != null && ViewData["SortOrderShow"].ToString() == "Show")
+                    {
+                        <span>&uarr;</span>
+                    }    
+                </a>
             </th>
             <th>
                 <a asp-action="Index"
@@ -30,7 +50,17 @@
                     asp-route-sortOrderShow="@ViewData["SortOrderShow"]"
                     asp-route-sortOrderCreatedAt="@ViewData["CreatedAtSortParm"]"
                     asp-route-sortOrderUpdatedAt="@ViewData["SortOrderUpdatedAt"]"
-                    >@Html.DisplayNameFor(model => model[0].CreatedAt)</a>
+                >
+                    Created at
+                    @if (ViewData["SortOrderCreatedAt"] != null && ViewData["SortOrderCreatedAt"].ToString() == "CreatedAt_desc")
+                    {
+                        <span>&darr;</span>
+                    }
+                    else if (ViewData["SortOrderCreatedAt"] != null && ViewData["SortOrderCreatedAt"].ToString() == "CreatedAt")
+                    {
+                        <span>&uarr;</span>
+                    }
+                </a>
             </th>
             <th>
                 <a asp-action="Index"
@@ -39,7 +69,17 @@
                     asp-route-sortOrderShow="@ViewData["SortOrderShow"]"
                     asp-route-sortOrderCreatedAt="@ViewData["SortOrderCreatedAt"]"
                     asp-route-sortOrderUpdatedAt="@ViewData["UpdatedAtSortParm"]"
-                    >@Html.DisplayNameFor(model => model[0].UpdatedAt)</a>
+                >
+                    Updated at
+                    @if (ViewData["SortOrderUpdatedAt"] != null && ViewData["SortOrderUpdatedAt"].ToString() == "UpdatedAt_desc")
+                    {
+                        <span>&darr;</span>
+                    }
+                    else if (ViewData["SortOrderUpdatedAt"] != null && ViewData["SortOrderUpdatedAt"].ToString() == "UpdatedAt")
+                    {
+                        <span>&uarr;</span>
+                    }
+                </a>
             </th>
             <th></th>
         </tr>

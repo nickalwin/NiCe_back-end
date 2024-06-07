@@ -124,11 +124,6 @@ namespace NiCeScanner.Controllers
 			int pageSize = 10;
 			var model = await PaginatedList<Category>.CreateAsync(categories.AsNoTracking(), pageNumber ?? 1, pageSize);
 
-			if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
-			{
-				return PartialView("_CategoryTable", model);
-			}
-
 			return View(model);
 		}
 
