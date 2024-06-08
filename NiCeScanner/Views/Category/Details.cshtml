@@ -1,4 +1,6 @@
-﻿@model NiCeScanner.Models.Category
+﻿@using Newtonsoft.Json
+@using Newtonsoft.Json.Linq
+@model NiCeScanner.Models.Category
 
 @{
     ViewData["Title"] = "Details";
@@ -18,10 +20,14 @@
         </dd>
 
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Data)
+            Content
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Data)
+            @{
+                var categoryData = JsonConvert.DeserializeObject<JObject>(Model.Data);
+                var categoryText = categoryData?["nl"]?.Value<string>("name") ?? "N/A";
+            }
+            @categoryText
         </dd>
 
         <dt class = "col-sm-2">

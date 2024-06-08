@@ -93,6 +93,7 @@ namespace NiCeScanner.Controllers
 					categories = categories.OrderBy(s => s.Id);
 					break;
 			}
+			
 			switch (sortOrderShow)
 			{
 				case "Show_desc":
@@ -102,6 +103,7 @@ namespace NiCeScanner.Controllers
 					categories = categories.OrderBy(s => s.Show);
 					break;
 			}
+			
 			switch (sortOrderCreatedAt)
 			{
 				case "CreatedAt_desc":
@@ -111,6 +113,7 @@ namespace NiCeScanner.Controllers
 					categories = categories.OrderBy(s => s.CreatedAt);
 					break;
 			}
+			
 			switch (sortOrderUpdatedAt)
 			{
 				case "UpdatedAt_desc":
@@ -215,6 +218,7 @@ namespace NiCeScanner.Controllers
 				category.Data = form.Data;
 				category.Color = form.Color;
 				category.Show = form.Show;
+				category.UpdatedAt = DateTime.Now;
 
 				_context.Update(category);
 				await _context.SaveChangesAsync();

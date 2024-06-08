@@ -1,4 +1,6 @@
-﻿@model NiCeScanner.Models.Advice
+﻿@using Newtonsoft.Json
+@using Newtonsoft.Json.Linq
+@model NiCeScanner.Models.Advice
 
 @{
     ViewData["Title"] = "Details";
@@ -11,10 +13,14 @@
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Data)
+            Content
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Data)
+            @{
+                var adviceData = JsonConvert.DeserializeObject<JObject>(Model.Data);
+                var adviceText = adviceData?["nl"]?.Value<string>("data") ?? "N/A";
+            }
+            @Html.DisplayFor(model => adviceText)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.AdditionalLink)

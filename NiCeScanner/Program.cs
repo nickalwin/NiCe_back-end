@@ -59,7 +59,7 @@ using (var scope = app.Services.CreateScope())
 	ApplicationDbContext dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 	dbContext.Database.Migrate();
 	
-	DatabaseSeeder.Seed(dbContext, "wwwroot/images/");
+	DatabaseSeeder.Seed(dbContext, "wwwroot/images/", app.Environment.IsDevelopment());
 }
 
 

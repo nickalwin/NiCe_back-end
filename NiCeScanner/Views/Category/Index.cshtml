@@ -1,13 +1,11 @@
-﻿@using Newtonsoft.Json
-@using Newtonsoft.Json.Linq
-@model PaginatedList<NiCeScanner.Models.Category>
+﻿@model PaginatedList<NiCeScanner.Models.Category>
 
 <h1>Index</h1>
 
 <div class="justify-content-between d-flex">
     <a asp-action="Create">Create New</a>
     <div class="search-container mb-4">
-        <form id="searchForm" asp-action="Index" method="get">
+        <form id="categorySearchForm" asp-action="Index" method="get">
             <div class="input-group">
                 <input id="searchInput" type="text" class="form-control" name="searchString" value="@ViewData["CurrentFilter"]" placeholder="Search...">
                 <div class="input-group-append">
@@ -21,23 +19,3 @@
 <div id="tableContainer" class="table-container">
     <partial name="_CategoryTable" model="Model" />
 </div>
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $(document).ready(function () {
-    $('#searchInput').on('input', function () {
-        var formData = $('#searchForm').serialize();
-        $.ajax({
-            type: 'GET',
-            url: $('#searchForm').attr('action'),
-            data: formData,
-            success: function (result) {
-                $('#tableContainer').html(result);
-            },
-            error: function (xhr, status, error) {
-                console.error(xhr.responseText);
-            }
-        });
-    });
-});
-</script>

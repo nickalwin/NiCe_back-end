@@ -6,9 +6,19 @@
 
 <h1>Index</h1>
 
-<p>
+<div class="justify-content-between d-flex">
     <a asp-action="Create">Create New</a>
-</p>
+    <div class="search-container mb-4">
+        <form id="linkSearchForm" asp-action="Index" method="get">
+            <div class="input-group">
+                <input id="searchInput" type="text" class="form-control" name="searchString" value="@ViewData["CurrentFilter"]" placeholder="Search...">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="submit">Search</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
 
 <div id="tableContainer" class="table-container">
     <partial name="_LinksTable" model="@Model" />

@@ -2,28 +2,62 @@
 @using Newtonsoft.Json.Linq
 @model PaginatedList<NiCeScanner.Models.Advice>
 
-<table id="questionTable" class="table mb-2">
+<table id="advicesTable" class="table mb-2">
     <thead>
         <tr>
             <th>
                 <a asp-action="Index"
                    asp-route-searchString="@ViewData["SearchString"]"
-                   asp-route-SortOrderContactName="@ViewData["ContactNameParm"]">Name</a>
+                   asp-route-sortOrderContent="@ViewData["ContentSortParam"]"
+                   asp-route-sortOrderAdditionalLink="@ViewData["SortOrderAdditionalLink"]"
+                   asp-route-sortOrderAdditionalLinkName="@ViewData["SortOrderAdditionalLinkName"]"
+                >
+                    Content
+                    @if (ViewData["SortOrderContent"] != null && ViewData["SortOrderContent"].ToString() == "Content_desc")
+                    {
+                        <span>&darr;</span>
+                    }
+                    else if (ViewData["SortOrderContent"] != null && ViewData["SortOrderContent"].ToString() == "Content")
+                    {
+                        <span>&uarr;</span>
+                    }
+                </a>
             </th>
             <th>
                 <a asp-action="Index"
                    asp-route-searchString="@ViewData["SearchString"]"
-                   asp-route-SortOrderContactEmail="@ViewData["ContactEmailParm"]">Additional Link</a>
+                   asp-route-sortOrderContent="@ViewData["SortOrderContent"]"
+                   asp-route-sortOrderAdditionalLink="@ViewData["AdditionalLinkSortParam"]"
+                   asp-route-sortOrderAdditionalLinkName="@ViewData["SortOrderAdditionalLinkName"]"
+                >
+                    Additional Link
+                    @if (ViewData["SortOrderAdditionalLink"] != null && ViewData["SortOrderAdditionalLink"].ToString() == "AdditionalLink_desc")
+                    {
+                        <span>&darr;</span>
+                    }
+                    else if (ViewData["SortOrderAdditionalLink"] != null && ViewData["SortOrderAdditionalLink"].ToString() == "AdditionalLink")
+                    {
+                        <span>&uarr;</span>
+                    }
+                </a>
             </th>
             <th>
                 <a asp-action="Index"
                    asp-route-searchString="@ViewData["SearchString"]"
-                   asp-route-SortOrderSector="@ViewData["SectorSortParm"]">Additional Link Name</a>
-            </th>
-            <th>
-                <a asp-action="Index"
-                   asp-route-searchString="@ViewData["SearchString"]"
-                   asp-route-SortOrderCreatedAt="@ViewData["CreatedAtSortParm"]">@Html.DisplayNameFor(model => model[0].CreatedAt)</a>
+                   asp-route-sortOrderContent="@ViewData["SortOrderContent"]"
+                   asp-route-sortOrderAdditionalLink="@ViewData["SortOrderAdditionalLink"]"
+                   asp-route-sortOrderAdditionalLinkName="@ViewData["AdditionalLinkNameSortParam"]"
+                >
+                    Additional Link Name
+                    @if (ViewData["SortOrderAdditionalLinkName"] != null && ViewData["SortOrderAdditionalLinkName"].ToString() == "AdditionalLinkName_desc")
+                    {
+                        <span>&darr;</span>
+                    }
+                    else if (ViewData["SortOrderAdditionalLinkName"] != null && ViewData["SortOrderAdditionalLinkName"].ToString() == "AdditionalLinkName")
+                    {
+                        <span>&uarr;</span>
+                    }
+                </a>
             </th>
             <th></th>
         </tr>
@@ -45,9 +79,6 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.AdditionalLinkName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CreatedAt)
                 </td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

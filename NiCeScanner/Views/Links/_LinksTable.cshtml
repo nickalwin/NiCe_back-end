@@ -6,13 +6,58 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model[0].Name)
+                <a asp-action="Index"
+                   asp-route-searchString="@ViewData["SearchString"]"
+                   asp-route-sortOrderName="@ViewData["NameSortParam"]"
+                   asp-route-sortOrderHref="@ViewData["SortOrderHref"]"
+                   asp-route-sortOrderCategory="@ViewData["SortOrderCategory"]"
+                >
+                    Content
+                    @if (ViewData["SortOrderName"] != null && ViewData["SortOrderName"].ToString() == "Name_desc")
+                    {
+                        <span>&darr;</span>
+                    }
+                    else if (ViewData["SortOrderName"] != null && ViewData["SortOrderName"].ToString() == "Name")
+                    {
+                        <span>&uarr;</span>
+                    }
+                </a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model[0].Href)
+                <a asp-action="Index"
+                   asp-route-searchString="@ViewData["SearchString"]"
+                   asp-route-sortOrderName="@ViewData["SortOrderName"]"
+                   asp-route-sortOrderHref="@ViewData["HrefSortParam"]"
+                   asp-route-sortOrderCategory="@ViewData["SortOrderCategory"]"
+                >
+                    Link
+                    @if (ViewData["SortOrderHref"] != null && ViewData["SortOrderHref"].ToString() == "Href_desc")
+                    {
+                    <span>&darr;</span>
+                    }
+                    else if (ViewData["SortOrderHref"] != null && ViewData["SortOrderHref"].ToString() == "Href")
+                    {
+                    <span>&uarr;</span>
+                    }
+                </a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model[0].Category.Id)
+                <a asp-action="Index"
+                   asp-route-searchString="@ViewData["SearchString"]"
+                   asp-route-sortOrderName="@ViewData["SortOrderName"]"
+                   asp-route-sortOrderHref="@ViewData["SortOrderHref"]"
+                   asp-route-sortOrderCategory="@ViewData["CategorySortParam"]"
+                >
+                    Attached to category
+                    @if (ViewData["SortOrderCategory"] != null && ViewData["SortOrderCategory"].ToString() == "Category_desc")
+                    {
+                    <span>&darr;</span>
+                    }
+                    else if (ViewData["SortOrderCategory"] != null && ViewData["SortOrderCategory"].ToString() == "Category")
+                    {
+                    <span>&uarr;</span>
+                    }
+                </a>
             </th>
             <th>
             <th></th>
@@ -28,12 +73,13 @@
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Href)
+                <a href="@item.Href">@item.Href</a>
             </td>
             <td>
                 @sectorText
             </td>
             <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
             </td>

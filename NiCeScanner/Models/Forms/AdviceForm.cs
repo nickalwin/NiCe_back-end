@@ -4,7 +4,9 @@ namespace NiCeScanner.Models
 {
 	public class AdviceForm
 	{
-		public required string Data { get; set; }
+		public long Id { get; set; }
+
+		public string Data { get; set; }
 
 		public string AdditionalLink { get; set; } = default!;
 

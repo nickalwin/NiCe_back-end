@@ -34,7 +34,7 @@ namespace NiCeScanner.Data
 			await dbContext.UserRoles.AddAsync(new IdentityUserRole<string> { UserId = user.Id, RoleId = adminRole.Id });
 			await dbContext.SaveChangesAsync();
 		}
-		public static async void Seed(ApplicationDbContext context, string imageFolder)
+		public static async void Seed(ApplicationDbContext context, string imageFolder, bool includeDev = true)
 		{
 			if (context.Users.Any())
 				return;
@@ -3168,7 +3168,32 @@ namespace NiCeScanner.Data
 				s1, s2, s3, s4, s5, s6, s7, s8, s9, s10,
 				s11, s12, s13, s14, s15
 			);
+			
+			if (includeDev)
+			{
+				Mail m1 = new Mail()
+				{
+					FirsName = "John",
+					LastName = "Doe",
+					Email = "john@doe.gmail.com",
+					Subject = "Test",
+					Message = "This is a test message",
+					Phone = "1234567890",
+				};
 
+				Mail m2 = new Mail()
+				{
+					FirsName = "Jane",
+					LastName = "Doe",
+					Email = "jane@doe.gmail.com",
+					Subject = "Test",
+					Message = "This is a test message",
+					Phone = "4999999999",
+				};
+			
+				context.Mail.AddRange(m1, m2);
+			}
+			
 			await context.SaveChangesAsync();
 		}
 	}
