@@ -6,18 +6,81 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model[0].Code)
+                <a asp-action="Index"
+                   asp-route-searchString="@ViewData["SearchString"]"
+                   asp-route-sortOrderCode="@ViewData["CodeParam"]"
+                   asp-route-sortOrderContactName="@ViewData["SortOrderContactName"]"
+                   asp-route-sortOrderContactEmail="@ViewData["SortOrderContactEmail"]"
+                   asp-route-sortOrderCanEdit="@ViewData["SortOrderCanEdit"]"
+                >
+                    Code
+                    @if (ViewData["SortOrderCode"] != null && ViewData["SortOrderCode"].ToString() == "Code_desc")
+                    {
+                    <span>&darr;</span>
+                    }
+                    else if (ViewData["SortOrderCode"] != null && ViewData["SortOrderCode"].ToString() == "Code")
+                    {
+                    <span>&uarr;</span>
+                    }
+                </a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model[0].Scan.ContactName)
+                <a asp-action="Index"
+                   asp-route-searchString="@ViewData["SearchString"]"
+                   asp-route-sortOrderCode="@ViewData["SortOrderCode"]"
+                   asp-route-sortOrderContactName="@ViewData["ContactNameParam"]"
+                   asp-route-sortOrderContactEmail="@ViewData["SortOrderContactEmail"]"
+                   asp-route-sortOrderCanEdit="@ViewData["SortOrderCanEdit"]"
+                >
+                    Contact name
+                    @if (ViewData["SortOrderContactName"] != null && ViewData["SortOrderContactName"].ToString() == "ContactName_desc")
+                    {
+                    <span>&darr;</span>
+                    }
+                    else if (ViewData["SortOrderContactName"] != null && ViewData["SortOrderContactName"].ToString() == "ContactName")
+                    {
+                    <span>&uarr;</span>
+                    }
+                </a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model[0].Scan.ContactEmail)
+                <a asp-action="Index"
+                   asp-route-searchString="@ViewData["SearchString"]"
+                   asp-route-sortOrderCode="@ViewData["SortOrderCode"]"
+                   asp-route-sortOrderContactName="@ViewData["SortOrderContactName"]"
+                   asp-route-sortOrderContactEmail="@ViewData["ContactEmailParam"]"
+                   asp-route-sortOrderCanEdit="@ViewData["SortOrderCanEdit"]"
+                >
+                    Contact email
+                    @if (ViewData["SortOrderContactEmail"] != null && ViewData["SortOrderContactEmail"].ToString() == "ContactEmail_desc")
+                    {
+                    <span>&darr;</span>
+                    }
+                    else if (ViewData["SortOrderContactEmail"] != null && ViewData["SortOrderContactEmail"].ToString() == "ContactEmail")
+                    {
+                    <span>&uarr;</span>
+                    }
+                </a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model[0].CanEdit)
+                <a asp-action="Index"
+                   asp-route-searchString="@ViewData["SearchString"]"
+                   asp-route-sortOrderCode="@ViewData["SortOrderCode"]"
+                   asp-route-sortOrderContactName="@ViewData["SortOrderContactName"]"
+                   asp-route-sortOrderContactEmail="@ViewData["SortOrderContactEmail"]"
+                   asp-route-sortOrderCanEdit="@ViewData["CanEditParam"]"
+                >
+                    Provides edit access
+                    @if (ViewData["SortOrderCanEdit"] != null && ViewData["SortOrderCanEdit"].ToString() == "CanEdit_desc")
+                    {
+                    <span>&darr;</span>
+                    }
+                    else if (ViewData["SortOrderCanEdit"] != null && ViewData["SortOrderCanEdit"].ToString() == "CanEdit")
+                    {
+                    <span>&uarr;</span>
+                    }
+                </a>
             </th>
-            <th>
             <th></th>
         </tr>
     </thead>

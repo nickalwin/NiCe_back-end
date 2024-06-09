@@ -4,15 +4,21 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using NiCeScanner.Data;
 using NiCeScanner.Models;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace NiCeScanner.Controllers
 {
+	public class PaginatedViewModel<T>
+	{
+		public List<T> Items { get; set; }
+		public int PageNumber { get; set; }
+		public int TotalPages { get; set; }
+
+		public bool HasPreviousPage => PageNumber > 1;
+		public bool HasNextPage => PageNumber < TotalPages;
+	}
+	
 	[Authorize(Roles = "Admin")]
 	public class UsersController : Controller
 	{
@@ -35,10 +41,58 @@ namespace NiCeScanner.Controllers
 			_logger = logger;
 			_emailSender = emailSender;
 		}
+		
+		public async Task<IActionResult> Index(
+			string sortOrder,
+			string sortOrderEmail,
+			string currentFilter,
+			string searchString,
+			int? pageNumber	
+		) {
+			ViewData["Title"] = "Users";
+			ViewData["CurrentSort"] = sortOrder;
+			ViewData["CurrentFilter"] = searchString;
+			
+			ViewData["EmailSortParm"] = sortOrderEmail switch
+			{
+				"Email" => "Email_desc",
+				"Email_desc" => "",
+				_ => "Email"
+			};
+			ViewData["SortOrderEmail"] = sortOrderEmail;
+			
+			if (!string.IsNullOrWhiteSpace(searchString))
+			{
+				pageNumber = 1;
+			}
+			else
+			{
+				searchString = currentFilter;
+			}
 
-		public async Task<IActionResult> Index()
-		{
-			var users = _userManager.Users.ToList();
+			ViewData["SearchString"] = searchString;
+			
+			var users = from u in _userManager.Users
+				select u;
+			
+			if (!string.IsNullOrEmpty(searchString))
+			{
+				users = users.Where(s => s.UserName.Contains(searchString));
+			}
+			
+			switch (sortOrderEmail)
+			{
+				case "Email_desc":
+					users = users.OrderByDescending(s => s.UserName);
+					break;
+				case "Email":
+					users = users.OrderBy(s => s.UserName);
+					break;
+				default:
+					users = users.OrderBy(s => s.Id);
+					break;
+			}
+			
 			var roleRequests = _context.UserRoleRequests.Where(r => r.Status == null).ToList();
 
 			var userRolesViewModel = new List<UserRolesViewModel>();
@@ -55,11 +109,25 @@ namespace NiCeScanner.Controllers
 					Roles = string.Join(", ", roles),
 					IsPendingRoleRequest = pendingRequest != null,
 					RequestedRole = pendingRequest?.Role,
-					RequestReason = pendingRequest?.Reason
+					RequestReason = pendingRequest?.Reason,
 				});
 			}
-
-			return View(userRolesViewModel);
+    
+			int pn = pageNumber ?? 1;
+			
+			int pageSize = 10;
+			
+			var paginatedUsers = new PaginatedViewModel<UserRolesViewModel>
+			{
+				Items = userRolesViewModel
+					.Skip((pn - 1) * pageSize)
+					.Take(pageSize)
+					.ToList(),
+				PageNumber = pn,
+				TotalPages = (int)Math.Ceiling(userRolesViewModel.Count / (double)pageSize)
+			};
+			
+			return View(paginatedUsers);
 		}
 
 		// GET: UserRolesView/Edit/5
@@ -84,7 +152,7 @@ namespace NiCeScanner.Controllers
 				Id = id,
 				UserName = user.UserName,
 				Roles = string.Join(", ", userRoles)
-		};
+			};
 
 			ViewBag.RoleList = roles.Select(r => new SelectListItem { Value = r.Name, Text = r.Name }).ToList();
 

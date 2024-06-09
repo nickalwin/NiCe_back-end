@@ -21,13 +21,52 @@ namespace NiCeScanner.Controllers
 
 		// GET: ScanCodes
 		public async Task<IActionResult> Index(
+			string sortOrder,
 			string currentFilter,
 			string searchString,
+			string sortOrderCode,
+			string sortOrderContactName,
+			string sortOrderContactEmail,
+			string sortOrderCanEdit,
 			int? pageNumber
-			)
-		{
+		) {
+			ViewData["Title"] = "Scan Codes";
+			ViewData["CurrentSort"] = sortOrder;
+
 			ViewData["SearchString"] = searchString;
 
+			ViewData["ContactNameParam"] = sortOrderContactName switch
+			{
+				"ContactName" => "ContactName_desc",
+				"ContactName_desc" => "",
+				_ => "ContactName"
+			};
+			ViewData["SortOrderContactName"] = sortOrderContactName;
+			
+			ViewData["ContactEmailParam"] = sortOrderContactEmail switch
+			{
+				"ContactEmail" => "ContactEmail_desc",
+				"ContactEmail_desc" => "",
+				_ => "ContactEmail"
+			};
+			ViewData["SortOrderContactEmail"] = sortOrderContactEmail;
+			
+			ViewData["CanEditParam"] = sortOrderCanEdit switch
+			{
+				"CanEdit" => "CanEdit_desc",
+				"CanEdit_desc" => "",
+				_ => "CanEdit"
+			};
+			ViewData["SortOrderCanEdit"] = sortOrderCanEdit;
+			
+			ViewData["CodeParam"] = sortOrderCode switch
+			{
+				"Code" => "Code_desc",
+				"Code_desc" => "",
+				_ => "Code"
+			};
+			ViewData["SortOrderCode"] = sortOrderCode;
+			
 			if (searchString != null)
 			{
 				pageNumber = 1;
@@ -38,6 +77,7 @@ namespace NiCeScanner.Controllers
 			}
 
 			ViewData["CurrentFilter"] = searchString;
+			
 			var codes = from s in _context.ScanCodes.Include(s => s.Scan)
 						select s;
 
@@ -45,14 +85,42 @@ namespace NiCeScanner.Controllers
 			{
 				codes = codes.Where(s => s.Scan.ContactName.Contains(searchString)
 									   || s.Scan.ContactEmail.Contains(searchString)
-									   || s.CanEdit.ToString().Contains(searchString));
+									   || s.CanEdit.ToString().Contains(searchString)
+									   || s.Code.ToString().Contains(searchString));
 			}
-			int pageSize = 10;
-			var model = await PaginatedList<ScanCode>.CreateAsync(codes.AsNoTracking(), pageNumber ?? 1, pageSize);
-			if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+			
+			codes = sortOrderContactName switch
 			{
-				return PartialView("_CodesTable", model);
-			}
+				"ContactName_desc" => codes.OrderByDescending(s => s.Scan.ContactName),
+				"ContactName" => codes.OrderBy(s => s.Scan.ContactName),
+				_ => codes
+			};
+			
+			codes = sortOrderContactEmail switch
+			{
+				"ContactEmail_desc" => codes.OrderByDescending(s => s.Scan.ContactEmail),
+				"ContactEmail" => codes.OrderBy(s => s.Scan.ContactEmail),
+				_ => codes
+			};
+			
+			codes = sortOrderCanEdit switch
+			{
+				"CanEdit_desc" => codes.OrderByDescending(s => s.CanEdit),
+				"CanEdit" => codes.OrderBy(s => s.CanEdit),
+				_ => codes
+			};
+			
+			codes = sortOrderCode switch
+			{
+				"Code_desc" => codes.OrderByDescending(s => s.Code),
+				"Code" => codes.OrderBy(s => s.Code),
+				_ => codes
+			};
+			
+			int pageSize = 10;
+			
+			var model = await PaginatedList<ScanCode>.CreateAsync(codes.AsNoTracking(), pageNumber ?? 1, pageSize);
+
 			return View(model);
 		}
 
@@ -118,8 +186,16 @@ namespace NiCeScanner.Controllers
             {
                 return NotFound();
             }
+            
             ViewData["ScanId"] = new SelectList(_context.Scans, "Id", "Id", scanCode.ScanId);
-            return View(scanCode);
+            
+            return View(new ScanCodeForm()
+            {
+	            Id = scanCode.Id,
+	            Code = scanCode.Code,
+	            ScanId = scanCode.ScanId,
+	            CanEdit = scanCode.CanEdit
+            });
         }
 
         // POST: ScanCodes/Edit/5
@@ -127,35 +203,27 @@ namespace NiCeScanner.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long id, [Bind("Id,Code,CanEdit,ScanId")] ScanCode scanCode)
+        public async Task<IActionResult> Edit(long id, [Bind("Id,Code,CanEdit,ScanId")] ScanCodeForm form)
         {
-            if (id != scanCode.Id)
+            if (id != form.Id)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(scanCode);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ScanCodeExists(scanCode.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+	            var scanCode = _context.ScanCodes.Find(id);
+	            scanCode.Code = form.Code;
+	            scanCode.CanEdit = form.CanEdit;
+	            scanCode.ScanId = form.ScanId;
+	            
+	            _context.Update(scanCode);
+	            await _context.SaveChangesAsync();
+
+	            return RedirectToAction(nameof(Details), new { id });
             }
-            ViewData["ScanId"] = new SelectList(_context.Scans, "Id", "Id", scanCode.ScanId);
-            return View(scanCode);
+            
+            return View(form);
         }
 
         // GET: ScanCodes/Delete/5

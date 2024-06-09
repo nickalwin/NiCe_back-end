@@ -29,18 +29,17 @@ namespace NiCeScanner.Controllers
 
 		// GET: Scans
 		public async Task<IActionResult> Index(
-	string sortOrder,
-	string sortOrderContactName,
-	string sortOrderContactEmail,
-	string sortOrderSector,
-	string sortOrderCreatedAt,
-	string sortOrderUpdatedAt,
-	string currentFilter,
-	string searchString,
-	int? pageNumber
-)
+			string sortOrder,
+			string sortOrderContactName,
+			string sortOrderContactEmail,
+			string sortOrderSector,
+			string sortOrderCreatedAt,
+			string currentFilter,
+			string searchString,
+			int? pageNumber
+		)
 		{
-			ViewData["Title"] = "scans";
+			ViewData["Title"] = "Scans";
 			ViewData["CurrentSort"] = sortOrder;
 
 			ViewData["SearchString"] = searchString;
@@ -76,14 +75,6 @@ namespace NiCeScanner.Controllers
 				_ => "CreatedAt_desc"
 			};
 			ViewData["SortOrderCreatedAt"] = sortOrderCreatedAt;
-
-			ViewData["UpdatedAtSortParm"] = sortOrderUpdatedAt switch
-			{
-				"UpdatedAt_desc" => "UpdatedAt",
-				"UpdatedAt" => "",
-				_ => "UpdatedAt_desc"
-			};
-			ViewData["SortOrderUpdatedAt"] = sortOrderUpdatedAt;
 
 			if (searchString != null)
 			{
@@ -134,20 +125,8 @@ namespace NiCeScanner.Controllers
 				_ => scans
 			};
 
-			scans = sortOrderUpdatedAt switch
-			{
-				"UpdatedAt_desc" => scans.OrderByDescending(s => s.UpdatedAt),
-				"UpdatedAt" => scans.OrderBy(s => s.UpdatedAt),
-				_ => scans
-			};
-
 			int pageSize = 10;
 			var model = await PaginatedList<Scan>.CreateAsync(scans.AsNoTracking(), pageNumber ?? 1, pageSize);
-
-			if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
-			{
-				return PartialView("_ScanTable", model);
-			}
 
 			return View(model);
 		}
@@ -192,6 +171,7 @@ namespace NiCeScanner.Controllers
 
 			var form = new ScanForm
 			{
+				Id = scan.Id,
 				ContactName = scan.ContactName,
 				ContactEmail = scan.ContactEmail
 			};
@@ -206,6 +186,11 @@ namespace NiCeScanner.Controllers
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Edit(long id, [Bind("ContactName,ContactEmail")] ScanForm form)
 		{
+			if (id != form.Id)
+			{
+				return NotFound();
+			}
+			
 			var scan = await _context.Scans.FindAsync(id);
 			if (scan == null)
 			{
@@ -219,7 +204,7 @@ namespace NiCeScanner.Controllers
 				_context.Update(scan);
 				await _context.SaveChangesAsync();
 
-				return RedirectToAction(nameof(Index));
+				return RedirectToAction(nameof(Details), new { id });
 			}
 
 			return View(form);

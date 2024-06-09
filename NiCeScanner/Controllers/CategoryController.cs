@@ -24,8 +24,8 @@ namespace NiCeScanner.Controllers
 			string sortOrderUpdatedAt,
 			string currentFilter,
 			string searchString,
-			int? pageNumber)
-		{
+			int? pageNumber
+		) {
 			ViewData["Title"] = "Categories";
 			ViewData["CurrentSort"] = sortOrder;
 			ViewData["CurrentFilter"] = searchString;

@@ -1,0 +1,27 @@
+@model NiCeScanner.Models.PdfTemplate
+
+<h1>Edit before plot text</h1>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="EditBeforePlotText" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label for="title" class="control-label">Before plot text</label>
+                <input id="title" name="beforePlotText" value="@Model.BeforePlotText" class="form-control" />
+                <span asp-validation-for="BeforePlotText" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,58 +1,16 @@
 ﻿using Newtonsoft.Json;
 using NiCeScanner.Models;
 using Microsoft.AspNetCore.Identity;
+using NuGet.Packaging;
 
 namespace NiCeScanner.Data
 {
 	public class DatabaseSeeder
 	{
-		public static async Task SeedUser(string name, string email, string password, string roleStr, ApplicationDbContext dbContext)
-		{
-			var roles = new List<string> { "Admin", "Manager", "Researcher", "Student", "Member" };
-
-			foreach (var role in roles)
-			{
-				await dbContext.Roles.AddAsync(new IdentityRole(role));
-			}
-
-			await dbContext.SaveChangesAsync();
-
-			var user = new IdentityUser { 
-				UserName = email, 
-				Email = email, 
-				EmailConfirmed = true,
-				NormalizedEmail = email.ToUpper(),
-				NormalizedUserName = email.ToUpper(),
-				LockoutEnabled = false,
-				SecurityStamp = Guid.NewGuid().ToString(),
-				PasswordHash = new PasswordHasher<IdentityUser>().HashPassword(null, password)
-			};
-			await dbContext.Users.AddAsync(user);
-			await dbContext.SaveChangesAsync();
-
-			var adminRole = dbContext.Roles.FirstOrDefault(r => r.Name == roleStr);
-			await dbContext.UserRoles.AddAsync(new IdentityUserRole<string> { UserId = user.Id, RoleId = adminRole.Id });
-			await dbContext.SaveChangesAsync();
-		}
 		public static async void Seed(ApplicationDbContext context, string imageFolder, bool includeDev = true)
 		{
-			if (context.Users.Any())
+			if (context.Categories.Any())
 				return;
-
-			var roles = new List<string> { "Admin", "Manager", "Researcher", "Student", "Member" };
-
-			foreach (var role in roles)
-			{
-				await context.Roles.AddAsync(new IdentityRole(role));
-			}
-
-			await context.SaveChangesAsync();
-
-			await SeedUser("Admin", "admin@admin.com", "Admin@123", "Admin", context);
-			await SeedUser("Manager", "manager@manager.com", "Manager@123", "Manager", context);
-			await SeedUser("Researcher", "researcher@researcher.com", "Researcher@123", "Researcher", context);
-			await SeedUser("Student", "student@student.com", "Student@123", "Student", context);
-			await SeedUser("Member", "member@member.com", "Member@123", "Member", context);
 
 			Category c1 = new Category()
 			{
@@ -3168,7 +3126,60 @@ namespace NiCeScanner.Data
 				s1, s2, s3, s4, s5, s6, s7, s8, s9, s10,
 				s11, s12, s13, s14, s15
 			);
-			
+			await context.SaveChangesAsync();
+
+			PdfTemplate template = new PdfTemplate()
+			{
+				Title = JsonConvert.SerializeObject(new
+				{
+					nl = new
+					{
+						data = "Circulaire scan PDF-rapport",
+					},
+					en = new
+					{
+						data = "Circularity scan PDF report",
+					}
+				}),
+				Introduction = JsonConvert.SerializeObject(new
+				{
+					nl = new
+					{
+						data = "Bedankt voor het invullen van de circulaire scan. In dit pdf-document kunt u uw resultaten vinden. Hoe hoger u scoort op een categorie, hoe beter u al bezig bent met de circulaire economie in dat gebied.",
+					},
+					en = new
+					{
+						data = "Thank you for completing the circularity scan. In this pdf document you can find your results. The higher you score on a category, the better you are already doing with the circular economy in that area.",
+					}
+				}),
+				ImageData = System.IO.File.ReadAllBytes(imageFolder + "pdf.png"),
+				BeforePlotText = JsonConvert.SerializeObject(new
+				{
+					nl = new
+					{
+						data = "Op de onderstaande plot kunt u de resultaten van de scan zien. Hoe hoger u scoort op een categorie, hoe beter u al bezig bent met de circulaire economie in dat gebied.",
+					},
+					en = new
+					{
+						data = "On the plot below you can see the results of the scan. The higher you score on a category, the better you are already doing with the circular economy in that area.",
+					}
+				}),
+				AfterPlotText = JsonConvert.SerializeObject(new
+				{
+					nl = new
+					{
+						data = "Op de volgende pagina's kunt u de resultaten van de scan in detail vinden samen met tips en adviezen over hoe u uw score kunt verbeteren.",
+					},
+					en = new
+					{
+						data = "On the following pages you can find the results of the scan in detail along with tips and advice on how to improve your score.",
+					}
+				}),
+			};
+
+			context.PdfTemplates.Add(template);
+			await context.SaveChangesAsync();
+
 			if (includeDev)
 			{
 				Mail m1 = new Mail()
@@ -3192,6 +3203,43 @@ namespace NiCeScanner.Data
 				};
 			
 				context.Mail.AddRange(m1, m2);
+				
+				Scan sc1 = new Scan()
+				{	
+					ContactName = "John Doe",
+					ContactEmail = "john@doe.gmail.com",
+					SectorId = s1.Id,
+					Results = "[{\"category_data\":\"{\\\"nl\\\":{\\\"name\\\":\\\"Arbeid\\\"},\\\"en\\\":{\\\"name\\\":\\\"Labor\\\"}}\",\"category_uuid\":\"87a1b56b-1f91-4176-9ba3-e74ac0f09060\",\"mean\":1.5},{\"category_data\":\"{\\\"nl\\\":{\\\"name\\\":\\\"Productie en logistiek\\\"},\\\"en\\\":{\\\"name\\\":\\\"Production and logistics\\\"}}\",\"category_uuid\":\"dd9707f8-93d1-4803-b451-98b21865279f\",\"mean\":2.0},{\"category_data\":\"{\\\"nl\\\":{\\\"name\\\":\\\"Ambitie\\\"},\\\"en\\\":{\\\"name\\\":\\\"Ambition\\\"}}\",\"category_uuid\":\"417806a9-4c79-44c5-9b60-08544e8deed0\",\"mean\":2.2},{\"category_data\":\"{\\\"nl\\\":{\\\"name\\\":\\\"Ketensamenwerking\\\"},\\\"en\\\":{\\\"name\\\":\\\"Chain collaboration\\\"}}\",\"category_uuid\":\"c827d80b-0807-4deb-8f4d-145c7fe9ecfe\",\"mean\":2.6},{\"category_data\":\"{\\\"nl\\\":{\\\"name\\\":\\\"Innovatie in grondstofgebruik\\\"},\\\"en\\\":{\\\"name\\\":\\\"Innovation in raw material use\\\"}}\",\"category_uuid\":\"ffad595d-985d-45c8-b92b-89cf41ac1502\",\"mean\":2.8666666666666667},{\"category_data\":\"{\\\"nl\\\":{\\\"name\\\":\\\"Facilitair\\\"},\\\"en\\\":{\\\"name\\\":\\\"Facility\\\"}}\",\"category_uuid\":\"d6b93472-c807-4484-b664-d594d6072924\",\"mean\":3.111111111111111}]",				CreatedAt = DateTime.Now,
+				};
+				context.Scans.Add(sc1);
+				await context.SaveChangesAsync();
+
+				Answer a1 = new Answer() { QuestionId = q1.Id, ScanId = sc1.Id, Score = 1, Comment = "test" };
+				Answer a2 = new Answer() { QuestionId = q2.Id, ScanId = sc1.Id, Score = 5, Comment = "test" };
+				Answer a3 = new Answer() { QuestionId = q3.Id, ScanId = sc1.Id, Score = 2, Comment = "test" };
+				Answer a4 = new Answer() { QuestionId = q4.Id, ScanId = sc1.Id, Score = 4, Comment = "test" };
+				Answer a5 = new Answer() { QuestionId = q5.Id, ScanId = sc1.Id, Score = 3, Comment = "test" };
+				Answer a6 = new Answer() { QuestionId = q6.Id, ScanId = sc1.Id, Score = 2, Comment = "test" };
+				
+				context.Answers.AddRange(a1, a2, a3, a4, a5, a6);
+				await context.SaveChangesAsync();
+				
+				ScanCode scd1 = new ScanCode()
+				{
+					Code = Guid.NewGuid(),
+					ScanId = sc1.Id,
+					CanEdit = false
+				};
+				
+				ScanCode scd2 = new ScanCode()
+				{
+					Code = Guid.NewGuid(),
+					ScanId = sc1.Id,
+					CanEdit = true
+				};
+				
+				context.ScanCodes.AddRange(scd1, scd2);
+				await context.SaveChangesAsync();
 			}
 			
 			await context.SaveChangesAsync();

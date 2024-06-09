@@ -4,6 +4,8 @@ namespace NiCeScanner.Models
 {
 	public class ScanForm
 	{
+		public long Id { get; set; }
+		
 		[MaxLength(400)]
 		public required string ContactName { get; set; }
 

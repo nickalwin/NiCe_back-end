@@ -4,6 +4,8 @@ namespace NiCeScanner.Models
 {
 	public class ScanCodeForm
 	{
+		public long Id { get; set; }
+		
 		public required Guid Code { get; set; }
 
 		public required bool CanEdit { get; set; }
