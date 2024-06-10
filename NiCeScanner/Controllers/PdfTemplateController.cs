@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using NiCeScanner.Data;
 using NiCeScanner.Models;
 
@@ -41,21 +42,43 @@ namespace NiCeScanner.Controllers
 		{
 			var template = _context.PdfTemplates.FirstOrDefault();
 			
+			if (ServiceLocator.ServiceProvider is not null)
+			{
+				var languages = await ServiceLocator.ServiceProvider.GetService<LanguagesService>()!.FetchLanguagesAsync();
+				languages = languages.Where(l => l.LangCode != "en" && l.LangCode != "nl").ToList();
+				ViewBag.Languages = languages;
+			}
+			else
+			{
+				ViewBag.Languages = new List<Language>();
+			}
+			
+			var languagesWithName = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, string>>>(template.Title);
+
+			var originalLanguages = languagesWithName.ToDictionary(
+				language => language.Key,
+				language => language.Value["data"]
+			);
+			ViewBag.Titles = originalLanguages;
+			
 			return View(template);
 		}
 		
 		// POST: PdfTemplate/EditTitle
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> EditTitle(string title)
+		public async Task<IActionResult> EditTitle(Dictionary<string, string> Languages)
 		{
-			if (title == "")
-			{
-				return RedirectToAction(nameof(EditTitle));
-			}
-			
 			var pdf = _context.PdfTemplates.FirstOrDefault();
-			pdf.Title = title;
+			
+			var languagesWithName = Languages.ToDictionary(
+				language => language.Key,
+				language => new { data = language.Value }
+			);
+
+			string jsonString = JsonConvert.SerializeObject(languagesWithName);
+			
+			pdf.Title = jsonString;
 			
 			_context.Update(pdf);
 			await _context.SaveChangesAsync();
@@ -68,21 +91,43 @@ namespace NiCeScanner.Controllers
 		{
 			var template = _context.PdfTemplates.FirstOrDefault();
 			
+			if (ServiceLocator.ServiceProvider is not null)
+			{
+				var languages = await ServiceLocator.ServiceProvider.GetService<LanguagesService>()!.FetchLanguagesAsync();
+				languages = languages.Where(l => l.LangCode != "en" && l.LangCode != "nl").ToList();
+				ViewBag.Languages = languages;
+			}
+			else
+			{
+				ViewBag.Languages = new List<Language>();
+			}
+			
+			var languagesWithName = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, string>>>(template.Introduction);
+
+			var originalLanguages = languagesWithName.ToDictionary(
+				language => language.Key,
+				language => language.Value["data"]
+			);
+			ViewBag.Introductions = originalLanguages;
+			
 			return View(template);
 		}
 		
 		// POST: PdfTemplate/EditIntroduction
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> EditIntroduction(string introduction)
+		public async Task<IActionResult> EditIntroduction(Dictionary<string, string> Languages)
 		{
-			if (introduction == "")
-			{
-				return RedirectToAction(nameof(EditIntroduction));
-			}
-			
 			var pdf = _context.PdfTemplates.FirstOrDefault();
-			pdf.Introduction = introduction;
+			
+			var languagesWithName = Languages.ToDictionary(
+				language => language.Key,
+				language => new { data = language.Value }
+			);
+
+			string jsonString = JsonConvert.SerializeObject(languagesWithName);
+			
+			pdf.Introduction = jsonString;
 			
 			_context.Update(pdf);
 			await _context.SaveChangesAsync();
@@ -125,21 +170,43 @@ namespace NiCeScanner.Controllers
 		{
 			var template = _context.PdfTemplates.FirstOrDefault();
 			
+			if (ServiceLocator.ServiceProvider is not null)
+			{
+				var languages = await ServiceLocator.ServiceProvider.GetService<LanguagesService>()!.FetchLanguagesAsync();
+				languages = languages.Where(l => l.LangCode != "en" && l.LangCode != "nl").ToList();
+				ViewBag.Languages = languages;
+			}
+			else
+			{
+				ViewBag.Languages = new List<Language>();
+			}
+			
+			var languagesWithName = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, string>>>(template.BeforePlotText);
+
+			var originalLanguages = languagesWithName.ToDictionary(
+				language => language.Key,
+				language => language.Value["data"]
+			);
+			ViewBag.BeforePlotTexts = originalLanguages;
+			
 			return View(template);
 		}
 		
 		// POST: PdfTemplate/BeforePlotText
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> EditBeforePlotText(string beforePlotText)
+		public async Task<IActionResult> EditBeforePlotText(Dictionary<string, string> Languages)
 		{
-			if (beforePlotText == "")
-			{
-				return RedirectToAction(nameof(EditBeforePlotText));
-			}
-			
 			var pdf = _context.PdfTemplates.FirstOrDefault();
-			pdf.BeforePlotText = beforePlotText;
+			
+			var languagesWithName = Languages.ToDictionary(
+				language => language.Key,
+				language => new { data = language.Value }
+			);
+
+			string jsonString = JsonConvert.SerializeObject(languagesWithName);
+			
+			pdf.BeforePlotText = jsonString;
 			
 			_context.Update(pdf);
 			await _context.SaveChangesAsync();
@@ -152,21 +219,43 @@ namespace NiCeScanner.Controllers
 		{
 			var template = _context.PdfTemplates.FirstOrDefault();
 			
+			if (ServiceLocator.ServiceProvider is not null)
+			{
+				var languages = await ServiceLocator.ServiceProvider.GetService<LanguagesService>()!.FetchLanguagesAsync();
+				languages = languages.Where(l => l.LangCode != "en" && l.LangCode != "nl").ToList();
+				ViewBag.Languages = languages;
+			}
+			else
+			{
+				ViewBag.Languages = new List<Language>();
+			}
+			
+			var languagesWithName = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, string>>>(template.AfterPlotText);
+
+			var originalLanguages = languagesWithName.ToDictionary(
+				language => language.Key,
+				language => language.Value["data"]
+			);
+			ViewBag.AfterPlotTexts = originalLanguages;
+			
 			return View(template);
 		}
 		
 		// POST: PdfTemplate/AfterPlotText
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> EditAfterPlotText(string afterPlotText)
+		public async Task<IActionResult> EditAfterPlotText(Dictionary<string, string> Languages)
 		{
-			if (afterPlotText == "")
-			{
-				return RedirectToAction(nameof(EditAfterPlotText));
-			}
-			
 			var pdf = _context.PdfTemplates.FirstOrDefault();
-			pdf.AfterPlotText = afterPlotText;
+			
+			var languagesWithName = Languages.ToDictionary(
+				language => language.Key,
+				language => new { data = language.Value }
+			);
+
+			string jsonString = JsonConvert.SerializeObject(languagesWithName);
+			
+			pdf.AfterPlotText = jsonString;
 			
 			_context.Update(pdf);
 			await _context.SaveChangesAsync();

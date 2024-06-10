@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using NiCeScanner.Data;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using NiCeScanner;
 using System.Net.Http.Headers;
 
 
@@ -35,14 +36,8 @@ builder.Services.AddAuthorization(options =>
 
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddHttpClient<LanguagesService>(client =>
-{
-	client.DefaultRequestHeaders.Add("X-RapidAPI-Key", "c81e2a0abfmsh7fefcc85f8eae1fp1173fdjsn1a6c1d5c7ea6");
-	client.DefaultRequestHeaders.Add("X-RapidAPI-Host", "languages-data.p.rapidapi.com");
-});
-
-var languagesService = builder.Services.BuildServiceProvider().GetService<LanguagesService>();
-// var languages = languagesService.FetchLanguagesAsync().Result;
+builder.Services.AddHttpClient();
+builder.Services.AddSingleton<LanguagesService>();
 
 builder.Services.AddSwaggerGen(c =>
 {
@@ -73,6 +68,7 @@ using (var scope = app.Services.CreateScope())
 	DatabaseSeeder.Seed(dbContext, "wwwroot/images/", app.Environment.IsDevelopment());
 }
 
+ServiceLocator.ServiceProvider = app.Services;
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

@@ -1,9 +1,8 @@
-﻿@using Newtonsoft.Json
-@using Newtonsoft.Json.Linq
-@model NiCeScanner.Models.Advice
+﻿@model NiCeScanner.Models.Advice
 
 @{
     ViewData["Title"] = "Details";
+    var languages = (Dictionary<string, string>)ViewBag.Languages;
 }
 
 <h1>Details</h1>
@@ -12,16 +11,19 @@
     <h4>Advice</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
-            Content
-        </dt>
-        <dd class = "col-sm-10">
-            @{
-                var adviceData = JsonConvert.DeserializeObject<JObject>(Model.Data);
-                var adviceText = adviceData?["nl"]?.Value<string>("data") ?? "N/A";
-            }
-            @Html.DisplayFor(model => adviceText)
-        </dd>
+        @foreach (var language in languages)
+        {
+            <dt class="col-sm-2">
+                Content (@language.Key)
+            </dt>
+            <dd class="col-sm-10">
+                @{
+
+                var categoryText = language.Value;
+                }
+                @categoryText
+            </dd>
+        }
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.AdditionalLink)
         </dt>

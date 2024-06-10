@@ -1,12 +1,10 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace NiCeScanner.Models
 {
 	public class AdviceForm
 	{
 		public long Id { get; set; }
 
-		public string Data { get; set; }
+		public Dictionary<string, string> Languages { get; set; } = new Dictionary<string, string>();
 
 		public string AdditionalLink { get; set; } = default!;
 

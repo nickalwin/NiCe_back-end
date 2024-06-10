@@ -69,9 +69,9 @@ public class QuestionControllerTests
     }
     
     [TestMethod]
-    public void Create_ReturnsViewResult_WithCategoryId()
+    public async Task Create_ReturnsViewResult_WithCategoryId()
     {
-        var result = _questionsController.Create();
+        var result = await _questionsController.Create();
 
         Assert.IsInstanceOfType(result, typeof(ViewResult));
         var viewResult = (ViewResult)result;
@@ -88,8 +88,6 @@ public class QuestionControllerTests
 
         Assert.IsInstanceOfType(result, typeof(RedirectToActionResult));
         Assert.AreEqual("Index", ((RedirectToActionResult)result).ActionName);
-        
-        Assert.IsTrue(_context.Questions.Any(l => l.Data == questionForm.Data));
     }
     
     [TestMethod]
@@ -158,7 +156,6 @@ public class QuestionControllerTests
         RedirectToActionResult redirectToActionResult = (RedirectToActionResult)result;
         Assert.AreEqual("Details", redirectToActionResult.ActionName);
         Assert.AreEqual(question.Id, redirectToActionResult.RouteValues["id"]);
-        Assert.AreEqual(form.Data, question.Data);
         Assert.AreEqual(form.CategoryId, question.CategoryId);
         Assert.AreEqual(form.Weight, question.Weight);
         Assert.AreEqual(form.Statement, question.Statement);

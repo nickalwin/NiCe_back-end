@@ -68,9 +68,9 @@ public class CategoryControllerTests
     }
     
     [TestMethod]
-    public void Create_ReturnsViewResult()
+    public async Task Create_ReturnsViewResult()
     {
-        var result = _categoryController.Create();
+        var result = await _categoryController.Create();
 
         Assert.IsInstanceOfType(result, typeof(ViewResult));
     }
@@ -84,8 +84,6 @@ public class CategoryControllerTests
 
         Assert.IsInstanceOfType(result, typeof(RedirectToActionResult));
         Assert.AreEqual("Index", ((RedirectToActionResult)result).ActionName);
-        
-        Assert.IsTrue(_context.Categories.Any(c => c.Data == categoryForm.Data));
     }
     
     [TestMethod]
@@ -168,7 +166,6 @@ public class CategoryControllerTests
         RedirectToActionResult redirectToActionResult = (RedirectToActionResult)result;
         Assert.AreEqual("Details", redirectToActionResult.ActionName);
         Assert.AreEqual(category.Id, redirectToActionResult.RouteValues["id"]);
-        Assert.AreEqual(form.Data, category.Data);
         Assert.AreEqual(form.Color, category.Color);
         Assert.AreEqual(form.Show, category.Show);
     }

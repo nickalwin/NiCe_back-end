@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using NiCeScanner.Data;
 using NiCeScanner.Models;
 
@@ -127,15 +128,35 @@ namespace NiCeScanner.Controllers
 			{
 				return NotFound();
 			}
+			
+			var languagesWithName = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, string>>>(advice.Data);
+
+			var originalLanguages = languagesWithName.ToDictionary(
+				language => language.Key,
+				language => language.Value["data"]
+			);        
+			
+			ViewBag.Languages = originalLanguages;
 
 			return View(advice);
 		}
 
 		// GET: Advices/Create
-		public IActionResult Create()
+		public async Task<IActionResult> Create()
 		{
 			ViewData["QuestionId"] = new SelectList(_context.Questions, "Id", "Id");
 
+			if (ServiceLocator.ServiceProvider is not null)
+			{
+				var languages = await ServiceLocator.ServiceProvider.GetService<LanguagesService>()!.FetchLanguagesAsync();
+				languages = languages.Where(l => l.LangCode != "en" && l.LangCode != "nl").ToList();
+				ViewBag.Languages = languages;
+			}
+			else
+			{
+				ViewBag.Languages = new List<Language>();
+			}
+			
 			return View();
 		}
 
@@ -144,21 +165,30 @@ namespace NiCeScanner.Controllers
 		// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Create([Bind("Data,Condition,QuestionId,AdditionalLink,AdditionalLinkName")] AdviceForm form)
+		public async Task<IActionResult> Create([Bind("Data,Condition,QuestionId,AdditionalLink,AdditionalLinkName,Languages")] AdviceForm form)
 		{
-			var advice = new Advice
-			{
-				Data = form.Data,
-				Condition = form.Condition,
-				QuestionId = form.QuestionId,
-				AdditionalLink = form.AdditionalLink,
-				AdditionalLinkName = form.AdditionalLinkName,
-				CreatedAt = DateTime.Now,
-				UpdatedAt = DateTime.Now
-			};
+			var languages = form.Languages;
 
 			if (ModelState.IsValid)
 			{
+				var languagesWithName = languages.ToDictionary(
+					language => language.Key,
+					language => new { data = language.Value }
+				);
+
+				string jsonString = JsonConvert.SerializeObject(languagesWithName);
+				
+				var advice = new Advice
+				{
+					Data = jsonString,
+					Condition = form.Condition,
+					QuestionId = form.QuestionId,
+					AdditionalLink = form.AdditionalLink,
+					AdditionalLinkName = form.AdditionalLinkName,
+					CreatedAt = DateTime.Now,
+					UpdatedAt = DateTime.Now
+				};
+
 				_context.Add(advice);
 				await _context.SaveChangesAsync();
 				return RedirectToAction(nameof(Index));
@@ -182,11 +212,30 @@ namespace NiCeScanner.Controllers
 			}
 
 			ViewData["QuestionId"] = new SelectList(_context.Questions, "Id", "Id");
+			
+			var languagesWithName = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, string>>>(advice.Data);
+
+			var originalLanguages = languagesWithName.ToDictionary(
+				language => language.Key,
+				language => language.Value["data"]
+			);
+
+			if (ServiceLocator.ServiceProvider is not null)
+			{
+				var languages = await ServiceLocator.ServiceProvider.GetService<LanguagesService>()!.FetchLanguagesAsync();
+				languages = languages.Where(l => l.LangCode != "en" && l.LangCode != "nl").ToList();
+				ViewBag.Languages = languages;
+				
+			}
+			else
+			{
+				ViewBag.Languages = new List<Language>();
+			}
 
 			return View(new AdviceForm
 			{
 				Id = advice.Id,
-				Data = advice.Data,
+				Languages = originalLanguages,
 				Condition = advice.Condition,
 				QuestionId = advice.QuestionId,
 				AdditionalLink = advice.AdditionalLink,
@@ -199,20 +248,24 @@ namespace NiCeScanner.Controllers
 		// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Edit(long id, [Bind("Data,Condition,QuestionId,AdditionalLink,AdditionalLinkName")] AdviceForm form)
+		public async Task<IActionResult> Edit(long id, [Bind("Data,Condition,QuestionId,AdditionalLink,AdditionalLinkName,Languages")] AdviceForm form)
 		{
-			if (id != form.Id)
-				return NotFound();
-			
 			if (ModelState.IsValid)
 			{
+				var languagesWithName = form.Languages.ToDictionary(
+					language => language.Key,
+					language => new { data = language.Value }
+				);
+
+				string jsonString = JsonConvert.SerializeObject(languagesWithName);
+				
 				var advice = await _context.Advices.FindAsync(id);
 				if (advice == null)
 				{
 					return NotFound();
 				}
 				
-				advice.Data = form.Data;
+				advice.Data = jsonString;
 				advice.Condition = form.Condition;
 				advice.QuestionId = form.QuestionId;
 				advice.AdditionalLink = form.AdditionalLink;

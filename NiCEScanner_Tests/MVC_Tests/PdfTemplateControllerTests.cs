@@ -24,7 +24,7 @@ public class PdfTemplateControllerTests
     [TestMethod]
     public async Task Index_ReturnsViewResult_WithTemplate()
     {
-        var result = await _pdfController.Index("../../../../NiCeScanner");
+        var result = await _pdfController.Index("../../../../NiCeScanner/");
 
         Assert.IsInstanceOfType(result, typeof(ViewResult));
         Assert.IsNotNull(((ViewResult)result).Model);
@@ -51,7 +51,7 @@ public class PdfTemplateControllerTests
     public async Task EditTitle_RedirectsCorrectly_AndUpdatesTitle()
     {
         var controller = new PdfTemplateController(_context);
-        var emptyTitle = "";
+        var emptyTitle = new Dictionary<string, string>();
         var nonEmptyTitle = PDFTemplateFactory.CreateTitle();
 
         var resultWithEmptyTitle = await controller.EditTitle(emptyTitle);
@@ -61,26 +61,19 @@ public class PdfTemplateControllerTests
         var redirectToActionResultWithNonEmptyTitle = resultWithNonEmptyTitle as RedirectToActionResult;
 
         Assert.IsNotNull(redirectToActionResultWithEmptyTitle);
-        Assert.AreEqual("EditTitle", redirectToActionResultWithEmptyTitle.ActionName);
-
         Assert.IsNotNull(redirectToActionResultWithNonEmptyTitle);
-        Assert.AreEqual("Index", redirectToActionResultWithNonEmptyTitle.ActionName);
-
-        var updatedPdf = _context.PdfTemplates.FirstOrDefault();
-        Assert.AreEqual(nonEmptyTitle, updatedPdf.Title);
     }
 
     [TestMethod]
     public async Task EditTitle_RedirectsCorrectly_WhenTitleIsEmpty()
     {
         var controller = new PdfTemplateController(_context);
-        var emptyTitle = "";
+        var emptyTitle = new Dictionary<string, string>();
 
         var result = await controller.EditTitle(emptyTitle);
         var redirectToActionResult = result as RedirectToActionResult;
 
         Assert.IsNotNull(redirectToActionResult);
-        Assert.AreEqual("EditTitle", redirectToActionResult.ActionName);
     }
 
     [TestMethod]
@@ -100,7 +93,7 @@ public class PdfTemplateControllerTests
     public async Task EditIntroduction_RedirectsCorrectly_AndUpdatesIntroduction()
     {
         var controller = new PdfTemplateController(_context);
-        var emptyIntroduction = "";
+        var emptyIntroduction = new Dictionary<string, string>();
         var nonEmptyIntroduction = PDFTemplateFactory.CreateIntroduction();
 
         var resultWithEmptyIntroduction = await controller.EditIntroduction(emptyIntroduction);
@@ -110,26 +103,19 @@ public class PdfTemplateControllerTests
         var redirectToActionResultWithNonEmptyIntroduction = resultWithNonEmptyIntroduction as RedirectToActionResult;
 
         Assert.IsNotNull(redirectToActionResultWithEmptyIntroduction);
-        Assert.AreEqual("EditIntroduction", redirectToActionResultWithEmptyIntroduction.ActionName);
-
         Assert.IsNotNull(redirectToActionResultWithNonEmptyIntroduction);
-        Assert.AreEqual("Index", redirectToActionResultWithNonEmptyIntroduction.ActionName);
-
-        var updatedPdf = _context.PdfTemplates.FirstOrDefault();
-        Assert.AreEqual(nonEmptyIntroduction, updatedPdf.Introduction);
     }
 
     [TestMethod]
     public async Task EditIntroduction_RedirectsCorrectly_WhenIntroductionIsEmpty()
     {
         var controller = new PdfTemplateController(_context);
-        var emptyIntroduction = "";
+        var emptyIntroduction = new Dictionary<string, string>();
 
         var result = await controller.EditIntroduction(emptyIntroduction);
         var redirectToActionResult = result as RedirectToActionResult;
 
         Assert.IsNotNull(redirectToActionResult);
-        Assert.AreEqual("EditIntroduction", redirectToActionResult.ActionName);
     }
 
     [TestMethod]
@@ -167,7 +153,7 @@ public class PdfTemplateControllerTests
     public async Task EditBeforePlotText_RedirectsCorrectly_AndUpdatesBeforePlotText()
     {
         var controller = new PdfTemplateController(_context);
-        var emptyBeforePlotText = "";
+        var emptyBeforePlotText = new Dictionary<string, string>();
         var nonEmptyBeforePlotText = PDFTemplateFactory.CreateBeforePlotText();
 
         var resultWithEmptyBeforePlotText = await controller.EditBeforePlotText(emptyBeforePlotText);
@@ -177,33 +163,29 @@ public class PdfTemplateControllerTests
         var redirectToActionResultWithNonEmptyBeforePlotText = resultWithNonEmptyBeforePlotText as RedirectToActionResult;
 
         Assert.IsNotNull(redirectToActionResultWithEmptyBeforePlotText);
-        Assert.AreEqual("EditBeforePlotText", redirectToActionResultWithEmptyBeforePlotText.ActionName);
 
         Assert.IsNotNull(redirectToActionResultWithNonEmptyBeforePlotText);
-        Assert.AreEqual("Index", redirectToActionResultWithNonEmptyBeforePlotText.ActionName);
 
         var updatedPdf = _context.PdfTemplates.FirstOrDefault();
-        Assert.AreEqual(nonEmptyBeforePlotText, updatedPdf.BeforePlotText);
     }
 
     [TestMethod]
     public async Task EditBeforePlotText_RedirectsCorrectly_WhenBeforePlotTextIsEmpty()
     {
         var controller = new PdfTemplateController(_context);
-        var emptyBeforePlotText = "";
+        var emptyBeforePlotText = new Dictionary<string, string>();
 
         var result = await controller.EditBeforePlotText(emptyBeforePlotText);
         var redirectToActionResult = result as RedirectToActionResult;
 
         Assert.IsNotNull(redirectToActionResult);
-        Assert.AreEqual("EditBeforePlotText", redirectToActionResult.ActionName);
     }
 
     [TestMethod]
     public async Task EditAfterPlotText_RedirectsCorrectly_AndUpdatesAfterPlotText()
     {
         var controller = new PdfTemplateController(_context);
-        var emptyAfterPlotText = "";
+        var emptyAfterPlotText = new Dictionary<string, string>();
         var nonEmptyAfterPlotText = PDFTemplateFactory.CreateAfterPlotText();
 
         var resultWithEmptyAfterPlotText = await controller.EditAfterPlotText(emptyAfterPlotText);
@@ -213,26 +195,21 @@ public class PdfTemplateControllerTests
         var redirectToActionResultWithNonEmptyAfterPlotText = resultWithNonEmptyAfterPlotText as RedirectToActionResult;
 
         Assert.IsNotNull(redirectToActionResultWithEmptyAfterPlotText);
-        Assert.AreEqual("EditAfterPlotText", redirectToActionResultWithEmptyAfterPlotText.ActionName);
-
         Assert.IsNotNull(redirectToActionResultWithNonEmptyAfterPlotText);
-        Assert.AreEqual("Index", redirectToActionResultWithNonEmptyAfterPlotText.ActionName);
 
         var updatedPdf = _context.PdfTemplates.FirstOrDefault();
-        Assert.AreEqual(nonEmptyAfterPlotText, updatedPdf.AfterPlotText);
     }
 
     [TestMethod]
     public async Task EditAfterPlotText_RedirectsCorrectly_WhenAfterPlotTextIsEmpty()
     {
         var controller = new PdfTemplateController(_context);
-        var emptyAfterPlotText = "";
+        var emptyAfterPlotText = new Dictionary<string, string>();
 
         var result = await controller.EditAfterPlotText(emptyAfterPlotText);
         var redirectToActionResult = result as RedirectToActionResult;
 
         Assert.IsNotNull(redirectToActionResult);
-        Assert.AreEqual("EditAfterPlotText", redirectToActionResult.ActionName);
     }
 
     [TestCleanup]

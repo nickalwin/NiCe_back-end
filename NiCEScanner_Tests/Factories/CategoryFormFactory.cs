@@ -11,17 +11,11 @@ public class CategoryFormFactory
 
         var categoryForm = new CategoryForm()
         {
-            Data = JsonConvert.SerializeObject(new
+            Languages = new Dictionary<string, string>()
             {
-                nl = new
-                {
-                    name = "Facilitair2123",
-                },
-                en = new
-                {
-                    name = "Facility123123",
-                }
-            }),
+                { "nl", "Facilitair2123" },
+                { "en", "Facility123123" }
+            },
             Color = colors[new Random().Next(0, colors.Length)],
             Show = true,
         };

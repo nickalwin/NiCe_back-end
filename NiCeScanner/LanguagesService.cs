@@ -1,4 +1,6 @@
+using NiCeScanner;
 using System.IO.Compression;
+using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -52,6 +54,11 @@ public class LanguagesService
     {
 	    var request = new HttpRequestMessage(HttpMethod.Get, "https://languages-data.p.rapidapi.com/languages");
 	    
+	    request.Headers.Add("X-RapidAPI-Key", "c81e2a0abfmsh7fefcc85f8eae1fp1173fdjsn1a6c1d5c7ea6");
+	    request.Headers.Add("X-RapidAPI-Host", "languages-data.p.rapidapi.com");
+	    request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+	    request.Headers.AcceptEncoding.Add(new StringWithQualityHeaderValue("gzip"));
+	    
 	    var response = await _httpClient.SendAsync(request);
 	    response.EnsureSuccessStatusCode();
 
@@ -59,39 +66,49 @@ public class LanguagesService
 	    return compressedContent;
     }
 
-    public async Task<List<Language>> FetchLanguagesAsync()
-    {
-	    if (_languages != null)
-	    {
-		    return _languages;
-	    }
-	    
-	    byte[] compressedContent = await GetCompressedLanguagesAsync();
+	public async Task<List<Language>> FetchLanguagesAsync()
+	{
+		if (_languages != null)
+		{
+			return _languages;
+		}
+		
+		byte[] compressedContent = await GetCompressedLanguagesAsync();
+		string jsonResponse;
 
-	    using var decompressedStream = new MemoryStream();
-	    using (var compressedStream = new MemoryStream(compressedContent))
-	    using (var gzipStream = new GZipStream(compressedStream, CompressionMode.Decompress))
-	    {
-		    await gzipStream.CopyToAsync(decompressedStream);
-	    }
+		byte[] firstTwoBytes = compressedContent.Take(2).ToArray();
 
-	    decompressedStream.Seek(0, SeekOrigin.Begin);
+		if (firstTwoBytes[0] == 0x1F && firstTwoBytes[1] == 0x8B)
+		{
+			using var decompressedStream = new MemoryStream();
+			using (var compressedStream = new MemoryStream(compressedContent))
+			using (var gzipStream = new GZipStream(compressedStream, CompressionMode.Decompress))
+			{
+				await gzipStream.CopyToAsync(decompressedStream);
+			}
 
-	    using var reader = new StreamReader(decompressedStream);
-	    string jsonResponse = await reader.ReadToEndAsync();
+			decompressedStream.Seek(0, SeekOrigin.Begin);
 
-	    if (jsonResponse.StartsWith('\uFEFF'))
-	    {
-		    jsonResponse = jsonResponse.Substring(1);
-	    }
+			using var reader = new StreamReader(decompressedStream);
+			jsonResponse = await reader.ReadToEndAsync();
+		}
+		else
+		{
+			jsonResponse = System.Text.Encoding.UTF8.GetString(compressedContent);
+		}
 
-	    if (string.IsNullOrWhiteSpace(jsonResponse))
-	    {
-		    throw new Exception("The JSON response is empty or null.");
-	    }
+		if (jsonResponse.StartsWith('\uFEFF'))
+		{
+			jsonResponse = jsonResponse.Substring(1);
+		}
 
-	    _languages = JsonSerializer.Deserialize<ApiResponse>(jsonResponse).Data;
-	    
-	    return _languages;
-    }
+		if (string.IsNullOrWhiteSpace(jsonResponse))
+		{
+			throw new Exception("The JSON response is empty or null.");
+		}
+
+		_languages = JsonSerializer.Deserialize<ApiResponse>(jsonResponse).Data;
+		
+		return _languages;
+	}
 }

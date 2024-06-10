@@ -176,19 +176,54 @@ namespace NiCeScanner.Controllers
                 .Include(q => q.Category)
 				.Include(q => q.Image)
                 .FirstOrDefaultAsync(m => m.Id == id);
+            
             if (question == null)
             {
                 return NotFound();
             }
+            
+            var languagesWithName = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, string>>>(question.Data);
+
+            var headers = languagesWithName.ToDictionary(
+	            language => language.Key,
+	            language => language.Value["header"]
+            );        
+            
+            var questions = languagesWithName.ToDictionary(
+	            language => language.Key,
+	            language => language.Value["question"]
+            );    
+            
+            var tooltips = languagesWithName.ToDictionary(
+	            language => language.Key,
+	            language => language.Value["tooltip"]
+			);
+			
+            ViewBag.Headers = headers;
+            ViewBag.Questions = questions;
+            ViewBag.Tooltips = tooltips;
 
 			return View(question);
         }
 
 		// GET: Questions/Create
 		[Authorize(Policy = "RequireResearcherRole")]
-		public IActionResult Create()
+		public async Task<IActionResult> Create()
 		{
 			ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Id");
+			ViewData["ImageId"] = new SelectList(_context.Images, "Id", "FileName");
+			
+			if (ServiceLocator.ServiceProvider is not null)
+			{
+				var languages = await ServiceLocator.ServiceProvider.GetService<LanguagesService>()!.FetchLanguagesAsync();
+				languages = languages.Where(l => l.LangCode != "en" && l.LangCode != "nl").ToList();
+				ViewBag.Languages = languages;
+				
+			}
+			else
+			{
+				ViewBag.Languages = new List<Language>();
+			}
 			
 			return View();
 		}
@@ -198,21 +233,39 @@ namespace NiCeScanner.Controllers
 		// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
 		[HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Data,CategoryId,Weight,Statement,Show,ImageId")] QuestionForm form)
+        public async Task<IActionResult> Create([Bind("Id,Data,CategoryId,Weight,Statement,Show,ImageId,Headers,Questions,Tooltips")] QuestionForm form)
         {
-	        var question = new Question()
-	        {
-		        Data = form.Data,
-		        CategoryId = form.CategoryId,
-		        Weight = form.Weight,
-		        Statement = form.Statement,
-		        Show = form.Show,
-		        ImageId = form.ImageId,
-		        CreatedAt = DateTime.Now
-	        };
-	        
             if (ModelState.IsValid)
             {
+	            var headers = form.Headers;
+	            var questions = form.Questions;
+	            var tooltips = form.Tooltips;
+	            
+	            var languages = headers.Keys
+		            .Select(key => new
+		            {
+			            key,
+			            value = new
+			            {
+				            header = headers[key],
+				            question = questions[key],
+				            tooltip = tooltips[key]
+			            }
+		            })
+		            .ToDictionary(x => x.key, x => x.value);
+
+	            string jsonString = JsonConvert.SerializeObject(languages);
+	            
+		        var question = new Question()
+		        {
+			        Data = jsonString,
+			        CategoryId = form.CategoryId,
+			        Weight = form.Weight,
+			        Statement = form.Statement,
+			        Show = form.Show,
+			        ImageId = form.ImageId,
+			        CreatedAt = DateTime.Now
+		        };
                 _context.Add(question);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -241,11 +294,41 @@ namespace NiCeScanner.Controllers
 
 			ViewBag.Category = new SelectList(categories, "Id", "CategoryName", question.CategoryId);
 			ViewBag.Images = new SelectList(await _context.Images.ToListAsync(), "Id", "FileName", question.ImageId);
+			
+			if (ServiceLocator.ServiceProvider is not null)
+			{
+				var languages = await ServiceLocator.ServiceProvider.GetService<LanguagesService>()!.FetchLanguagesAsync();
+				languages = languages.Where(l => l.LangCode != "en" && l.LangCode != "nl").ToList();
+				ViewBag.Languages = languages;
+			}
+			else
+			{
+				ViewBag.Languages = new List<Language>();
+			}
+			
+			var languagesWithName = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, string>>>(question.Data);
+
+			var headers = languagesWithName.ToDictionary(
+				language => language.Key,
+				language => language.Value["header"]
+			);        
+            
+			var questions = languagesWithName.ToDictionary(
+				language => language.Key,
+				language => language.Value["question"]
+			);    
+            
+			var tooltips = languagesWithName.ToDictionary(
+				language => language.Key,
+				language => language.Value["tooltip"]
+			);
 
 			return View(new QuestionForm()
 			{
 				Id = question.Id,
-				Data = question.Data,
+				Headers = headers,
+				Questions = questions,
+				Tooltips = tooltips,
 				CategoryId = question.CategoryId,
 				Weight = question.Weight,
 				Statement = question.Statement,
@@ -257,20 +340,39 @@ namespace NiCeScanner.Controllers
 		//POST: Question/Edit/5
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Edit(long id, [Bind("Id,Data,CategoryId,Weight,Statement,Show,ImageId")] QuestionForm form)
+		public async Task<IActionResult> Edit(long id, [Bind("Id,Data,CategoryId,Weight,Statement,Show,ImageId,Headers,Questions,Tooltips")] QuestionForm form)
 		{
 			if (id != form.Id)
 				return NotFound();
 
 			if (ModelState.IsValid)
 			{
+				var headers = form.Headers;
+				var questions = form.Questions;
+				var tooltips = form.Tooltips;
+	            
+				var languages = headers.Keys
+					.Select(key => new
+					{
+						key,
+						value = new
+						{
+							header = headers[key],
+							question = questions[key],
+							tooltip = tooltips[key]
+						}
+					})
+					.ToDictionary(x => x.key, x => x.value);
+
+				string jsonString = JsonConvert.SerializeObject(languages);
+				
 				var question = await _context.Questions.FindAsync(id);
 				if (question == null)
 				{
 					return NotFound();
 				}
 				
-				question.Data = form.Data;
+				question.Data = jsonString;
 				question.CategoryId = form.CategoryId;
 				question.Weight = form.Weight;
 				question.Show = form.Show;

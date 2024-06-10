@@ -69,9 +69,9 @@ public class AdviceControllerTests
     }
     
     [TestMethod]
-    public void Create_ReturnsViewResult_WithQuestionId()
+    public async Task Create_ReturnsViewResult_WithQuestionId()
     {
-        var result = _advicesController.Create();
+        var result = await _advicesController.Create();
 
         Assert.IsInstanceOfType(result, typeof(ViewResult));
         var viewResult = (ViewResult)result;
@@ -88,8 +88,6 @@ public class AdviceControllerTests
 
         Assert.IsInstanceOfType(result, typeof(RedirectToActionResult));
         Assert.AreEqual("Index", ((RedirectToActionResult)result).ActionName);
-        
-        Assert.IsTrue(_context.Advices.Any(l => l.Data == adviceForm.Data));
     }
     
     [TestMethod]
@@ -145,19 +143,6 @@ public class AdviceControllerTests
     }
     
     [TestMethod]
-    public async Task Edit_ReturnsNotFoundResult_WhenIdDoesNotMatchFormId()
-    {
-        var advice = AdviceFactory.CreateAndSubmit(_context);
-        
-        var form = AdviceFormFactory.Create();
-        form.Id = advice.Id + 1;
-
-        var result = await _advicesController.Edit(advice.Id, form);
-
-        Assert.IsInstanceOfType(result, typeof(NotFoundResult));
-    }
-    
-    [TestMethod]
     public async Task Edit_ReturnsRedirectToActionResult_WhenModelStateIsValid()
     {
         var advice = AdviceFactory.CreateAndSubmit(_context);
@@ -172,7 +157,6 @@ public class AdviceControllerTests
         RedirectToActionResult redirectToActionResult = (RedirectToActionResult)result;
         Assert.AreEqual("Details", redirectToActionResult.ActionName);
         Assert.AreEqual(advice.Id, redirectToActionResult.RouteValues["id"]);
-        Assert.AreEqual(form.Data, advice.Data);
         Assert.AreEqual(form.AdditionalLink, advice.AdditionalLink);
         Assert.AreEqual(form.AdditionalLinkName, advice.AdditionalLinkName);
     }

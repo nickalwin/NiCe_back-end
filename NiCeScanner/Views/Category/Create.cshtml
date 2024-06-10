@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Create";
+    var languages = (List<Language>)ViewBag.Languages;
 }
 
 <h1>Create</h1>
@@ -12,28 +13,48 @@
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            
             <div class="form-group">
-                <label asp-for="Data" class="control-label"></label>
-                <input asp-for="Data" class="form-control" />
-                <span asp-validation-for="Data" class="text-danger"></span>
+                Category name (en)
+                <input class="form-control" name="Languages[en]" />
             </div>
+            <div class="form-group">
+                Category name (nl)
+                <input class="form-control" name="Languages[nl]" />
+            </div>
+            
+            <div id="additionalLanguages"></div>
+            
+            <div>
+                <select id="LanguageSelect" class="form-control">
+                    <option value="">Select Language</option>
+                    @foreach (var language in languages)
+                    {
+                        <option value="@language.LangCode">@language.LangEnglishName</option>
+                    }
+                </select>
+                <button type="button" id="addLanguage" class="btn btn-primary">Add Language</button>
+            </div>
+
             <div class="form-group form-check">
                 <label class="form-check-label">
                     <input class="form-check-input" asp-for="Show" /> @Html.DisplayNameFor(model => model.Show)
                 </label>
             </div>
+
             <div class="form-group">
                 <label asp-for="Color" class="control-label"></label>
                 <select asp-for="Color" class="form-control">
-                    <option value="goud">goud</option>
-                    <option value="appelgroen">appelgroen</option>
-                    <option value="lichtroze">lichtroze</option>
-                    <option value="blauw">blauw</option>
-                    <option value="lichtblauw">lichtblauw</option>
-                    <option value="donkerroze">donkerroze</option>
+                    <option value="goud" style="color: #ffcb05;">goud</option>
+                    <option value="appelgroen" style="color: #b1d249;">appelgroen</option>
+                    <option value="lichtroze" style="color: #f287b7;">lichtroze</option>
+                    <option value="blauw" style="color: #1ebcc5;">blauw</option>
+                    <option value="lichtblauw" style="color: #84d0d9;">lichtblauw</option>
+                    <option value="donkerroze" style="color: #f16682;">donkerroze</option>
                 </select>
                 <span asp-validation-for="Color" class="text-danger"></span>
             </div>
+            
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
@@ -41,10 +62,32 @@
     </div>
 </div>
 
+@section Scripts {
+    <script>
+        document.getElementById('addLanguage').addEventListener('click', function() {
+            var select = document.getElementById('LanguageSelect');
+            var langCode = select.value;
+            var langName = select.options[select.selectedIndex].text;
+            if (langCode) {
+                var input = document.createElement('input');
+                input.name = 'Languages[' + langCode + ']';
+                input.className = 'form-control';
+                var label = document.createElement('label');
+                label.textContent = 'Category name (' + langName + ')';
+                var div = document.createElement('div');
+                div.className = 'form-group';
+                div.appendChild(label);
+                div.appendChild(input);
+                document.getElementById('additionalLanguages').appendChild(div);
+                select.options[select.selectedIndex].disabled = true;
+                select.value = '';
+            }
+        });
+    </script>
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}

@@ -41,7 +41,13 @@
                             @if (isAuthorized.Succeeded)
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Category" asp-action="Index">Category</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Category" asp-action="Index">Categories</a>
+                                </li>
+                            }
+                            @if (isAuthorized.Succeeded)
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Sectors" asp-action="Index">Sectors</a>
                                 </li>
                             }
                             isAuthorized = await AuthorizationService.AuthorizeAsync(User, "RequireStudentRole");

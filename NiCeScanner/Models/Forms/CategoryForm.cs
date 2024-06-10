@@ -1,13 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace NiCeScanner.Models
+﻿namespace NiCeScanner.Models
 {
 	public class CategoryForm
 	{
 		public long Id { get; set; }
 		
-		public string Data { get; set; }
-
+		public Dictionary<string, string> Languages { get; set; } = new Dictionary<string, string>();
+		
 		public string Color { get; set; }
 
 		public bool Show { get; set; }

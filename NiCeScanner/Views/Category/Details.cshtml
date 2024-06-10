@@ -1,9 +1,8 @@
-﻿@using Newtonsoft.Json
-@using Newtonsoft.Json.Linq
-@model NiCeScanner.Models.Category
+﻿@model NiCeScanner.Models.Category
 
 @{
     ViewData["Title"] = "Details";
+    var languages = (Dictionary<string, string>)ViewBag.Languages;
 }
 
 <h1>Details</h1>
@@ -19,16 +18,19 @@
             @Html.DisplayFor(model => model.Uuid)
         </dd>
 
-        <dt class = "col-sm-2">
-            Content
-        </dt>
-        <dd class = "col-sm-10">
-            @{
-                var categoryData = JsonConvert.DeserializeObject<JObject>(Model.Data);
-                var categoryText = categoryData?["nl"]?.Value<string>("name") ?? "N/A";
-            }
-            @categoryText
-        </dd>
+        @foreach (var language in languages)
+        {
+            <dt class="col-sm-2">
+                Content (@language.Key)
+            </dt>
+            <dd class="col-sm-10">
+                @{
+
+                    var categoryText = language.Value;
+                }
+                @categoryText
+            </dd>
+        }
 
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Show)

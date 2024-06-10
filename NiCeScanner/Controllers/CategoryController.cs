@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using NiCeScanner.Data;
 using NiCeScanner.Models;
 
@@ -29,7 +30,7 @@ namespace NiCeScanner.Controllers
 			ViewData["Title"] = "Categories";
 			ViewData["CurrentSort"] = sortOrder;
 			ViewData["CurrentFilter"] = searchString;
-
+			
 			ViewData["CategorySortParm"] = sortOrderCategory switch
 			{
 				"Category" => "Category_desc",
@@ -146,27 +147,57 @@ namespace NiCeScanner.Controllers
             {
                 return NotFound();
             }
+            
+            var languagesWithName = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, string>>>(category.Data);
+
+            var originalLanguages = languagesWithName.ToDictionary(
+	            language => language.Key,
+	            language => language.Value["name"]
+            );        
+			
+            ViewBag.Languages = originalLanguages;
 
             return View(category);
         }
 
 		// GET: Category/Create
 		[Authorize(Policy = "RequireResearcherRole")]
-		public IActionResult Create()
-        {
+		public async Task<IActionResult> Create()
+		{
+			if (ServiceLocator.ServiceProvider is not null)
+			{
+				var languages = await ServiceLocator.ServiceProvider.GetService<LanguagesService>()!.FetchLanguagesAsync();
+				languages = languages.Where(l => l.LangCode != "en" && l.LangCode != "nl").ToList();
+				ViewBag.Languages = languages;
+				
+			}
+			else
+			{
+				ViewBag.Languages = new List<Language>();
+			}
+
             return View();
         }
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		[Authorize(Policy = "RequireResearcherRole")]
-		public async Task<IActionResult> Create([Bind("Data,Show,Color")] CategoryForm categoryForm)
+		public async Task<IActionResult> Create([Bind("Data,Show,Color,Languages")] CategoryForm categoryForm)
 		{
+			var languages = categoryForm.Languages;
+			
 			if (ModelState.IsValid)
 			{
+				var languagesWithName = languages.ToDictionary(
+					language => language.Key,
+					language => new { name = language.Value }
+				);
+
+				string jsonString = JsonConvert.SerializeObject(languagesWithName);
+
 				var category = new Category
 				{
-					Data = categoryForm.Data,
+					Data = jsonString,
 					Show = categoryForm.Show,
 					Color = categoryForm.Color,
 					CreatedAt = DateTime.Now,
@@ -191,10 +222,28 @@ namespace NiCeScanner.Controllers
             if (category is null)
                 return NotFound();
 
+			var languagesWithName = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, string>>>(category.Data);
+
+			var originalLanguages = languagesWithName.ToDictionary(
+				language => language.Key,
+				language => language.Value["name"]
+			);
+
+			if (ServiceLocator.ServiceProvider is not null)
+			{
+				var languages = await ServiceLocator.ServiceProvider.GetService<LanguagesService>()!.FetchLanguagesAsync();
+				languages = languages.Where(l => l.LangCode != "en" && l.LangCode != "nl").ToList();
+				ViewBag.Languages = languages;
+			}
+			else
+			{
+				ViewBag.Languages = new List<Language>();
+			}
+
             return View(new CategoryForm
 			{
 				Id = category.Id,
-				Data = category.Data,
+				Languages = originalLanguages,
 				Color = category.Color,
 				Show = category.Show
 			});
@@ -204,18 +253,26 @@ namespace NiCeScanner.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
 		[Authorize(Policy = "RequireResearcherRole")]
-		public async Task<IActionResult> Edit(long id, [Bind("Id,Data,Color,Show")] CategoryForm form)
+		public async Task<IActionResult> Edit(long id, [Bind("Id,Data,Color,Show,Languages")] CategoryForm form)
         {
             if (id != form.Id)
                 return NotFound();
 
+            var languages = form.Languages;
+			
             if (ModelState.IsValid)
             {
+	            var languagesWithName = languages.ToDictionary(
+		            language => language.Key,
+		            language => new { name = language.Value }
+	            );
+
+	            string jsonString = JsonConvert.SerializeObject(languagesWithName);
 				var category = await _context.Categories.FindAsync(id);
 				if (category is null)
 					return NotFound();
 
-				category.Data = form.Data;
+				category.Data = jsonString;
 				category.Color = form.Color;
 				category.Show = form.Show;
 				category.UpdatedAt = DateTime.Now;
