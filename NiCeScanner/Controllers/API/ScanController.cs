@@ -50,6 +50,7 @@ namespace NiCeScanner.Controllers.API
 						Name = l.Name,
 						Href = l.Href
 					}),
+					Color = g.First().Question.Category.Color,
 					Grouped_answers = g.Select(a => new GroupedCategoryQuestionsResource
 					{
 						Question_data = a.Question.Data,
