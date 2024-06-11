@@ -1,7 +1,7 @@
-﻿@model NiCeScanner.Models.Question
+﻿@model NiCeScanner.Models.QuestionForm
 
 @{
-    ViewData["Title"] = "Create";
+    var languages = (List<Language>)ViewBag.Languages;
 }
 
 <h1>Create</h1>
@@ -12,16 +12,51 @@
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
             <div class="form-group">
-                <label asp-for="Uuid" class="control-label"></label>
-                <input asp-for="Uuid" class="form-control" />
-                <span asp-validation-for="Uuid" class="text-danger"></span>
+                Header (en)
+                <input class="form-control" name="Headers[en]" />
             </div>
             <div class="form-group">
-                <label asp-for="Data" class="control-label"></label>
-                <input asp-for="Data" class="form-control" />
-                <span asp-validation-for="Data" class="text-danger"></span>
+                Header (nl)
+                <input class="form-control" name="Headers[nl]" />
             </div>
+
+            <div id="additionalHeaders"></div>
+
+            <div class="form-group">
+                Question (en)
+                <input class="form-control" name="Questions[en]" />
+            </div>
+            <div class="form-group">
+                Question (nl)
+                <input class="form-control" name="Questions[nl]" />
+            </div>
+
+            <div id="additionalQuestions"></div>
+
+            <div class="form-group">
+                Tooltip (en)
+                <input class="form-control" name="Tooltips[en]" />
+            </div>
+            <div class="form-group">
+                Tooltip (nl)
+                <input class="form-control" name="Tooltips[nl]" />
+            </div>
+
+            <div id="additionalTooltips"></div>
+
+            <div>
+                <select id="LanguageSelect" class="form-control">
+                    <option value="">Select Language</option>
+                    @foreach (var language in languages)
+                    {
+                    <option value="@language.LangCode">@language.LangEnglishName</option>
+                    }
+                </select>
+                <button type="button" id="addLanguage" class="btn btn-primary">Add Language</button>
+            </div>
+
             <div class="form-group">
                 <label asp-for="CategoryId" class="control-label"></label>
                 <select asp-for="CategoryId" class ="form-control" asp-items="ViewBag.CategoryId"></select>
@@ -42,19 +77,9 @@
                 </label>
             </div>
             <div class="form-group">
-                <label asp-for="Image" class="control-label"></label>
-                <input asp-for="Image" class="form-control" />
-                <span asp-validation-for="Image" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CreatedAt" class="control-label"></label>
-                <input asp-for="CreatedAt" class="form-control" />
-                <span asp-validation-for="CreatedAt" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UpdatedAt" class="control-label"></label>
-                <input asp-for="UpdatedAt" class="form-control" />
-                <span asp-validation-for="UpdatedAt" class="text-danger"></span>
+                <label asp-for="ImageId" class="control-label"></label>
+                <select asp-for="ImageId" class="form-control" asp-items="ViewBag.ImageId"></select>
+                <span asp-validation-for="ImageId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
@@ -68,5 +93,53 @@
 </div>
 
 @section Scripts {
+    <script>
+        document.getElementById('addLanguage').addEventListener('click', function() {
+            var select = document.getElementById('LanguageSelect');
+            var langCode = select.value;
+            var langName = select.options[select.selectedIndex].text;
+            if (langCode) {
+                var input = document.createElement('input');
+                input.name = 'Headers[' + langCode + ']';
+                input.className = 'form-control';
+                var label = document.createElement('label');
+                label.textContent = 'Category name (' + langName + ')';
+                var div = document.createElement('div');
+                div.className = 'form-group';
+                div.appendChild(label);
+                div.appendChild(input);
+                document.getElementById('additionalHeaders').appendChild(div);
+                select.options[select.selectedIndex].disabled = true;
+                select.value = '';
+                
+                var input = document.createElement('input');
+                input.name = 'Questions[' + langCode + ']';
+                input.className = 'form-control';
+                var label = document.createElement('label');
+                label.textContent = 'Category name (' + langName + ')';
+                var div = document.createElement('div');
+                div.className = 'form-group';
+                div.appendChild(label);
+                div.appendChild(input);
+                document.getElementById('additionalQuestions').appendChild(div);
+                select.options[select.selectedIndex].disabled = true;
+                select.value = '';
+                
+                var input = document.createElement('input');
+                input.name = 'Tooltips[' + langCode + ']';
+                input.className = 'form-control';
+                var label = document.createElement('label');
+                label.textContent = 'Category name (' + langName + ')';
+                var div = document.createElement('div');
+                div.className = 'form-group';
+                div.appendChild(label);
+                div.appendChild(input);
+                document.getElementById('additionalTooltips').appendChild(div);
+                select.options[select.selectedIndex].disabled = true;
+                select.value = '';
+            }
+        });
+    </script>
+
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

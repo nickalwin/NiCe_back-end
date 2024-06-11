@@ -1,0 +1,21 @@
+@model PaginatedList<NiCeScanner.Models.Sector>
+
+<h1>Sectors</h1>
+
+<div class="justify-content-between d-flex">
+    <a asp-action="Create">Create New</a>
+    <div class="search-container mb-4">
+        <form id="categorySearchForm" asp-action="Index" method="get">
+            <div class="input-group">
+                <input id="searchInput" type="text" class="form-control" name="searchString" value="@ViewData["CurrentFilter"]" placeholder="Search...">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="submit">Search</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="tableContainer" class="table-container">
+    <partial name="_SectorTable" model="Model" />
+</div>

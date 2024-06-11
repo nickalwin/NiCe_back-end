@@ -22,6 +22,7 @@ namespace NiCeScanner.Controllers.API
 			var questions = await _context.Questions
 				.Where(q => q.Show)
 				.Include(q => q.Category)
+				.Where(q => q.Category.Show)
 				.Include(q => q.Image)
 				.Select(q => new QuestionResource
 				{

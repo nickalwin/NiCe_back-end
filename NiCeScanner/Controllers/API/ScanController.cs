@@ -50,15 +50,18 @@ namespace NiCeScanner.Controllers.API
 						Name = l.Name,
 						Href = l.Href
 					}),
+					Color = g.First().Question.Category.Color,
 					Grouped_answers = g.Select(a => new GroupedCategoryQuestionsResource
 					{
 						Question_data = a.Question.Data,
 						Question_uuid = a.Question.Uuid,
 						Answer = a.Score,
+						Is_statement = a.Question.Statement,
 						Comment = a.Comment,
 						Advice = a.Question.Advice != null
 							? (a.Score <= a.Question.Advice.Condition ? a.Question.Advice.Data : "") : ""
 					})
+					.Where(a => a.Answer != 0) // Filter out not applicable questions
 				});
 
 			var scans = await _context.Scans.ToListAsync();

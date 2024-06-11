@@ -1,0 +1,33 @@
+@model NiCeScanner.Controllers.PaginatedViewModel<NiCeScanner.Models.UserRolesViewModel>
+
+<table id="usersTable" class="table mb-2">
+    <thead>
+        <tr>
+            <th>Email address</th>
+            <th>Assigned roles</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.UserName)</td>
+                <td>@Html.DisplayFor(modelItem => item.Roles)</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    @if (item.IsPendingRoleRequest)
+                    {
+                        <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#roleRequestModal" data-username="@item.UserName" data-role="@item.RequestedRole" data-reason="@item.RequestReason" data-userid="@item.Id">
+                            Pending Request
+                        </button>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+

@@ -1,0 +1,140 @@
+@using Newtonsoft.Json
+@using Newtonsoft.Json.Linq
+@model PaginatedList<NiCeScanner.Models.Advice>
+
+<table id="advicesTable" class="table mb-2">
+    <thead>
+        <tr>
+            <th>
+                <a asp-action="Index"
+                   asp-route-searchString="@ViewData["SearchString"]"
+                   asp-route-sortOrderContent="@ViewData["ContentSortParam"]"
+                   asp-route-sortOrderAdditionalLink="@ViewData["SortOrderAdditionalLink"]"
+                   asp-route-sortOrderAdditionalLinkName="@ViewData["SortOrderAdditionalLinkName"]"
+                >
+                    Content
+                    @if (ViewData["SortOrderContent"] != null && ViewData["SortOrderContent"].ToString() == "Content_desc")
+                    {
+                        <span>&darr;</span>
+                    }
+                    else if (ViewData["SortOrderContent"] != null && ViewData["SortOrderContent"].ToString() == "Content")
+                    {
+                        <span>&uarr;</span>
+                    }
+                </a>
+            </th>
+            <th>
+                <a asp-action="Index"
+                   asp-route-searchString="@ViewData["SearchString"]"
+                   asp-route-sortOrderContent="@ViewData["SortOrderContent"]"
+                   asp-route-sortOrderAdditionalLink="@ViewData["AdditionalLinkSortParam"]"
+                   asp-route-sortOrderAdditionalLinkName="@ViewData["SortOrderAdditionalLinkName"]"
+                >
+                    Additional Link
+                    @if (ViewData["SortOrderAdditionalLink"] != null && ViewData["SortOrderAdditionalLink"].ToString() == "AdditionalLink_desc")
+                    {
+                        <span>&darr;</span>
+                    }
+                    else if (ViewData["SortOrderAdditionalLink"] != null && ViewData["SortOrderAdditionalLink"].ToString() == "AdditionalLink")
+                    {
+                        <span>&uarr;</span>
+                    }
+                </a>
+            </th>
+            <th>
+                <a asp-action="Index"
+                   asp-route-searchString="@ViewData["SearchString"]"
+                   asp-route-sortOrderContent="@ViewData["SortOrderContent"]"
+                   asp-route-sortOrderAdditionalLink="@ViewData["SortOrderAdditionalLink"]"
+                   asp-route-sortOrderAdditionalLinkName="@ViewData["AdditionalLinkNameSortParam"]"
+                >
+                    Additional Link Name
+                    @if (ViewData["SortOrderAdditionalLinkName"] != null && ViewData["SortOrderAdditionalLinkName"].ToString() == "AdditionalLinkName_desc")
+                    {
+                        <span>&darr;</span>
+                    }
+                    else if (ViewData["SortOrderAdditionalLinkName"] != null && ViewData["SortOrderAdditionalLinkName"].ToString() == "AdditionalLinkName")
+                    {
+                        <span>&uarr;</span>
+                    }
+                </a>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+
+            var adviceData = JsonConvert.DeserializeObject<JObject>(item.Data);
+            var adviceText = adviceData?["nl"]?.Value<string>("data") ?? "N/A";
+
+            <tr>
+                <td>
+                    @adviceText
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AdditionalLink)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AdditionalLinkName)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+
+<div>
+    <nav aria-label="Page navigation">
+        <ul class="pagination mb-2">
+            <li class="page-item @prevDisabled">
+                <a class="page-link" asp-action="Index"
+                   asp-route-sortOrder="@ViewData["CurrentSort"]"
+                   asp-route-pageNumber="@(Model.PageIndex - 1)"
+                   asp-route-currentFilter="@ViewData["CurrentFilter"]">Previous</a>
+            </li>
+            <li class="page-item @(1 == Model.PageIndex ? "active" : "")">
+                <a class="page-link" asp-action="Index"
+                   asp-route-sortOrder="@ViewData["CurrentSort"]"
+                   asp-route-pageNumber="1"
+                   asp-route-currentFilter="@ViewData["CurrentFilter"]">1</a>
+            </li>
+            @for (int i = Math.Max(1, Model.PageIndex - 2); i <= Math.Min(Model.TotalPages, Model.PageIndex + 2); i++)
+            {
+                if (i > 1 && i < Model.TotalPages)
+                {
+                    <li class="page-item @(i == Model.PageIndex ? "active" : "")">
+                        <a class="page-link" asp-action="Index"
+                           asp-route-sortOrder="@ViewData["CurrentSort"]"
+                           asp-route-pageNumber="@i"
+                           asp-route-currentFilter="@ViewData["CurrentFilter"]">@i</a>
+                    </li>
+                }
+            }
+            <li class="page-item @(Model.TotalPages == Model.PageIndex ? "active" : "")">
+                <a class="page-link" asp-action="Index"
+                   asp-route-sortOrder="@ViewData["CurrentSort"]"
+                   asp-route-pageNumber="@Model.TotalPages"
+                   asp-route-currentFilter="@ViewData["CurrentFilter"]">@Model.TotalPages</a>
+            </li>
+            <li class="page-item @nextDisabled">
+                <a class="page-link" asp-action="Index"
+                   asp-route-sortOrder="@ViewData["CurrentSort"]"
+                   asp-route-pageNumber="@(Model.PageIndex + 1)"
+                   asp-route-currentFilter="@ViewData["CurrentFilter"]">Next</a>
+            </li>
+        </ul>
+    </nav>
+</div>

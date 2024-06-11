@@ -7,7 +7,7 @@
 <div class="justify-content-between d-flex">
     <a asp-action="Create">Create New</a>
     <div class="search-container mb-4">
-        <form id="searchForm" asp-action="Index" method="get">
+        <form id="questionSearchForm" asp-action="Index" method="get">
             <div class="input-group">
                 <input id="searchInput" type="text" class="form-control" name="searchString" value="@ViewData["CurrentFilter"]" placeholder="Search...">
                 <div class="input-group-append">
@@ -29,25 +29,3 @@
 <div id="tableContainer" class="table-container">
     @Html.Partial("_QuestionTable", Model)
 </div>
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $(document).ready(function () {
-        $('.alert-success').delay(5000).fadeOut('fast');
-
-    $('#searchInput').on('input', function () {
-        var formData = $('#searchForm').serialize();
-        $.ajax({
-            type: 'GET',
-            url: $('#searchForm').attr('action'),
-            data: formData,
-            success: function (result) {
-                $('#tableContainer').html(result);
-            },
-            error: function (xhr, status, error) {
-                console.error(xhr.responseText);
-            }
-        });
-    });
-});
-</script>

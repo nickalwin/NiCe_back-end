@@ -29,18 +29,17 @@ namespace NiCeScanner.Controllers
 
 		// GET: Scans
 		public async Task<IActionResult> Index(
-	string sortOrder,
-	string sortOrderContactName,
-	string sortOrderContactEmail,
-	string sortOrderSector,
-	string sortOrderCreatedAt,
-	string sortOrderUpdatedAt,
-	string currentFilter,
-	string searchString,
-	int? pageNumber
-)
+			string sortOrder,
+			string sortOrderContactName,
+			string sortOrderContactEmail,
+			string sortOrderSector,
+			string sortOrderCreatedAt,
+			string currentFilter,
+			string searchString,
+			int? pageNumber
+		)
 		{
-			ViewData["Title"] = "scans";
+			ViewData["Title"] = "Scans";
 			ViewData["CurrentSort"] = sortOrder;
 
 			ViewData["SearchString"] = searchString;
@@ -76,14 +75,6 @@ namespace NiCeScanner.Controllers
 				_ => "CreatedAt_desc"
 			};
 			ViewData["SortOrderCreatedAt"] = sortOrderCreatedAt;
-
-			ViewData["UpdatedAtSortParm"] = sortOrderUpdatedAt switch
-			{
-				"UpdatedAt_desc" => "UpdatedAt",
-				"UpdatedAt" => "",
-				_ => "UpdatedAt_desc"
-			};
-			ViewData["SortOrderUpdatedAt"] = sortOrderUpdatedAt;
 
 			if (searchString != null)
 			{
@@ -134,20 +125,8 @@ namespace NiCeScanner.Controllers
 				_ => scans
 			};
 
-			scans = sortOrderUpdatedAt switch
-			{
-				"UpdatedAt_desc" => scans.OrderByDescending(s => s.UpdatedAt),
-				"UpdatedAt" => scans.OrderBy(s => s.UpdatedAt),
-				_ => scans
-			};
-
 			int pageSize = 10;
 			var model = await PaginatedList<Scan>.CreateAsync(scans.AsNoTracking(), pageNumber ?? 1, pageSize);
-
-			if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
-			{
-				return PartialView("_ScanTable", model);
-			}
 
 			return View(model);
 		}
@@ -176,31 +155,6 @@ namespace NiCeScanner.Controllers
 			return View(scan);
 		}
 
-
-		// GET: Scans/Create
-		public IActionResult Create()
-		{
-			ViewData["SectorId"] = new SelectList(_context.Sectors, "Id", "Id");
-			return View();
-		}
-
-		// POST: Scans/Create
-		// To protect from overposting attacks, enable the specific properties you want to bind to.
-		// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-		[HttpPost]
-		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Create([Bind("Id,Uuid,ContactName,ContactEmail,SectorId,Results,CreatedAt,UpdatedAt")] Scan scan)
-		{
-			if (ModelState.IsValid)
-			{
-				_context.Add(scan);
-				await _context.SaveChangesAsync();
-				return RedirectToAction(nameof(Index));
-			}
-			ViewData["SectorId"] = new SelectList(_context.Sectors, "Id", "Id", scan.SectorId);
-			return View(scan);
-		}
-
 		// GET: Scans/Edit/5
 		public async Task<IActionResult> Edit(long? id)
 		{
@@ -214,8 +168,15 @@ namespace NiCeScanner.Controllers
 			{
 				return NotFound();
 			}
-			ViewData["SectorId"] = new SelectList(_context.Sectors, "Id", "Id", scan.SectorId);
-			return View(scan);
+
+			var form = new ScanForm
+			{
+				Id = scan.Id,
+				ContactName = scan.ContactName,
+				ContactEmail = scan.ContactEmail
+			};
+
+			return View(form);
 		}
 
 		// POST: Scans/Edit/5
@@ -223,35 +184,30 @@ namespace NiCeScanner.Controllers
 		// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Edit(long id, [Bind("Id,Uuid,ContactName,ContactEmail,SectorId,Results,CreatedAt,UpdatedAt")] Scan scan)
+		public async Task<IActionResult> Edit(long id, [Bind("ContactName,ContactEmail")] ScanForm form)
 		{
-			if (id != scan.Id)
+			if (id != form.Id)
+			{
+				return NotFound();
+			}
+			
+			var scan = await _context.Scans.FindAsync(id);
+			if (scan == null)
 			{
 				return NotFound();
 			}
 
 			if (ModelState.IsValid)
 			{
-				try
-				{
-					_context.Update(scan);
-					await _context.SaveChangesAsync();
-				}
-				catch (DbUpdateConcurrencyException)
-				{
-					if (!ScanExists(scan.Id))
-					{
-						return NotFound();
-					}
-					else
-					{
-						throw;
-					}
-				}
-				return RedirectToAction(nameof(Index));
+				scan.ContactName = form.ContactName;
+				scan.ContactEmail = form.ContactEmail;
+				_context.Update(scan);
+				await _context.SaveChangesAsync();
+
+				return RedirectToAction(nameof(Details), new { id });
 			}
-			ViewData["SectorId"] = new SelectList(_context.Sectors, "Id", "Id", scan.SectorId);
-			return View(scan);
+
+			return View(form);
 		}
 
 		// GET: Scans/Delete/5
@@ -298,10 +254,11 @@ namespace NiCeScanner.Controllers
 		public IActionResult DownloadExcel()
 		{
 			var scans = _context.Scans
-			   .Include(s => s.Sector)
 			   .Include(s => s.Answers)
 				   .ThenInclude(a => a.Question)
 			   .ToList();
+
+			scans.ForEach(s => s.Sector = _context.Sectors.Find(s.SectorId));
 
 			var questions = scans
 				   .SelectMany(s => s.Answers.Select(a => a.Question))

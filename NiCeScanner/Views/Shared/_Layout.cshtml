@@ -20,11 +20,11 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <div class="avatar">
+                @* <div class="avatar">
                     <a asp-area="" asp-controller="Home" asp-action="Index">
                     <img src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
                     </a>
-                </div>
+                </div> *@
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">NiCE Scanner</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
@@ -41,7 +41,13 @@
                             @if (isAuthorized.Succeeded)
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Category" asp-action="Index">Category</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Category" asp-action="Index">Categories</a>
+                                </li>
+                            }
+                            @if (isAuthorized.Succeeded)
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Sectors" asp-action="Index">Sectors</a>
                                 </li>
                             }
                             isAuthorized = await AuthorizationService.AuthorizeAsync(User, "RequireStudentRole");
@@ -68,6 +74,12 @@
                             {
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Advices" asp-action="Index">Advices</a>
+                                </li>
+                            }
+                            @if (isAuthorized.Succeeded)
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="PdfTemplate" asp-action="Index">PDF Template</a>
                                 </li>
                             }
                             isAuthorized = await AuthorizationService.AuthorizeAsync(User, "RequireStudentRole");
@@ -97,6 +109,7 @@
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Index">Users</a>
                                 </li>
                             }
+                            
                         }
                     </ul>
                     <partial name="_LoginPartial" />

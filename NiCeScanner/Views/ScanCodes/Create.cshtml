@@ -1,4 +1,4 @@
-﻿@model NiCeScanner.Models.ScanCode
+﻿@model NiCeScanner.Models.ScanCodeForm
 
 @{
     ViewData["Title"] = "Create";
@@ -9,12 +9,17 @@
 <h4>ScanCode</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-6">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Code" class="control-label"></label>
-                <input asp-for="Code" class="form-control" />
+                <div class="input-group">
+                    <input asp-for="Code" class="form-control" />
+                    <div class="input-group-append">
+                        <button type="button" class="btn btn-secondary" id="generateGuid">Generate</button>
+                    </div>
+                </div>
                 <span asp-validation-for="Code" class="text-danger"></span>
             </div>
             <div class="form-group form-check">
@@ -39,4 +44,12 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        document.getElementById('generateGuid').addEventListener('click', function () {
+            document.getElementById('Code').value = ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+                (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+            );
+        });
+    </script>
 }

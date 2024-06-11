@@ -30,12 +30,22 @@
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.ContactEmail)
         </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Results)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Results)
-        </dd>
+        @{
+            var results = JsonConvert.DeserializeObject<JArray>(Model.Results);
+            if (results == null) return;
+            foreach (var result in results)
+            {
+                var categoryData = JsonConvert.DeserializeObject<JObject>(result["category_data"].ToString());
+                var categoryText = categoryData?["nl"]?.Value<string>("name") ?? "N/A";
+                var mean = result["mean"]?.Value<double>() ?? 0.0;
+                <dt class="col-sm-2">
+                    @categoryText (mean)
+                </dt>
+                <dd class="col-sm-10">
+                    @mean
+                </dd>
+            }
+        }
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.CreatedAt)
         </dt>
@@ -51,8 +61,12 @@
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Sector)
         </dt>
+        @{
+            var sectorData = JsonConvert.DeserializeObject<JObject>(Model.Sector.Data);
+            var sectorText = sectorData?["nl"]?.Value<string>("name") ?? "N/A";
+        }
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Sector.Data)
+            @sectorText
         </dd>
     </dl>
 </div>
@@ -60,6 +74,14 @@
     <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
+
+<br />
+<h3>Score Information</h3>
+<h4>Rating 1-5 (1 = lowest, 5 = highest)</h4>
+<h4>Rating 0 (Not Applicable)</h4>
+<h4>Rating -1 (I Don't Know)</h4>
+<h4>Rating -2 (No answer)</h4>
+<br />
 
 <div>
     @foreach(var category in Model.Answers.Select(a => a.Question.Category).Distinct())
@@ -90,7 +112,23 @@
                         <tr>
                             <td>@answer.Id</td>
                         <td>@questionText</td>
-                        <td>@answer.Score</td>
+                        <td>
+                            @if (answer.Score == 0)
+                            {
+                                <span>Not Applicable</span>
+                            }
+                            else if (answer.Score == -1)
+                            {
+                                <span>I Don't Know</span>
+                            }
+                            else if (answer.Score == -2)
+                            {
+                                <span>No answer</span>
+                            }
+                            else
+                            {
+                                <span>@answer.Score</span>
+                            }
                         <td>@answer.Comment</td>
                     </tr>
                     }

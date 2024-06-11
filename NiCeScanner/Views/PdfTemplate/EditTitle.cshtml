@@ -1,0 +1,88 @@
+@model NiCeScanner.Models.PdfTemplate
+
+@{
+    var languages = (List<Language>)ViewBag.Languages;
+}
+
+<h1>Edit title</h1>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="EditTitle" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            @foreach (var title in ViewBag.Titles)
+            {
+                <div class="form-group" id="@title.Key" style="display: flex; align-items: center;">
+                    <label style="flex: 1;">Category name (@title.Key)</label>
+                    <textarea class="form-control" name="Languages[@title.Key]" style="flex: 2;">@title.Value</textarea>
+                    @if (title.Key != "en" && title.Key != "nl")
+                    {
+                    <button type="button" onclick="removeLanguage('@title.Key')" style="flex: 1; margin-left: 10px; background-color: #e01e1e; color: white; padding: 10px 24px; border: none; border-radius: 4px; cursor: pointer;">Remove</button>
+                    }
+                </div>
+            }
+
+            <div id="additionalLanguages"></div>
+
+            <div>
+                <select id="LanguageSelect" class="form-control">
+                    <option value="">Select Language</option>
+                    @foreach (var language in languages)
+                    {
+                    <option value="@language.LangCode">@language.LangEnglishName</option>
+                    }
+                </select>
+                <button type="button" id="addLanguage" class="btn btn-primary">Add Language</button>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back</a>
+</div>
+
+@section Scripts {
+    <script>
+        document.getElementById('addLanguage').addEventListener('click', function() {
+            var select = document.getElementById('LanguageSelect');
+            var langCode = select.value;
+            var langName = select.options[select.selectedIndex].text;
+            if (langCode) {
+                var input = document.createElement('input');
+                input.name = 'Languages[' + langCode + ']';
+                input.className = 'form-control';
+                var label = document.createElement('label');
+                label.textContent = 'Category name (' + langName + ')';
+                var div = document.createElement('div');
+                div.className = 'form-group';
+                div.appendChild(label);
+                div.appendChild(input);
+                document.getElementById('additionalLanguages').appendChild(div);
+                select.options[select.selectedIndex].disabled = true;
+                select.value = '';
+            }
+        });
+
+        function removeLanguage(key) {
+            var element = document.getElementById(key);
+            element.parentNode.removeChild(element);
+            element = document.getElementById(key);
+            element.parentNode.removeChild(element);
+            element = document.getElementById(key);
+            element.parentNode.removeChild(element);
+
+            var index = Languages.indexOf(key);
+            if (index > -1) {
+                Languages.splice(index, 1);
+            }
+        }
+    </script>
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

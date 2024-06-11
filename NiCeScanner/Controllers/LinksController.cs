@@ -22,10 +22,101 @@ namespace NiCeScanner.Controllers
 		}
 
 		// GET: Links
-		public async Task<IActionResult> Index()
-		{
-			var applicationDbContext = _context.Links.Include(l => l.Category);
-			return View(await applicationDbContext.ToListAsync());
+		public async Task<IActionResult> Index(
+			string sortOrder,
+			string sortOrderName,
+			string sortOrderHref,
+			string sortOrderCategory,
+			string currentFilter,
+			string searchString,
+			int pageNumber = 1
+		) {
+			ViewData["Title"] = "Links";
+			ViewData["CurrentSort"] = sortOrder;
+			ViewData["CurrentFilter"] = searchString;
+			
+			ViewData["NameSortParam"] = sortOrderName switch
+			{
+				"Name" => "Name_desc",
+				"Name_desc" => "",
+				_ => "Name"
+			};
+			ViewData["SortOrderName"] = sortOrderName;
+			
+			ViewData["HrefSortParam"] = sortOrderHref switch
+			{
+				"Href" => "Href_desc",
+				"Href_desc" => "",
+				_ => "Href"
+			};
+			ViewData["SortOrderHref"] = sortOrderHref;
+			
+			ViewData["CategorySortParam"] = sortOrderCategory switch
+			{
+				"Category" => "Category_desc",
+				"Category_desc" => "",
+				_ => "Category"
+			};
+			ViewData["SortOrderCategory"] = sortOrderCategory;
+			
+			if (!string.IsNullOrWhiteSpace(searchString))
+			{
+				pageNumber = 1;
+			}
+			else
+			{
+				searchString = currentFilter;
+			}
+
+			ViewData["SearchString"] = searchString;
+			
+			var links = from s in _context.Links
+				select s;
+			
+			if (!string.IsNullOrEmpty(searchString))
+			{
+				links = links.Where(s => s.Name.Contains(searchString));
+			}
+			
+			switch (sortOrderName)
+			{
+				case "Name_desc":
+					links = links.OrderByDescending(s => s.Name);
+					break;
+				case "Name":
+					links = links.OrderBy(s => s.Name);
+					break;
+				default:
+					links = links.OrderBy(s => s.Id);
+					break;
+			}
+			
+			switch (sortOrderHref)
+			{
+				case "Href_desc":
+					links = links.OrderByDescending(s => s.Href);
+					break;
+				case "Href":
+					links = links.OrderBy(s => s.Href);
+					break;
+			}
+			
+			switch (sortOrderCategory)
+			{
+				case "Category_desc":
+					links = links.OrderByDescending(s => s.Category.Data);
+					break;
+				case "Category":
+					links = links.OrderBy(s => s.Category.Data);
+					break;
+			}
+			
+			links = links.Include(l => l.Category);
+			
+			int pageSize = 10;
+			var paginatedList = await PaginatedList<Link>.CreateAsync(links.AsNoTracking(), pageNumber, pageSize);
+
+			return View(paginatedList);
 		}
 
 		// GET: Links/Details/5
@@ -98,6 +189,7 @@ namespace NiCeScanner.Controllers
 			ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Id", link.CategoryId);
 			var form = new LinkForm
 			{
+				Id = link.Id,
 				Name = link.Name,
 				Href = link.Href,
 			};
@@ -112,21 +204,25 @@ namespace NiCeScanner.Controllers
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Edit(long id, [Bind("Name,Href,CategoryId")] LinkForm form)
 		{
-			var link = new Link
-			{
-				Id = id,
-				Name = form.Name,
-				Href = form.Href,
-				CategoryId = form.CategoryId,
-				UpdatedAt = DateTime.Now
-			};
+			if (id != form.Id)
+				return NotFound();
+			
+			var link = await _context.Links.FindAsync(id);
+			
+			if (link == null)
+				return NotFound();
 
 			if (ModelState.IsValid)
 			{
+				link.Name = form.Name;
+				link.Href = form.Href;
+				link.CategoryId = form.CategoryId;
+				link.UpdatedAt = DateTime.Now;
+				
 				_context.Update(link);
 				await _context.SaveChangesAsync();
 
-				return RedirectToAction(nameof(Index));
+				return RedirectToAction(nameof(Details), new { id });
 			}
 
 			ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Id", link.CategoryId);
