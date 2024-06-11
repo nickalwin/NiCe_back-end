@@ -14,10 +14,37 @@ namespace NiCeScanner.Controllers
 		}
 
 		// GET: Image
-		public IActionResult Index()
-		{
-			var images = _context.Images.ToList();
-			return View(images);
+		public async Task<IActionResult> Index(
+			string currentFilter,
+			string searchString,
+			int? pageNumber	
+		) {
+			ViewData["Title"] = "Scans";
+			ViewData["SearchString"] = searchString;
+			
+			if (searchString != null)
+			{
+				pageNumber = 1;
+			}
+			else
+			{
+				searchString = currentFilter;
+			}
+
+			ViewData["CurrentFilter"] = searchString;
+
+			var images = from i in _context.Images
+						 select i;
+			
+			if (!string.IsNullOrEmpty(searchString))
+			{
+				images = images.Where(i => i.FileName.Contains(searchString));
+			}
+
+			int pageSize = 15;
+			var paginatedList = await PaginatedList<ImageModel>.CreateAsync(images, pageNumber ?? 1, pageSize);
+			
+			return View(paginatedList);
 		}
 
 		// GET: Image/Upload
@@ -68,20 +95,27 @@ namespace NiCeScanner.Controllers
 			return View(image);
 		}
 
-		[HttpPost]
-		public async Task<IActionResult> EditName(int id, string newName)
+		[HttpPost, ActionName("Delete")]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> Delete(long id)
 		{
 			var image = await _context.Images.FindAsync(id);
 			if (image == null)
-			{
 				return NotFound();
+			
+			var questions = from q in _context.Questions
+							where q.ImageId == id
+							select q;
+			foreach (var question in questions)
+			{
+				question.ImageId = null;
 			}
-
-			image.FileName = newName;
-			_context.Images.Update(image);
 			await _context.SaveChangesAsync();
 
-			return RedirectToAction("Details", new { id = image.Id }); // Redirect to image details page or any other appropriate action
+			_context.Images.Remove(image);
+			await _context.SaveChangesAsync();
+
+			return RedirectToAction(nameof(Index));
 		}
 
 	}

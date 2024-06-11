@@ -1,10 +1,9 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using NiCeScanner.Data;
-using NiCeScanner.Controllers;
 using Microsoft.AspNetCore.Identity.UI.Services;
-using NiCeScanner.Models;
-using Microsoft.Extensions.Options;
+using NiCeScanner;
+using System.Net.Http.Headers;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -37,6 +36,9 @@ builder.Services.AddAuthorization(options =>
 
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddHttpClient();
+builder.Services.AddSingleton<LanguagesService>();
+
 builder.Services.AddSwaggerGen(c =>
 {
 	c.SwaggerDoc("v1", new() { Title = "NiCeScanner", Version = "v1" });
@@ -59,11 +61,14 @@ var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
 {
-	var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+	ApplicationDbContext dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 	dbContext.Database.Migrate();
+	
+	UserSeeder.SeedUsers(dbContext, app);
+	DatabaseSeeder.Seed(dbContext, "wwwroot/images/", app.Environment.IsDevelopment());
 }
 
-ApplicationDbInitializer.Seed(app);
+ServiceLocator.ServiceProvider = app.Services;
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -98,87 +103,5 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
-
-using (var scope = app.Services.CreateScope())
-{
-	var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-	var roles = new List<string> { "Admin", "Manager", "Researcher", "Student", "Member" };
-
-	foreach (var role in roles)
-	{
-		if (!await roleManager.RoleExistsAsync(role))
-		{
-			roleManager.CreateAsync(new IdentityRole(role)).Wait();
-		}
-	}
-}
-using (var scope = app.Services.CreateScope())
-{
-	var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
-	string name = "Admin";
-	string email = "admin@admin.com";
-	string password = "Admin@123";
-	if (await userManager.FindByEmailAsync(email) == null)
-	{
-		var user = new IdentityUser { UserName = email, Email = email };
-		await userManager.CreateAsync(user, password);
-		userManager.AddToRoleAsync(user, "Admin");
-	}
-
-	userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
-	name = "Nick Oost";
-	email = "nick.alwin.oost@gmail.com";
-	password = "Test@123";
-	if (await userManager.FindByEmailAsync(email) == null)
-	{
-		var user = new IdentityUser { UserName = email, Email = email };
-		await userManager.CreateAsync(user, password);
-		userManager.AddToRoleAsync(user, "Admin");
-	}
-
-	userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
-	name = "Manager";
-	email = "manager@manager.com";
-	password = "Manager@123";
-	if (await userManager.FindByEmailAsync(email) == null)
-	{
-		var user = new IdentityUser { UserName = email, Email = email };
-		await userManager.CreateAsync(user, password);
-		userManager.AddToRoleAsync(user, "Manager");
-	}
-
-	userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
-	name = "Researcher";
-	email = "researcher@researcher.com";
-	password = "Researcher@123";
-	if (await userManager.FindByEmailAsync(email) == null)
-	{
-		var user = new IdentityUser { UserName = email, Email = email };
-		await userManager.CreateAsync(user, password);
-		userManager.AddToRoleAsync(user, "Researcher");
-	}
-
-	userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
-	name = "Student";
-	email = "student@student.com";
-	password = "Student@123";
-	if (await userManager.FindByEmailAsync(email) == null)
-	{
-		var user = new IdentityUser { UserName = email, Email = email };
-		await userManager.CreateAsync(user, password);
-		userManager.AddToRoleAsync(user, "Student");
-	}
-
-	userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
-	name = "Member";
-	email = "member@member.com";
-	password = "Member@123";
-	if (await userManager.FindByEmailAsync(email) == null)
-	{
-		var user = new IdentityUser { UserName = email, Email = email };
-		await userManager.CreateAsync(user, password);
-		userManager.AddToRoleAsync(user, "Member");
-	}
-}
 
 app.Run();

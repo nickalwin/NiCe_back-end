@@ -1,15 +1,8 @@
-﻿@using Newtonsoft.Json
-@using Newtonsoft.Json.Linq
-@model PaginatedList<NiCeScanner.Models.Scan>
-
-@{
-    ViewData["Title"] = "Index";
-}
+﻿@model PaginatedList<NiCeScanner.Models.Scan>
 
 <h1>@ViewData["Title"]</h1>
 
 <div class="justify-content-between d-flex">
-    <a asp-action="Create">Create New</a>
     <div class="search-container mb-4">
         <form id="searchForm" asp-action="Index" method="get">
             <div class="input-group">
@@ -26,23 +19,3 @@
 <div id="tableContainer" class="table-container">
     @Html.Partial("_ScanTable", Model)
 </div>
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $(document).ready(function () {
-        $('#searchInput').on('input', function () {
-            var formData = $('#searchForm').serialize();
-            $.ajax({
-                type: 'GET',
-                url: $('#searchForm').attr('action'),
-                data: formData,
-                success: function (result) {
-                    $('#tableContainer').html(result);
-                },
-                error: function (xhr, status, error) {
-                    console.error(xhr.responseText);
-                }
-            });
-        });
-    });
-</script>

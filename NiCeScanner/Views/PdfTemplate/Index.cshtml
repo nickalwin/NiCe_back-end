@@ -1,0 +1,57 @@
+@using Newtonsoft.Json
+@using Newtonsoft.Json.Linq
+@model NiCeScanner.Models.PdfTemplate
+
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header">
+            <h2 class="text-center">
+                @{
+                    var titleData = JsonConvert.DeserializeObject<JObject>(Model.Title);
+                    var titleText = titleData?["nl"]?.Value<string>("data") ?? "N/A";
+                }
+                @titleText
+                <small>
+                    <a asp-action="EditTitle">Edit</a>
+                </small>
+            </h2>
+        </div>
+        <div class="card-body">
+            <p class="card-text">
+                @{
+                    var introductionData = JsonConvert.DeserializeObject<JObject>(Model.Introduction);
+                    var introductionText = introductionData?["nl"]?.Value<string>("data") ?? "N/A";
+                }
+                @introductionText
+                <small>
+                    <a asp-action="EditIntroduction">Edit</a>
+                </small>
+            </p>
+            <img class="card-img-top mb-3" src="@ViewBag.ImageDataUrl" />
+            <small>
+                <a asp-action="EditImage">Edit</a>
+            </small>
+            <p class="card-text">
+                @{
+                    var beforePlotData = JsonConvert.DeserializeObject<JObject>(Model.BeforePlotText);
+                    var beforePlotText = beforePlotData?["nl"]?.Value<string>("data") ?? "N/A";
+                }
+                @beforePlotText
+                <small>
+                    <a asp-action="EditBeforePlotText">Edit</a>
+                </small>
+            </p>
+            <img class="card-img-top mb-3" src="@ViewBag.ExamplePlot" />
+            <p class="card-text">
+                @{
+                    var afterPlotData = JsonConvert.DeserializeObject<JObject>(Model.AfterPlotText);
+                    var afterPlotText = afterPlotData?["nl"]?.Value<string>("data") ?? "N/A";
+                }
+                @afterPlotText
+                <small>
+                    <a asp-action="EditAfterPlotText">Edit</a>
+                </small>
+            </p>
+        </div>
+    </div>
+</div>

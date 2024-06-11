@@ -213,6 +213,42 @@ namespace NiCeScanner.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("NiCeScanner.Models.Advice", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("AdditionalLink")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("AdditionalLinkName")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Condition")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Data")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<long>("QuestionId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("QuestionId")
+                        .IsUnique();
+
+                    b.ToTable("Advices");
+                });
+
             modelBuilder.Entity("NiCeScanner.Models.Answer", b =>
                 {
                     b.Property<long>("Id")
@@ -580,6 +616,17 @@ namespace NiCeScanner.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("NiCeScanner.Models.Advice", b =>
+                {
+                    b.HasOne("NiCeScanner.Models.Question", "Question")
+                        .WithOne("Advice")
+                        .HasForeignKey("NiCeScanner.Models.Advice", "QuestionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Question");
+                });
+
             modelBuilder.Entity("NiCeScanner.Models.Answer", b =>
                 {
                     b.HasOne("NiCeScanner.Models.Question", "Question")
@@ -659,6 +706,12 @@ namespace NiCeScanner.Migrations
             modelBuilder.Entity("NiCeScanner.Models.ImageModel", b =>
                 {
                     b.Navigation("Questions");
+                });
+
+            modelBuilder.Entity("NiCeScanner.Models.Question", b =>
+                {
+                    b.Navigation("Advice")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("NiCeScanner.Models.Scan", b =>

@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Drawing.Printing;
-using System.Linq;
-using System.Threading.Tasks;
-using ClosedXML.Excel;
-using DocumentFormat.OpenXml.Office2010.Excel;
-using DocumentFormat.OpenXml.Spreadsheet;
+﻿using ClosedXML.Excel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -14,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NiCeScanner.Data;
-using NiCeScanner.Migrations;
 using NiCeScanner.Models;
 
 namespace NiCeScanner.Controllers
@@ -103,6 +94,7 @@ namespace NiCeScanner.Controllers
 			{
 				questions = questions.Where(s => s.Data.Contains(searchString) || s.Category.Data.Contains(searchString));
 			}
+			
 			switch (sortOrderCategory)
 			{
 				case "category_desc":
@@ -112,6 +104,7 @@ namespace NiCeScanner.Controllers
 					questions = questions.OrderBy(s => s.Category.Data);
 					break;
 			}
+			
 			switch (sortOrderQuestion)
 			{
 				case "QuestionID_desc":
@@ -124,6 +117,7 @@ namespace NiCeScanner.Controllers
 					questions = questions.OrderBy(s => s.Data);
 					break;
 			}
+			
 			switch (sortOrderWeight)
 			{
 				case "Weight_desc":
@@ -133,6 +127,7 @@ namespace NiCeScanner.Controllers
 					questions = questions.OrderBy(s => s.Weight);
 					break;
 			}
+			
 			switch (sortOrderShow)
 			{
 				case "Show_desc":
@@ -142,6 +137,7 @@ namespace NiCeScanner.Controllers
 					questions = questions.OrderBy(s => s.Show);
 					break;
 			}
+			
 			switch (sortOrderStatement)
 			{
 				case "Statement_desc":
@@ -151,14 +147,19 @@ namespace NiCeScanner.Controllers
 					questions = questions.OrderBy(s => s.Statement);
 					break;
 			}
+			
+			switch (sortOrderCategory)
+			{
+				case "category_desc":
+					questions = questions.OrderByDescending(s => s.Category.Data);
+					break;
+				case "category":
+					questions = questions.OrderBy(s => s.Category.Data);
+					break;
+			}
 
 			int pageSize = 10;
 			var model = await PaginatedList<Question>.CreateAsync(questions.AsNoTracking(), pageNumber ?? 1, pageSize);
-
-			if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
-			{
-				return PartialView("_QuestionTable", model);
-			}
 
 			return View(model);
 		}
@@ -175,19 +176,55 @@ namespace NiCeScanner.Controllers
                 .Include(q => q.Category)
 				.Include(q => q.Image)
                 .FirstOrDefaultAsync(m => m.Id == id);
+            
             if (question == null)
             {
                 return NotFound();
             }
+            
+            var languagesWithName = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, string>>>(question.Data);
+
+            var headers = languagesWithName.ToDictionary(
+	            language => language.Key,
+	            language => language.Value["header"]
+            );        
+            
+            var questions = languagesWithName.ToDictionary(
+	            language => language.Key,
+	            language => language.Value["question"]
+            );    
+            
+            var tooltips = languagesWithName.ToDictionary(
+	            language => language.Key,
+	            language => language.Value["tooltip"]
+			);
+			
+            ViewBag.Headers = headers;
+            ViewBag.Questions = questions;
+            ViewBag.Tooltips = tooltips;
 
 			return View(question);
         }
 
 		// GET: Questions/Create
 		[Authorize(Policy = "RequireResearcherRole")]
-		public IActionResult Create()
+		public async Task<IActionResult> Create()
 		{
 			ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Id");
+			ViewData["ImageId"] = new SelectList(_context.Images, "Id", "FileName");
+			
+			if (ServiceLocator.ServiceProvider is not null)
+			{
+				var languages = await ServiceLocator.ServiceProvider.GetService<LanguagesService>()!.FetchLanguagesAsync();
+				languages = languages.Where(l => l.LangCode != "en" && l.LangCode != "nl").ToList();
+				ViewBag.Languages = languages;
+				
+			}
+			else
+			{
+				ViewBag.Languages = new List<Language>();
+			}
+			
 			return View();
 		}
 
@@ -196,20 +233,45 @@ namespace NiCeScanner.Controllers
 		// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
 		[HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Uuid,Data,CategoryId,Weight,Statement,Show,Image,CreatedAt,UpdatedAt")] Question question)
+        public async Task<IActionResult> Create([Bind("Id,Data,CategoryId,Weight,Statement,Show,ImageId,Headers,Questions,Tooltips")] QuestionForm form)
         {
             if (ModelState.IsValid)
             {
+	            var headers = form.Headers;
+	            var questions = form.Questions;
+	            var tooltips = form.Tooltips;
+	            
+	            var languages = headers.Keys
+		            .Select(key => new
+		            {
+			            key,
+			            value = new
+			            {
+				            header = headers[key],
+				            question = questions[key],
+				            tooltip = tooltips[key]
+			            }
+		            })
+		            .ToDictionary(x => x.key, x => x.value);
+
+	            string jsonString = JsonConvert.SerializeObject(languages);
+	            
+		        var question = new Question()
+		        {
+			        Data = jsonString,
+			        CategoryId = form.CategoryId,
+			        Weight = form.Weight,
+			        Statement = form.Statement,
+			        Show = form.Show,
+			        ImageId = form.ImageId,
+			        CreatedAt = DateTime.Now
+		        };
                 _context.Add(question);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-			var categories = _context.Categories
-				.Select(c => new { c.Id, CategoryName = JObject.Parse(c.Data)["nl"]["name"].ToString() })
-				.ToList();
-
-			ViewBag.Category = new SelectList(categories, "Id", "CategoryName", question.CategoryId);
-			return View(question);
+            
+			return View(form);
         }
 
 		// GET: Question/Edit/5
@@ -232,104 +294,100 @@ namespace NiCeScanner.Controllers
 
 			ViewBag.Category = new SelectList(categories, "Id", "CategoryName", question.CategoryId);
 			ViewBag.Images = new SelectList(await _context.Images.ToListAsync(), "Id", "FileName", question.ImageId);
-			return View(question);
+			
+			if (ServiceLocator.ServiceProvider is not null)
+			{
+				var languages = await ServiceLocator.ServiceProvider.GetService<LanguagesService>()!.FetchLanguagesAsync();
+				languages = languages.Where(l => l.LangCode != "en" && l.LangCode != "nl").ToList();
+				ViewBag.Languages = languages;
+			}
+			else
+			{
+				ViewBag.Languages = new List<Language>();
+			}
+			
+			var languagesWithName = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, string>>>(question.Data);
+
+			var headers = languagesWithName.ToDictionary(
+				language => language.Key,
+				language => language.Value["header"]
+			);        
+            
+			var questions = languagesWithName.ToDictionary(
+				language => language.Key,
+				language => language.Value["question"]
+			);    
+            
+			var tooltips = languagesWithName.ToDictionary(
+				language => language.Key,
+				language => language.Value["tooltip"]
+			);
+
+			return View(new QuestionForm()
+			{
+				Id = question.Id,
+				Headers = headers,
+				Questions = questions,
+				Tooltips = tooltips,
+				CategoryId = question.CategoryId,
+				Weight = question.Weight,
+				Statement = question.Statement,
+				Show = question.Show,
+				ImageId = question.ImageId
+			});
 		}
 
 		//POST: Question/Edit/5
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Edit(long id, [Bind("Data,CategoryId,Weight,Statement,Show,ImageId")] Question question)
+		public async Task<IActionResult> Edit(long id, [Bind("Id,Data,CategoryId,Weight,Statement,Show,ImageId,Headers,Questions,Tooltips")] QuestionForm form)
 		{
-			question.Id = id;
-			question.UpdatedAt = DateTime.UtcNow;
+			if (id != form.Id)
+				return NotFound();
 
-			ModelState["Category"].ValidationState = Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Valid;
-			ModelState["Image"].ValidationState = Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Valid;
-
-			var categoryIsValid = await _context.Categories.AnyAsync(c => c.Id == question.CategoryId);
-			var imageIsValid = await _context.Images.AnyAsync(i => i.Id == question.ImageId);
-
-			if (ModelState.IsValid && categoryIsValid && (imageIsValid || question.ImageId == null))
+			if (ModelState.IsValid)
 			{
-				try
-				{
-					_context.Attach(question).State = EntityState.Modified;
-
-					await _context.SaveChangesAsync();
-
-					TempData["SuccessMessage"] = "Question updated successfully.";
-					return RedirectToAction("Index");
-				}
-				catch (DbUpdateConcurrencyException)
-				{
-					if (!QuestionExists(id))
+				var headers = form.Headers;
+				var questions = form.Questions;
+				var tooltips = form.Tooltips;
+	            
+				var languages = headers.Keys
+					.Select(key => new
 					{
-						return NotFound();
-					}
-					else
-					{
-						var categories = _context.Categories
-							.Select(c => new { c.Id, CategoryName = JObject.Parse(c.Data)["nl"]["name"].ToString() })
-							.ToList();
+						key,
+						value = new
+						{
+							header = headers[key],
+							question = questions[key],
+							tooltip = tooltips[key]
+						}
+					})
+					.ToDictionary(x => x.key, x => x.value);
 
-						ViewBag.Category = new SelectList(categories, "Id", "CategoryName", question.CategoryId);
-						ViewBag.Images = new SelectList(await _context.Images.ToListAsync(), "Id", "FileName", question.ImageId);
-						TempData["ErrorMessage"] = "Failed to update question. Please check the input.";
-						return View(question);
-						//return BadRequest(new { error = "Failed to update question. Please check the input." });
-					}
+				string jsonString = JsonConvert.SerializeObject(languages);
+				
+				var question = await _context.Questions.FindAsync(id);
+				if (question == null)
+				{
+					return NotFound();
 				}
-			}
-			else
-			{
-				var categories = _context.Categories
-					.Select(c => new { c.Id, CategoryName = JObject.Parse(c.Data)["nl"]["name"].ToString() })
-					.ToList();
+				
+				question.Data = jsonString;
+				question.CategoryId = form.CategoryId;
+				question.Weight = form.Weight;
+				question.Show = form.Show;
+				question.Statement = form.Statement;
+				question.ImageId = form.ImageId;
+				question.UpdatedAt = DateTime.Now;
+				
+				_context.Update(question);
+				await _context.SaveChangesAsync();
 
-				ViewBag.Category = new SelectList(categories, "Id", "CategoryName", question.CategoryId);
-				ViewBag.Images = new SelectList(await _context.Images.ToListAsync(), "Id", "FileName", question.ImageId);
-				TempData["ErrorMessage"] = "Technical issue, Model not valid.";
-				return View(question);
-				//var errors = ModelState.Values.SelectMany(v => v.Errors);
-				//return BadRequest(new { error = "Technical issue, Model not valid.", model = question, errors = errors });
+				return RedirectToAction(nameof(Details), new { id });
 			}
+
+			return View(form);
 		}
-
-		// GET: Questions/Delete/5
-		[Authorize(Policy = "RequireResearcherRole")]
-		public async Task<IActionResult> Delete(long? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var question = await _context.Questions
-                .Include(q => q.Category)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (question == null)
-            {
-                return NotFound();
-            }
-
-            return View(question);
-        }
-
-        // POST: Questions/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-		[Authorize(Policy = "RequireResearcherRole")]
-		public async Task<IActionResult> DeleteConfirmed(long id)
-        {
-            var question = await _context.Questions.FindAsync(id);
-            if (question != null)
-            {
-                _context.Questions.Remove(question);
-            }
-
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
 
         private bool QuestionExists(long id)
         {

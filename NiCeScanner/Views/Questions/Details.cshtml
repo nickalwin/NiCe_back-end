@@ -2,6 +2,9 @@
 
 @{
     ViewData["Title"] = "Details";
+    var headers = (Dictionary<string, string>)ViewBag.Headers;
+    var questions = (Dictionary<string, string>)ViewBag.Questions;
+    var tooltips = (Dictionary<string, string>)ViewBag.Tooltips;
 }
 
 <h1>Details</h1>
@@ -16,12 +19,37 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Uuid)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Data)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Data)
-        </dd>
+
+        @foreach (var header in headers)
+        {
+            <dt class="col-sm-2">
+                Header (@header.Key)
+            </dt>
+            <dd class="col-sm-10">
+                @header.Value
+            </dd>
+        }
+
+        @foreach (var question in questions)
+        {
+            <dt class="col-sm-2">
+                Question (@question.Key)
+            </dt>
+            <dd class="col-sm-10">
+                @question.Value
+            </dd>
+        }
+
+        @foreach (var tooltip in tooltips)
+        {
+            <dt class="col-sm-2">
+                Tooltip (@tooltip.Key)
+            </dt>
+            <dd class="col-sm-10">
+                @tooltip.Value
+            </dd>
+        }
+        
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Weight)
         </dt>
@@ -61,9 +89,6 @@
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Category)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Category.Id)
-        </dd>
     </dl>
 </div>
 <div>

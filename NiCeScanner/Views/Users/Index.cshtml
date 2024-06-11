@@ -1,40 +1,115 @@
-﻿@model IEnumerable<NiCeScanner.Models.UserRolesViewModel>
+﻿@model NiCeScanner.Controllers.PaginatedViewModel<NiCeScanner.Models.UserRolesViewModel>
 
-@{
-    ViewData["Title"] = "Users";
-}
+<h1>@ViewData["Title"]</h1>
 
-<h1>Users</h1>
+<div class="justify-content-between d-flex">
+    <div class="search-container mb-4">
+        <form id="searchForm" asp-action="Index" method="get">
+            <div class="input-group">
+                <input id="searchInput" type="text" class="form-control" name="searchString" value="@ViewData["CurrentFilter"]" placeholder="Search...">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="submit">Search</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
 
-<table class="table">
-    <thead>
+<div class="table-container">
+    <table id="usersTable" class="table mb-2">
+        <thead>
         <tr>
-            <th>@Html.DisplayNameFor(model => model.UserName)</th>
-            <th>@Html.DisplayNameFor(model => model.Roles)</th>
+            <th>
+                <a asp-action="Index"
+                   asp-route-searchString="@ViewData["SearchString"]"
+                   asp-route-sortOrderEmail="@ViewData["EmailSortParm"]"
+                >
+                    Email address
+                    @if (ViewData["SortOrderEmail"] != null && ViewData["SortOrderEmail"].ToString() == "Email_desc")
+                    {
+                    <span>&darr;</span>
+                    }
+                    else if (ViewData["SortOrderEmail"] != null && ViewData["SortOrderEmail"].ToString() == "Email")
+                    {
+                    <span>&uarr;</span>
+                    }
+                </a>
+            </th>
+            <th>Assigned roles</th>
             <th></th>
         </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
+        </thead>
+        <tbody>
+        @foreach (var item in Model.Items)
         {
-            <tr>
-                <td>@Html.DisplayFor(modelItem => item.UserName)</td>
-                <td>@Html.DisplayFor(modelItem => item.Roles)</td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                    @if (item.IsPendingRoleRequest)
-                    {
-                        <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#roleRequestModal" data-username="@item.UserName" data-role="@item.RequestedRole" data-reason="@item.RequestReason" data-userid="@item.Id">
-                            Pending Request
-                        </button>
-                    }
-                </td>
-            </tr>
+        <tr>
+            <td>@Html.DisplayFor(modelItem => item.UserName)</td>
+            <td>@Html.DisplayFor(modelItem => item.Roles)</td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                @if (item.IsPendingRoleRequest)
+                {
+                <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#roleRequestModal" data-username="@item.UserName" data-role="@item.RequestedRole" data-reason="@item.RequestReason" data-userid="@item.Id">
+                    Pending Request
+                </button>
+                }
+            </td>
+        </tr>
         }
-    </tbody>
-</table>
+        </tbody>
+    </table>
+
+    @{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+    }
+
+    <div>
+        <nav aria-label="Page navigation">
+            <ul class="pagination mb-2">
+                <li class="page-item @prevDisabled">
+                    <a class="page-link" asp-action="Index"
+                       asp-route-sortOrder="@ViewData["CurrentSort"]"
+                       asp-route-pageNumber="@(Model.PageNumber - 1)"
+                       asp-route-currentFilter="@ViewData["CurrentFilter"]">Previous</a>
+                </li>
+                <li class="page-item @(1 == Model.PageNumber ? "active" : "")">
+                    <a class="page-link" asp-action="Index"
+                       asp-route-sortOrder="@ViewData["CurrentSort"]"
+                       asp-route-pageNumber="1"
+                       asp-route-currentFilter="@ViewData["CurrentFilter"]">1</a>
+                </li>
+                @for (int i = Math.Max(1, Model.PageNumber - 2); i <= Math.Min(Model.TotalPages, Model.PageNumber + 2); i++)
+                {
+                if (i > 1 && i < Model.TotalPages)
+                {
+                <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                    <a class="page-link" asp-action="Index"
+                       asp-route-sortOrder="@ViewData["CurrentSort"]"
+                       asp-route-pageNumber="@i"
+                       asp-route-currentFilter="@ViewData["CurrentFilter"]">@i</a>
+                </li>
+                }
+                }
+                <li class="page-item @(Model.TotalPages == Model.PageNumber ? "active" : "")">
+                    <a class="page-link" asp-action="Index"
+                       asp-route-sortOrder="@ViewData["CurrentSort"]"
+                       asp-route-pageNumber="@Model.TotalPages"
+                       asp-route-currentFilter="@ViewData["CurrentFilter"]">@Model.TotalPages</a>
+                </li>
+                <li class="page-item @nextDisabled">
+                    <a class="page-link" asp-action="Index"
+                       asp-route-sortOrder="@ViewData["CurrentSort"]"
+                       asp-route-pageNumber="@(Model.PageNumber + 1)"
+                       asp-route-currentFilter="@ViewData["CurrentFilter"]">Next</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+</div>
 
 <!-- Modal -->
 <div class="modal fade" id="roleRequestModal" tabindex="-1" role="dialog" aria-labelledby="roleRequestModalLabel" aria-hidden="true">

@@ -1,4 +1,6 @@
-﻿@model NiCeScanner.Models.Link
+﻿@using Newtonsoft.Json
+@using Newtonsoft.Json.Linq
+@model NiCeScanner.Models.Link
 
 @{
     ViewData["Title"] = "Delete";
@@ -18,10 +20,10 @@
             @Html.DisplayFor(model => model.Name)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Href)
+            Link
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Href)
+            <a href="@Model.Href">@Model.Href</a>
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.CreatedAt)
@@ -36,10 +38,14 @@
             @Html.DisplayFor(model => model.UpdatedAt)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Category)
+            Attached to category
         </dt>
+        @{
+            var sectorData = JsonConvert.DeserializeObject<JObject>(Model.Category.Data);
+            var sectorText = sectorData?["nl"]?.Value<string>("name") ?? "N/A";
+        }
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Category.Id)
+            @sectorText
         </dd>
     </dl>
     
