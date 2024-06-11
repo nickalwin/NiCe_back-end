@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using NiCEScanner_Tests.Factories;
+using NiCEScanner_Tests.Factories.MVC;
 using NiCeScanner.Controllers;
 using NiCeScanner.Data;
 using NiCeScanner.Models;

@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using NiCeScanner.Data;
 
-namespace NiCEScanner_Tests.Factories.MVC;
+namespace NiCEScanner_Tests.Factories.API;
 
 public class DummyDatabaseFactory
 {

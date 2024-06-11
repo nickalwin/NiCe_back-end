@@ -1,6 +1,6 @@
 using NiCeScanner.Models;
 
-namespace NiCEScanner_Tests.Factories;
+namespace NiCEScanner_Tests.Factories.MVC;
 
 public class ScanCodeFormFactory
 {

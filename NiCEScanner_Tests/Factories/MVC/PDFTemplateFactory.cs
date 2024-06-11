@@ -1,6 +1,4 @@
-using Newtonsoft.Json;
-
-namespace NiCEScanner_Tests.Factories;
+namespace NiCEScanner_Tests.Factories.MVC;
 
 public class PDFTemplateFactory
 {
