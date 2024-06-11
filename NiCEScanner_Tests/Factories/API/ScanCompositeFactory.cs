@@ -1,11 +1,18 @@
 using NiCeScanner.Data;
 using NiCeScanner.Models;
 
-namespace NiCEScanner_Tests.Factories.MVC;
+namespace NiCEScanner_Tests.Factories.API;
 
-public class ScanFactory
+public class ScanComposite
 {
-    public static Scan CreateAndSubmit(ApplicationDbContext context)
+    public Scan Scan { get; set; }
+    public ScanCode EditCode { get; set; }
+    public ScanCode ViewCode { get; set; }
+}
+
+public class ScanCompositeFactory
+{
+    static public ScanComposite CreateAndSubmit(ApplicationDbContext context)
     {
 		Scan scan = new Scan()
 		{	
@@ -44,7 +51,12 @@ public class ScanFactory
 		
 		context.ScanCodes.AddRange(scd1, scd2);
 		context.SaveChanges();
-        
-        return scan;
+
+        return new ScanComposite
+        {
+            Scan = scan,
+            EditCode = scd2,
+            ViewCode = scd1
+        };
     }
 }

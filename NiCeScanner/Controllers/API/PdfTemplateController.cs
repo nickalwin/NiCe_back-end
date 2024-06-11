@@ -26,14 +26,14 @@ namespace NiCeScanner.Controllers.API
 			var imageBase64Data = Convert.ToBase64String(template.ImageData);
 			var imageDataURL = string.Format("data:image/png;base64,{0}", imageBase64Data);
 
-			return new PdfTemplateResource()
+			return Ok(new PdfTemplateResource()
 			{
 				Title = template.Title,
 				Introduction = template.Introduction,
 				ImageData = imageDataURL,
 				BeforePlotText = template.BeforePlotText,
 				AfterPlotText = template.AfterPlotText
-			};
+			});
 		}
 	}
 }
