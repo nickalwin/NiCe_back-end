@@ -166,6 +166,20 @@
                 Languages.splice(index, 1);
             }
         }
+
+        if (!$('#ImageSelect').val()) {
+            $('#imagePreviewContainer').hide();
+        }
+        $('#ImageSelect').change(function () {
+            var imageId = $(this).val();
+            if (imageId) {
+                $('#imagePreview').attr('src', '/Image/Display/' + imageId);
+                $('#imagePreviewContainer').show();
+            } else {
+                $('#imagePreview').attr('src', '').hide();
+                $('#imagePreviewContainer').hide();
+            }
+        });
     </script>
 
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
