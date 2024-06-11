@@ -254,10 +254,11 @@ namespace NiCeScanner.Controllers
 		public IActionResult DownloadExcel()
 		{
 			var scans = _context.Scans
-			   .Include(s => s.Sector)
 			   .Include(s => s.Answers)
 				   .ThenInclude(a => a.Question)
 			   .ToList();
+
+			scans.ForEach(s => s.Sector = _context.Sectors.Find(s.SectorId));
 
 			var questions = scans
 				   .SelectMany(s => s.Answers.Select(a => a.Question))

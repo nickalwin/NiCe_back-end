@@ -20,4 +20,8 @@
     <ProjectReference Include="..\NiCeScanner\NiCeScanner.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="API_Tests\" />
+  </ItemGroup>
+
 </Project>
