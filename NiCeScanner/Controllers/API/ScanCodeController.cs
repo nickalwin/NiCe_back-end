@@ -38,12 +38,12 @@ namespace NiCeScanner.Controllers.API
 				return NotFound("Scan not found for this code!");
 			}
 
-			return new ValidatedScanCodeResource
+			return Ok(new ValidatedScanCodeResource
 			{
 				Scan_uuid = scan.Uuid,
 				Scan_code = scanCode.Code,
 				Editable = scanCode.CanEdit
-			};
+			});
 		}
 	}
 }

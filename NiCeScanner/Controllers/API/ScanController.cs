@@ -105,7 +105,7 @@ namespace NiCeScanner.Controllers.API
 				Data = groupedAnswers
 			};
 
-			return scanResource;
+			return Ok(scanResource);
 		}
 
 		[HttpPost]
@@ -115,6 +115,7 @@ namespace NiCeScanner.Controllers.API
 			{
 				ContactName = scan.Contact_name,
 				ContactEmail = scan.Contact_email,
+				Results = "",
 				SectorId = scan.Sector_id,
 				CreatedAt = DateTime.Now,
 			};
@@ -161,12 +162,12 @@ namespace NiCeScanner.Controllers.API
 			_context.ScanCodes.AddRange(editCode, viewCode);
 			await _context.SaveChangesAsync();
 
-			return new PostScanRequestResult 
+			return Ok(new PostScanRequestResult 
 			{ 
 				Uuid = newScan.Uuid,
 				Edit_code = editCode.Code,
 				View_code = viewCode.Code,
-			};
+			});
 		}
 
 		[HttpDelete]

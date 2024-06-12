@@ -36,7 +36,7 @@ namespace NiCeScanner.Controllers.API
 				})
 				.ToListAsync();
 
-			return questions;
+			return Ok(questions);
 		}
 	}
 }
