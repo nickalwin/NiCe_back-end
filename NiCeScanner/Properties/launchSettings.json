@@ -28,7 +28,7 @@
     "Docker": {
       "commandName": "Docker",
       "launchBrowser": true,
-      "launchUrl": "https://nice-test-dev-backend.it-core.fun/",
+      "launchUrl": "https://admin.nicescan.nl",
       "environmentVariables": {
         "ASPNETCORE_HTTPS_PORTS": "8081",
         "ASPNETCORE_HTTP_PORTS": "8080"
