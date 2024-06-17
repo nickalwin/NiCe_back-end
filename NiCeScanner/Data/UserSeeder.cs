@@ -13,7 +13,7 @@ namespace NiCeScanner.Data
 				var user = new IdentityUser { 
 					UserName = email, 
 					Email = email, 
-					EmailConfirmed = true,
+					//EmailConfirmed = true,
 					NormalizedEmail = email.ToUpper(),
 					NormalizedUserName = email.ToUpper(),
 					LockoutEnabled = false,
@@ -47,11 +47,8 @@ namespace NiCeScanner.Data
 				}
 			}
 			
-			await SeedUser("Admin", "admin@admin.com", "Admin@123", "Admin", context, app);
-			await SeedUser("Manager", "manager@manager.com", "Manager@123", "Manager", context, app);
-			await SeedUser("Researcher", "researcher@researcher.com", "Researcher@123", "Researcher", context, app);
-			await SeedUser("Student", "student@student.com", "Student@123", "Student", context, app);
-			await SeedUser("Member", "member@member.com", "Member@123", "Member", context, app);
+			await SeedUser("NiCE", "nicescanningtool@gmail.com", "NiCE@123", "Admin", context, app);
+			await SeedUser("Anne", "a.van.vulpen@windesheim.nl", "Start@123", "Admin", context, app);
 		}
 	}
 }
