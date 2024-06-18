@@ -13,7 +13,7 @@ namespace NiCeScanner.Data
 				var user = new IdentityUser { 
 					UserName = email, 
 					Email = email, 
-					//EmailConfirmed = true,
+					EmailConfirmed = true,
 					NormalizedEmail = email.ToUpper(),
 					NormalizedUserName = email.ToUpper(),
 					LockoutEnabled = false,
